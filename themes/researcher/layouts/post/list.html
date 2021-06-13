@@ -1,0 +1,28 @@
+{{ define "main" }}
+<div class="container">
+    <h1>{{ .Title }}</h1>
+    {{.Content}}
+    <br />
+
+  {{ range $index, $page := .Site.RegularPages.ByDate.Reverse }}
+      <h3>{{ $page.Date.Format "January 2, 2006" }}</h3>
+      <ul>
+        <li><a href="{{ $page.Permalink }}">{{ $page.Title }}</a></li>
+      </ul>
+  {{ end }}
+
+  {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+    {{ if eq "categories" $taxonomyname }}
+      {{ range $key, $value := $taxonomy }}
+        <h3>{{ title $key }}</h3>
+        <ul>
+        {{ range $value.Pages }}
+          <li><a href="{{ .Permalink }}">{{ .Date.Format "2006-01-02" }} | {{ .Title }}</a></li>
+        {{ end }}
+        </ul>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+    <br />
+</div>
+{{ end }}

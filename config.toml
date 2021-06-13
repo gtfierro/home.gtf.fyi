@@ -1,0 +1,57 @@
+baseURL = "https://home.gtf.fyi/"
+languageCode = "en-us"
+title = "Gabe Fierro"
+theme = "researcher"
+contentDir = "content/"
+
+enableRobotsTXT = true
+
+[params]
+  author = "Gabe Fierro"
+  description = "Assistant Professor at Colorado School of Mines // Researcher at NREL"
+  [params.footer]
+  text = "Based on 'hugo-researcher' theme"
+  url = "https://github.com/ojroques/hugo-researcher"
+
+  [params.style]
+    avatarSize = "150px;"
+    rightimgSize = "400px;"
+    pageWidth = "1000px;"
+
+[menu]
+ [[menu.main]]
+ name = "Home"
+ url = "/"
+ weight = 1
+
+ [[menu.main]]
+ name = "Papers"
+ url = "/papers"
+ weight = 2
+
+ [[menu.main]]
+ name = "Projects"
+ url = "/projects"
+ weight = 3
+
+ [[menu.main]]
+ name = "Classes"
+ url = "/classes"
+ weight = 4
+
+ [[menu.main]]
+ name = "Talks"
+ url = "/talks"
+ weight = 5
+
+ [[menu.main]]
+ name = "Posts"
+ url = "/posts"
+ weight = 6
+
+[markup]
+    [markup.highlight]
+    style = "colorful"
+    lineNos = false
+    [markup.goldmark.renderer]
+    unsafe = true
