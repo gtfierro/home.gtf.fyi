@@ -1,3 +1,9 @@
+# /// script
+# requires-python = "==3.11"
+# dependencies = [
+#   "jinja2",
+# ]
+# ///
 import sys
 import jinja2
 import sqlite3
