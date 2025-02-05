@@ -1,7 +1,7 @@
 ---
 title: "Minimal Brick Validation Example (no BuildingMOTIF)"
 date: 2025-01-20
-categories: ['Brick']
+categories: ['Brick','SHACL','ontoenv']
 type: post
 ---
 
