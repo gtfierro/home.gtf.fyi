@@ -1,12 +1,13 @@
 ---
-title: "Minimal Brick Validation Example"
+title: "Minimal Brick Validation Example (no BuildingMOTIF)"
 date: 2025-01-20
 categories: ['Brick']
 type: post
 ---
 
 
-This document provides a minimal example of how to validate a Brick model in Python.
+This document provides a minimal example of how to validate a Brick model in Python without BuildingMOTIF.
+I would generally recommend using BuildingMOTIF for this purpose, but this example is useful for understanding the underlying processes.
 
 ## Brick Model
 
