@@ -4,6 +4,8 @@ title: "Selected Talks"
 
 ## Selected Talks
 
+- **ASHRAE Winter Conference** 2025.
+    - [Future Tools and Solutions for Brownfield Deployment of Building Ontologies](/files/2025-ASHRAE-Brownfield-Fierro.pdf)
 - **ASHRAE Summer Conference** 2024.
     - [Metadata Ontologies for Data Discovery and Portable Analytics](/files/2024-ASHRAE-Data-Fierro.pdf)
 - **International Conference on Building Data Acquisition, Ontology, and Modelling** 2024.
