@@ -1,5 +1,20 @@
 {{ define "main" }}
 <div class="container">
-    {{ .Content }}
+    <div class="row">
+        <div class="col-md-8">
+            {{ .Content }}
+        </div>
+        <div class="col-md-4">
+            <h3>Recent Posts</h3>
+            <ul>
+                {{ range first 3 .Site.RegularPages.ByDate }}
+                <li>
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                    <p>{{ .Summary }}</p>
+                </li>
+                {{ end }}
+            </ul>
+        </div>
+    </div>
 </div>
 {{ end }}
