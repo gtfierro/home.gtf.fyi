@@ -1,10 +1,10 @@
 {{ define "main" }}
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8" style="float: left;">
             {{ .Content }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="float: right; width: 30%;">
             <h3>Recent Posts</h3>
             <ul class="post-list">
                 {{ range first 3 .Site.RegularPages.ByDate.Reverse }}
