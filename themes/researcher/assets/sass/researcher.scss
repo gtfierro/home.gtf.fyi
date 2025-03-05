@@ -76,6 +76,9 @@ $y-medium: 1.0rem;
 
 .post-list {
     font-size: 0.8rem; // Smaller font size for post list
+    li {
+        margin-bottom: 0.5rem; // Add space between list items
+    }
 }
 
 .pub {
