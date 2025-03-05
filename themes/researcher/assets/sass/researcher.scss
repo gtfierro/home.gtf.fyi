@@ -73,10 +73,6 @@ $y-medium: 1.0rem;
     @extend %link-dark;
     font-size: 2rem;
 }
-.nav-link {
-    @extend %link-default;
-    font-size: 0.8rem; // Smaller font size for sidebar links
-}
 
 .post-list {
     font-size: 0.8rem; // Smaller font size for post list
