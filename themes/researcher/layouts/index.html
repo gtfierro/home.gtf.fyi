@@ -3,21 +3,21 @@
     <div class="row">
         <div class="col-md-8" style="float: left;">
             {{ .Content }}
-            <h3>Recent Papers</h3>
-            <ul class="paper-list">
-                {{ range first 3 .Site.Data.papers }}
-                <li>
-                    {{ .date }} <a href="{{ .url }}">{{ .title }}</a>
-                </li>
-                {{ end }}
-            </ul>
         </div>
         <div class="col-md-4" style="float: right; width: 30%;">
             <h3>Recent Posts</h3>
             <ul class="post-list">
-                {{ range first 3 .Site.RegularPages.ByDate.Reverse }}
+                {{ range first 5 .Site.RegularPages.ByDate.Reverse }}
                 <li>
                     {{ .Date.Format "2006-01-02" }} <a href="{{ .Permalink }}">{{ .Title }}</a>
+                </li>
+                {{ end }}
+            </ul>
+            <h3>Recent Papers</h3>
+            <ul class="paper-list">
+                {{ range first 5 .Site.Data.papers }}
+                <li>
+                    {{ .year }} <a href="/papers/{{ .pdf }}">{{ .title }}</a>
                 </li>
                 {{ end }}
             </ul>
