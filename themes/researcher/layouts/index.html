@@ -9,8 +9,7 @@
             <ul class="post-list">
                 {{ range first 3 .Site.RegularPages.ByDate.Reverse }}
                 <li>
-                    <p>{{ .Date.Format "2006-01-02" }}</p>
-                    <a href="{{ .Permalink }}">{{ .Title }}</a>
+                    {{ .Date.Format "2006-01-02" }} <a href="{{ .Permalink }}">{{ .Title }}</a>
                 </li>
                 {{ end }}
             </ul>
