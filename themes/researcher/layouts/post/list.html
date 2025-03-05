@@ -4,7 +4,7 @@
     {{.Content}}
     <br />
 
-  {{ range $index, $page := .Site.RegularPages.ByDate.Reverse }}
+  {{ range $index, $page := .Site.RegularPages.ByDate }}
       <h3>{{ $page.Date.Format "January 2, 2006" }}</h3>
       <ul>
         <li><a href="{{ $page.Permalink }}">{{ $page.Title }}</a></li>

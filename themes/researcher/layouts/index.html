@@ -7,7 +7,7 @@
         <div class="col-md-4">
             <h3>Recent Posts</h3>
             <ul class="post-list">
-                {{ range last 3 .Site.RegularPages.ByDate }}
+                {{ range first 3 .Site.RegularPages.ByDate.Reverse }}
                 <li>
                     <p>{{ .Date.Format "2006-01-02" }}</p>
                     <a href="{{ .Permalink }}">{{ .Title }}</a>
