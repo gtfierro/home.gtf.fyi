@@ -75,6 +75,7 @@ $y-medium: 1.0rem;
 }
 .nav-link {
     @extend %link-default;
+    font-size: 0.8rem; // Smaller font size for sidebar links
 }
 
 .pub {
