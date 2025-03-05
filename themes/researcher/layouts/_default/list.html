@@ -21,7 +21,7 @@
   {{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
     {{ if eq "categories" $taxonomyname }}
       {{ range $key, $value := $taxonomy }}
-        <b>{{ title $key }}</b>
+        <b><a href="{{ "categories/" | relLangURL }}{{ $key | urlize }}">{{ title $key }}</a></b>
         <ul>
         {{ range $value.Pages }}
           <li><a href="{{ .Permalink }}">{{ .Date.Format "2006-01-02" }} | {{ .Title }}</a></li>
