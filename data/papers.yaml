@@ -1,0 +1,620 @@
+- authors: Ruiji Sun, Carlos Duarte Roa, Paul Raftery, Gabe Fierro
+  award: null
+  conference: ASHRAE 2022 Annual Conference
+  link: https://escholarship.org/uc/item/5640w8m0
+  location: null
+  month: February
+  pdf: enabling2022sun.pdf
+  slides: null
+  title: Enabling Portable and Reproducible Long-term Thermal Comfort Evaluation with
+    Brick Schema and Mortar Testbed
+  type: conference
+  year: 2022
+- authors: Imane Bennani, Anand Prakash, Marina Zafiris, Lazlo Paul, Carlos Duarte
+    Roa, Paul Raftery, Marco Pritoni, Gabe Fierro
+  award: null
+  conference: Proceedings of the 8th ACM International Conference on Systems for Energy-Efficient
+    Buildings, Cities, and Transportation (BuildSys)
+  link: https://dl.acm.org/doi/abs/10.1145/3486611.3486671
+  location: Virtual Event, Portugal
+  month: November
+  pdf: query2021bennani.pdf
+  slides: null
+  title: Query Relaxation for Portable Brick-Based Applications
+  type: conference
+  year: 2021
+- authors: Keith Moffat, Jasper Pakshong, Leo Chu, Gabe Fierro, Jaimie Swartz, Maxime
+    Baudette, Alexandra von Meier
+  award: null
+  conference: 2021 IEEE Power & Energy Society Innovative Smart Grid Technologies
+    Conference (ISGT)
+  link: https://ieeexplore.ieee.org/abstract/document/9372161
+  location: Virtual Event
+  month: February
+  pdf: null
+  slides: null
+  title: Phasor Based Control with the Distributed, Extensible Grid Control Platform
+  type: conference
+  year: 2021
+- authors: Gabe Fierro, Keith Moffat, Jasper Pakshong, Alexandra von Meier
+  award: null
+  conference: 2020 IEEE International Conference on Communications, Control, and Computing
+    Technologies for Smart Grids (SmartGridComm)
+  link: https://ieeexplore.ieee.org/abstract/document/9303006
+  location: Virtual Event
+  month: November
+  pdf: null
+  slides: null
+  title: An Extensible Software and Communication Platform for Distributed Energy
+    Resource Management
+  type: conference
+  year: 2020
+- authors: Gabe Fierro, Anand Krishnan Prakash, Cory Mosiman, Marco Pritoni, Paul
+    Raftery, Michael Wetter, David E. Culler
+  award: null
+  conference: Proceedings of the 7th ACM International Conference on Systems for Energy-Efficient
+    Buildings, Cities, and Transportation (BuildSys)
+  link: null
+  location: Virtual Event, Japan
+  month: November
+  pdf: shepherding2020fierro.pdf
+  slides: null
+  title: Shepherding Metadata Through the Building Lifecycle
+  type: conference
+  year: 2020
+- authors: Harry Bergmann, Cory Mosiman, Avijit Saha, Selam Haile, William Livingood,
+    Steven Bushby, Gabe Fierro, Joel Bender, Michael Poplawski, Jessica Granderson,
+    Marco Pritoni
+  award: null
+  conference: 2020 ACEEE Summer Study on Energy Efficiency in Buildings
+  link: null
+  location: Virtual Event
+  month: August
+  pdf: semantic_interop.pdf
+  slides: null
+  title: Semantic Interoperability to Enable Smart, Grid-Interactive Efficient Buildings
+  type: conference
+  year: 2020
+- authors: Gabe Fierro, Jason Koh, Yuvraj Agarwal, Rajesh K. Gupta, David E. Culler
+  award: null
+  conference: 6th ACM International Conference on Systems for Energy-Efficient Buildings,
+    Cities, and Transportation (BuildSys)
+  link: null
+  location: New York, NY, USA
+  month: November
+  pdf: house2019fierro.pdf
+  slides: null
+  title: 'Beyond a House of Sticks: Formalizing Metadata Tags with Brick'
+  type: conference
+  year: 2019
+- authors: Michael P Andersen, Sam Kumar, Moustafa AbdelBaky, Gabe Fierro, John Kolb,
+    Hyung-Sin Kim, David E. Culler, Raluca Ada Popa
+  award: null
+  conference: 28th USENIX Security Symposium (USENIX Security 19)
+  link: https://www.usenix.org/conference/usenixsecurity19/presentation/andersen
+  location: Santa Clara, CA, USA
+  month: null
+  pdf: wave2019andersen.pdf
+  slides: null
+  title: 'WAVE: A Decentralized Authorization Framework with Transitive Delegation'
+  type: conference
+  year: 2019
+- authors: Gabe Fierro, David E. Culler
+  award: null
+  conference: 4th ACM International Conference on Systems for Energy-Efficient Built
+    Environments (BuildSys)
+  link: null
+  location: Delft, The Netherlands
+  month: November
+  pdf: hoddb2017fierro.pdf
+  slides: null
+  title: Design and Analysis of a Query Processor for Brick
+  type: conference
+  year: 2017
+- authors: Gabe Fierro, Marco Pritoni, Moustafa AbdelBaky, Paul Raftery, Therese Peffer,
+    Greg Thomson, David E. Culler
+  award: Audience Choice Award
+  conference: 5th ACM International Conference on Systems for Energy-Efficient Built
+    Environments (BuildSys)
+  link: null
+  location: Shenzhen, China
+  month: November
+  pdf: mortar2018fierro.pdf
+  slides: null
+  title: 'Mortar: An Open Testbed for Portable Building Analytics'
+  type: conference
+  year: 2018
+- authors: Bharathan Balaji, Arka Bhattacharya, Gabe Fierro, Jingkun Gao, Joshua Gluck,
+    Dezhi Hong, Aslak Johansen, Jason Koh, Yuvraj Agarwal, Mario Berges, David E.
+    Culler, Rajesh Gupta, Mikkel Baun Kjaergaard, Joern Ploennigs, Kamin Whitehouse
+  award: Best Paper Runner-Up
+  conference: 3rd ACM International Conference on Systems for Energy-Efficient Built
+    Environments (BuildSys)
+  link: null
+  location: Palo Alto, California
+  month: November
+  pdf: brick2016balaji.pdf
+  slides: null
+  title: Brick v1.0 - Towards a Unified Metadata Schema for Buildings
+  type: conference
+  year: 2016
+- authors: Gabe Fierro, Therese Peffer, David E. Culler
+  award: null
+  conference: 2016 ACEEE Summer Study on Energy Efficiency in Buildings
+  link: null
+  location: Pacific Grove, CA
+  month: August
+  pdf: aceee_enabling.pdf
+  slides: null
+  title: Enabling Portable Energy Applications with a Building Operating System
+  type: conference
+  year: 2016
+- authors: Therese Peffer, Marco Pritoni, Gabe Fierro, Soazig Kaam, Joyce Kim, Paul
+    Raftery
+  award: null
+  conference: 2016 ACEEE Summer Study on Energy Efficiency in Buildings
+  link: null
+  location: Pacific Grove, CA
+  month: August
+  pdf: aceee_enclave.pdf
+  slides: null
+  title: "Writing Controls Sequences for Buildings: from HVAC Industry Enclave to\
+    \ Hacker\u2019s Weekend Project"
+  type: conference
+  year: 2016
+- authors: Peng Zhao, Therese Peffer, Ram Narayanamurthy, Gabe Fierro, Paul Raftery,
+    Soazig Kaam, Joyce Kim
+  award: null
+  conference: 2016 ACEEE Summer Study on Energy Efficiency in Buildings
+  link: null
+  location: Pacific Grove, CA
+  month: August
+  pdf: aceee_gettingintothezone.pdf
+  slides: null
+  title: 'Getting into the Zone: How the Internet of Things can Improve Energy Efficiency
+    and Demand Response in a Commercial Building'
+  type: conference
+  year: 2016
+- authors: Michael P Andersen, Gabe Fierro, Sam Kumar, Joyce Kim, Edward A. Arens,
+    Hui Zhang, Paul Raftery, and David E. Culler
+  award: null
+  conference: 2016 ACEEE Summer Study on Energy Efficiency in Buildings
+  link: null
+  location: Pacific Grove, CA
+  month: August
+  pdf: aceee_chairs.pdf
+  slides: null
+  title: Well-connected Microzones for Increased Building Efficiency and Occupant
+    Comfort
+  type: conference
+  year: 2016
+- authors: Michael P Andersen, Gabe Fierro, David E. Culler
+  award: null
+  conference: 15th ACM/IEEE Conference on Information Processing in Sensor Networks
+  link: null
+  location: Vienna, Austria
+  month: April
+  pdf: synergy.pdf
+  slides: null
+  title: System Design for a Synergistic, Low Power Mote/BLE Embedded Platform
+  type: conference
+  year: 2016
+- authors: Michael P Andersen, Gabe Fierro, David E. Culler
+  award: null
+  conference: 1st IEEE International Conference on Internet-of-Things Design and Implementation
+  link: null
+  location: Berlin, Germany
+  month: April
+  pdf: enabling_synergy.pdf
+  slides: null
+  title: 'Enabling Synergy in IoT: Platform to Service and Beyond'
+  type: conference
+  year: 2016
+- authors: Stephen Dawson-Haggerty, Andrew Krioukov, Jay Taneja, Sagar Karandikar,
+    Gabe Fierro, Nikita Kitaev, and David E. Culler
+  award: null
+  conference: 10th USENIX Symposium on Networked Systems Design and Implementation
+  link: null
+  location: Lombard, IL
+  month: April
+  pdf: boss.pdf
+  slides: null
+  title: 'BOSS: Building Operating System Services'
+  type: conference
+  year: 2013
+- authors: Na Luo, Gabe Fierro, Yapan Liu, Bing Dong, Tianzhen Hong
+  award: null
+  conference: Automation in Construction
+  link: https://doi.org/10.1016/j.autcon.2022.104307
+  location: null
+  month: May
+  pdf: extending2022luo.pdf
+  slides: null
+  title: Extending the Brick Schema to Represent Metadata of Occupants
+  type: journal
+  year: 2022
+- authors: Gabe Fierro, Jason Koh, Shreyas Nagare, Xiaolin Zang, Yuvraj Agarwal, Rajesh
+    K. Gupta and David E. Culler
+  award: null
+  conference: Frontiers in Built Environment
+  link: https://doi.org/10.3389/fbuil.2020.558034
+  location: null
+  month: September
+  pdf: house2020fierro.pdf
+  slides: null
+  title: Formalizing Tag-Based Metadata With the Brick Ontology
+  type: journal
+  year: 2020
+- authors: Anand Krishnan Prakash, Kun Zhang, Pranav Gupta, David Blum, Marc Marshall,
+    Gabe Fierro, Peter Alstone, James Zoellick, Richard Brown and Marco Pritoni
+  award: null
+  conference: Energies
+  link: https://www.mdpi.com/1996-1073/13/12/3093#cite
+  location: null
+  month: June
+  pdf: solarplus.pdf
+  slides: null
+  title: 'Solar+ Optimizer: A Model Predictive Control Optimization Platform for Grid
+    Responsive Building Microgrids'
+  type: journal
+  year: 2020
+- authors: Gabe Fierro, Marco Pritoni, Moustafa AbdelBaky, Paul Raftery, Therese Peffer,
+    Greg Thomson, David E. Culler
+  award: null
+  conference: ACM Transactions on Sensor Networks
+  link: null
+  location: null
+  month: January
+  pdf: mortar2020fierro.pdf
+  slides: null
+  title: 'Mortar: An Open Testbed for Portable Building Analytics'
+  type: journal
+  year: 2020
+- authors: Michael P Andersen, John Kolb, Kaifei Chen, Gabe Fierro, David E. Culler,
+    Randy Katz
+  award: null
+  conference: ACM Transactions on Sensor Networks
+  link: null
+  location: December
+  month: null
+  pdf: democratizing2018anderson.pdf
+  slides: null
+  title: Democratizing Authority in the Built Environment
+  type: journal
+  year: 2018
+- authors: Gabe Fierro, David E. Culler
+  award: null
+  conference: ACM Transactions on Sensor Networks
+  link: null
+  location: null
+  month: January
+  pdf: hoddb2018fierro.pdf
+  slides: null
+  title: Design and Analysis of a Query Processor for Brick
+  type: journal
+  year: 2018
+- authors: "Benjamin Balsmeier, Alireza Chavosh, Guan-Cheng Li, Gabe Fierro, Kevin\
+    \ Johnson, Aditya Kaulagi, Doug O\u2019Reagan, Bill Yeh, Lee Fleming"
+  award: null
+  conference: Fung Institute for Engineering Leadership
+  link: null
+  location: Berkeley, CA, USA
+  month: null
+  pdf: AutomatedDisambiguation-of-US-Patent-Grants-and-Applications.pdf
+  slides: null
+  title: Automated Disambiguation of US Patent Grants and Applications
+  type: journal
+  year: 2015
+- authors: Gabe Fierro, Sriharsha Guduguntla, David E. Culler
+  award: null
+  conference: 2nd Workshop on Data Acquisition To Analysis (DATA)
+  link: null
+  location: New York, NY, USA
+  month: November
+  pdf: BuildingMetadataDataset-DATA-2019-Fierro.pdf
+  slides: null
+  title: 'Dataset: An Open Dataset and Collection Tool for BMS Point Labels'
+  type: workshop
+  year: 2019
+- authors: Andrew Krioukov, Gabe Fierro, Nikita Kitaev, David E. Culler
+  award: Best Paper Award
+  conference: 4th ACM Workshop On Embedded Sensing Systems For Energy-Efficiency In
+    Buildings
+  link: null
+  location: Toronto, Canada
+  month: November
+  pdf: bas.pdf
+  slides: null
+  title: 'BAS: Building Application Stack'
+  type: workshop
+  year: 2012
+- authors: Michael Wetter, Jianjun Hu, Anand Prakash, Paul Erlich, Gabe Fierro, Milica
+    Grahovac, Marco Pritoni, Lisa Rivalin, Dave Robin
+  award: null
+  conference: Proceedings of the 17th IBPSA Conference (IBPSA 2021)
+  link: null
+  location: Brugge, Belgium
+  month: September
+  pdf: 2021-ibpsa-modelica-json.pdf
+  slides: null
+  title: 'Modelica-json: Transforming Energy Models to Digitize the Control Delivery
+    Process'
+  type: conference
+  year: 2021
+- authors: Gabe Fierro
+  award: null
+  conference: PhD Dissertation
+  link: https://www2.eecs.berkeley.edu/Pubs/TechRpts/2021/EECS-2021-159.html
+  location: Berkeley, CA, USA
+  month: May
+  pdf: fierro-dissertation.pdf
+  slides: null
+  title: Self-Adapting Software for Cyberphysical Systems
+  type: misc
+  year: 2021
+- authors: David Culler, Prabal Dutta, Gabe Fierro, Joseph E. Gonzalez, Nathan Pemberton,
+    JohannSchleier-Smith, K. Shankari, Alvin Wan, and Thomas Zachariah
+  award: null
+  conference: arXiv
+  link: https://arxiv.org/abs/2005.13164
+  location: null
+  month: May
+  pdf: covista-2020.pdf
+  slides: null
+  title: 'CoVista: A Unified View on Privacy Sensitive Mobile Contact Tracing Effort'
+  type: misc
+  year: 2020
+- authors: Gabe Fierro
+  award: null
+  conference: Masters Thesis
+  link: https://www2.eecs.berkeley.edu/Pubs/TechRpts/2019/EECS-2019-106.html
+  location: Berkeley, CA, USA
+  month: June
+  pdf: fierro_masters_thesis.pdf
+  slides: null
+  title: Design of an Effective Ontology and Query Processor Enabling Portable Building
+    Applications
+  type: misc
+  year: 2019
+- authors: Michael P Andersen, John Kolb, Kaifei Chen, Gabriel Fierro, David E. Culler
+    and Raluca Ada Popa.
+  award: null
+  conference: Technical Report No. UCB/EECS-2017-234
+  link: https://www2.eecs.berkeley.edu/Pubs/TechRpts/2017/EECS-2017-234.html
+  location: null
+  month: December
+  pdf: wave_techreport.pdf
+  slides: null
+  title: 'WAVE: A Decentralized Authorization System for IoT via Blockchain Smart
+    Contracts'
+  type: misc
+  year: 2017
+- authors: Gabe Fierro and David E. Culler
+  award: null
+  conference: Technical Report No. UCB/EECS-2015-197
+  link: http://www.eecs.berkeley.edu/Pubs/TechRpts/2015/EECS-2015-197.pdf
+  location: null
+  month: September
+  pdf: EECS-2015-197.pdf
+  slides: null
+  title: 'XBOS: An Extensible Building Operating System'
+  type: misc
+  year: 2015
+- authors: Gabe Fierro, Omar Rehmane, Andrew Krioukov, David E. Culler
+  award: null
+  conference: 4th ACM Workshop On Embedded Sensing Systems For Energy-Efficiency In
+    Buildings
+  link: null
+  location: Toronto, Canada
+  month: November
+  pdf: zonelevelocc.pdf
+  slides: null
+  title: 'Demo Abstract: Zone-level occupancy counting with existing infrastructure'
+  type: demoposter
+  year: 2012
+- authors: Gabe Fierro, Anand Krishnan Prakash, Cory Mosiman, Marco Pritoni, Paul
+    Raftery, Michael Wetter, David E Culler
+  award: null
+  conference: Proceedings of the 7th ACM International Conference on Systems for Energy-Efficient
+    Buildings, Cities, and Transportation
+  link: null
+  location: Virtual Event, Japan
+  month: November
+  pdf: interactive2020fierro.pdf
+  slides: null
+  title: 'Demo Abstract: Interactive Metadata Integration with Brick'
+  type: demoposter
+  year: 2020
+- authors: Gabe Fierro, Avijit Saha, Tobias Shapinsky, Matthew Steen, Hannah Eslinger
+  award: null
+  conference: Proceedings of the 9th ACM International Conference on Systems for Energy-Efficient
+    Built Environment (BuildSys)
+  link: null
+  location: Boston, MA, USA
+  month: November
+  pdf: fierro2022application.pdf
+  slides: null
+  title: Application-Driven Creation of Building Metadata Models with Semantic Sufficiency
+  type: conference
+  year: 2022
+- authors: Gabe Fierro, Anand Prakash, David Blum, Joel Bender, Erik Paulson, Michael
+    Wetter
+  award: null
+  conference: Proceedings of the 9th ACM International Conference on Systems for Energy-Efficient
+    Built Environment (BuildSys)
+  link: null
+  location: Boston, MA, USA
+  month: November
+  pdf: fierro2022simulated.pdf
+  slides: null
+  title: 'Notes Paper: Enabling Building Application Development with Simulated Digital
+    Twins'
+  type: conference
+  year: 2022
+- authors: Amir Roth, Michael Wetter, Kyle Benne, David Blum, Yan Chen, Gabe Fierro,
+    Marco Pritoni, Avijit Saha, Draguna Vrabie
+  award: null
+  conference: ACEEE Summer Study on Energy Efficiency in Buildings
+  link: https://escholarship.org/uc/item/59z6d46m
+  location: Asilomar, CA, US
+  month: August
+  pdf: roth2022towards.pdf
+  slides: null
+  title: Towards Digital and Performance-Based Supervisory HVAC Control Delivery
+  type: conference
+  year: 2022
+- authors: Therese Peffer, Gabe Fierro, Paul Raftery, Carlos Duarte Roa, Marco Pritoni,
+    Michael Wetter, Anand Prakash, Lazlo Paul, Erik Paulson
+  award: null
+  conference: Tech Report for DOE Grant DE-EE0008681
+  link: https://escholarship.org/uc/item/04w0b9n2
+  location: null
+  month: January
+  pdf: peffer2023skewering.pdf
+  slides: null
+  title: 'Skewering the silos: using Brick to enable portable analytics, modeling
+    and controls in buildings'
+  type: misc
+  year: 2023
+- authors: Dimitris Mavrokapnidis, Gabe Fierro, Ivan Korolija, Dimitrios Rovas
+  award: null
+  conference: 14th ACM International Conference on Future Energy Systems (ACM e-Energy
+    2023)
+  link: https://dl.acm.org/doi/10.1145/3575813.3595190
+  location: Orlando, FL, USA
+  month: June
+  pdf: mavrokapnidis2023programming.pdf
+  slides: null
+  title: A Programming Model for Portable Fault Detection and Diagnosis
+  type: conference
+  year: 2023
+- authors: Dimitris Mavrokapnidis, Gabe Fierro, Maria Husmann, Ivan Korolija, Dimitrios
+    Rovas
+  award: null
+  conference: The 10th ACM International Conference on Systems for Energy-Efficient
+    Buildings, Cities, and Transportation (BuildSys 2023)
+  link: https://dl.acm.org/doi/10.1145/3600100.3623744
+  location: Istanbul, Turkey
+  month: November
+  pdf: mavrokapnidis2023seeq.pdf
+  slides: null
+  title: 'SeeQ: A Programming Model for Portable Data-driven Building Applications'
+  type: conference
+  year: 2023
+- authors: "David Blum, Jos\xE9 Candanedo, Zhelun Chen, Gabe Fierro, Virginia Gori,\
+    \ Hicham Johra, Henrik Madsen, Anna Marszal-Pomianowska, Zheng O\u2019Neill, Ojas\
+    \ Pradhan, Dimitrios Rovas, Francesco Sacco, Sofia Stensson, Christian A. Thilker,\
+    \ Charalampos Vallianos, Jin Wen, Stephen D. White"
+  award: null
+  conference: 'International Energy Agency : Annex 81'
+  link: https://annex81.iea-ebc.org/Data/publications/Annex%2081%20State-of-the-Art%20Report%20(final).pdf
+  location: null
+  month: September
+  pdf: Annex81Review.pdf
+  slides: null
+  title: 'Data-Driven Smart Buildings: State-of-the-Art Review'
+  type: misc
+  year: 2023
+- authors: Gabe Fierro, Pieter Pauwels
+  award: null
+  conference: 'International Energy Agency : Annex 81'
+  link: https://annex81.iea-ebc.org/Data/publications/Survey%20of%20meta-data%20schemas%20(final)1.pdf
+  location: null
+  month: May
+  pdf: fierro2022survey.pdf
+  slides: null
+  title: Survey of Metadata Schemas for Data-Driven Smart Buildings
+  type: misc
+  year: 2022
+- authors: Ethan Richards, Sonia Spindt, Gabe Fierro
+  award: null
+  conference: 55th ACM Technical Symposium on Computer Science Education (SIGCSE 2024)
+  link: null
+  location: Portland, OR, USA
+  month: March
+  pdf: using2024richards.pdf
+  slides: null
+  title: Using Concept Maps for Notional Machine Selection in CS1
+  type: demoposter
+  year: 2024
+- authors: Xiaohan Fu, Yihao Liu, Jason Koh, Dezhi Hong, Rajesh Gupta, Gabe Fierro
+  award: Best Paper Runner-Up
+  conference: 15th ACM/IEEE International Conference on Cyber-Physical Systems (ICCPS
+    2024)
+  link: null
+  location: Hong Kong, China
+  month: May
+  pdf: playground2024fu.pdf
+  slides: null
+  title: 'Playground: A Safe Building Operating System'
+  type: conference
+  year: 2024
+- authors: C. Estelle Smith, Alemitu Bezabih, Shadi Nourriz, Bo Wu, and Gabe Fierro
+  award: null
+  conference: Companion to the ACM/IEEE International Conference on Human Robot Interaction
+    (HRI 2024)
+  link: null
+  location: Boulder, CO, USA
+  month: March
+  pdf: llmpowered2024smith.pdf
+  slides: null
+  title: Toward LLM-Powered Robots in Engineering Education
+  type: workshop
+  year: 2024
+- authors: C. Estelle Smith, Kylee Shiekh, Hayden Cooreman, Sharfi Rahman, Yifei Zhu,
+    Md Kamrul Siam, Michael Ivanitskiy, Ahmed M. Ahmed, Michael Hallinan, Alexander
+    Grisak, and Gabe Fierro
+  award: null
+  conference: 29th ACM conference on Innovation and Technology in Computer Science
+    Education (ITiCSE 2024)
+  link: null
+  location: Milan, Italy
+  month: July
+  pdf: null
+  slides: null
+  title: 'Early Adoption of Generative Artificial Intelligence in Computing Education:
+    Emergent Student Use Cases and Perspectives in 2023'
+  type: conference
+  year: 2024
+- authors: Marco Pritoni, Drew Paine, Gabe Fierro, Cory Mosiman, Michael Poplawski,
+    Avijit Saha, Joel Bender, Jessica Granderson
+  award: null
+  conference: Energies
+  link: https://www.mdpi.com/1996-1073/14/7/2024
+  location: null
+  month: April
+  pdf: metadata2021pritoni.pdf
+  slides: null
+  title: 'Metadata Schemas and Ontologies for Building Energy Applications: A Critical
+    Review and Use Case Analysis'
+  type: journal
+  year: 2021
+- authors: Marco Pritoni, Michael Wetter, Lazlo Paul, Anand Prakash, Weiping Huang,Steven
+    Bushby, Parastoo Delgoshaei, Michael Poplawski, Avijit Saha, Gabe Fierro, Matt
+    Steen, Joel Bender, Paul Ehrlich
+  award: null
+  conference: 2024 ACEEE Summer Study on Energy Efficiency in Buildings
+  link: https://escholarship.org/uc/item/191333wd
+  location: null
+  month: August
+  pdf: digital2024pritoni.pdf
+  slides: null
+  title: 'Digital and Interoperable: The future of building automation is on the horizon.
+    What''s in it for me?'
+  type: conference
+  year: 2024
+- authors: Ozan Baris Mulayim, Lazlo Paul, Marco Pritoni, Anand Krishnan Prakash,
+    Malavikha Sudarshan, Gabe Fierro
+  award: null
+  conference: 'Seventh International Workshop on Data:
+
+    Data Acquisition & Analysis in the Era of AI (DATA 2024)'
+  link: https://dl.acm.org/doi/abs/10.1145/3671127.3698792
+  location: null
+  month: November
+  pdf: large2024mulayim.pdf
+  slides: null
+  title: 'Large Language Models for the Creation and Use of Semantic Ontologies in
+    Buildings: Requirements and Challenges'
+  type: workshop
+  year: 2024

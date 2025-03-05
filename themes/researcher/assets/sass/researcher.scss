@@ -83,6 +83,15 @@ $y-medium: 1.0rem;
     }
 }
 
+.paper-list {
+    font-size: 0.8rem; // Smaller font size for post list
+    float: right; // Make the post list float to the right
+    width: 100%; // Ensure it takes full width of its container
+    li {
+        margin-bottom: 0.5rem; // Add space between list items
+    }
+}
+
 .pub {
     font-size: 13px;
     max-width: 100%;
