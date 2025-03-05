@@ -1,0 +1,146 @@
+@prefix s223: <http://data.ashrae.org/standard223#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix qudtqk: <http://qudt.org/vocab/quantitykind/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix ex: <http://example.com/hvac/> .
+
+# Air Handling Unit (AHU) and its connections
+ex:AHU a s223:AirHandlingUnit ;
+    s223:hasInletConnection ex:AHU_Inlet ;
+    s223:hasOutletConnection ex:AHU_Outlet .
+
+ex:AHU_Inlet a s223:InletConnectionPoint ;
+    s223:cnx ex:Return_Duct1_Outlet, ex:Return_Duct2_Outlet ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:AHU_Outlet a s223:OutletConnectionPoint ;
+    s223:cnx ex:Supply_Duct_Inlet ;
+    s223:hasMedium s223:Medium-Air .
+
+# Supply Main Duct connections
+ex:Supply_Duct a s223:Duct ;
+    s223:cnx ex:Supply_Duct_Inlet, ex:Supply_Duct_Out1, ex:Supply_Duct_Out2 .
+
+ex:Supply_Duct_Inlet a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Supply_Duct_Out1 a s223:OutletConnectionPoint ;
+    s223:cnx ex:VAV1_Inlet ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Supply_Duct_Out2 a s223:OutletConnectionPoint ;
+    s223:cnx ex:VAV2_Inlet ;
+    s223:hasMedium s223:Medium-Air .
+
+# VAV 1 and its internal components
+ex:VAV1 a s223:VariableAirVolumeBox ;
+    s223:hasInletConnection ex:VAV1_Inlet ;
+    s223:hasOutletConnection ex:VAV1_Outlet .
+
+ex:VAV1_Inlet a s223:InletConnectionPoint ;
+    s223:cnx ex:Supply_Duct_Out1 ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:VAV1_Outlet a s223:OutletConnectionPoint ;
+    s223:cnx ex:Room1_Inlet ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:VAV1_Damper a s223:Damper ;
+    s223:cnx ex:VAV1_Damper_In, ex:VAV1_Damper_Out .
+
+ex:VAV1_Damper_In a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:VAV1_Damper_Out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Heating_Coil1 a s223:HeatingCoil ;
+    s223:cnx ex:Heating_Coil1_In, ex:Heating_Coil1_Out .
+
+ex:Heating_Coil1_In a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Heating_Coil1_Out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+# Room 1 and its connection
+ex:Room1 a s223:Room ;
+    s223:hasInletConnection ex:Room1_Inlet ;
+    s223:hasOutletConnection ex:Return_Duct1_Inlet .
+
+ex:Room1_Inlet a s223:InletConnectionPoint ;
+    s223:cnx ex:VAV1_Outlet ;
+    s223:hasMedium s223:Medium-Air .
+
+# Supply Duct to Room 1
+ex:Supply_Duct_Room1 a s223:Duct ;
+    s223:cnx ex:VAV1_Outlet, ex:Room1_Inlet .
+
+# VAV 2 and its internal components
+ex:VAV2 a s223:VariableAirVolumeBox ;
+    s223:hasInletConnection ex:VAV2_Inlet ;
+    s223:hasOutletConnection ex:Room2_Inlet .
+
+ex:VAV2_Inlet a s223:InletConnectionPoint ;
+    s223:cnx ex:Supply_Duct_Out2 ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:VAV2_Outlet a s223:OutletConnectionPoint ;
+    s223:cnx ex:Room2_Inlet ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:VAV2_Damper a s223:Damper ;
+    s223:cnx ex:VAV2_Damper_In, ex:VAV2_Damper_Out .
+
+ex:VAV2_Damper_In a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:VAV2_Damper_Out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Heating_Coil2 a s223:HeatingCoil ;
+    s223:cnx ex:Heating_Coil2_In, ex:Heating_Coil2_Out .
+
+ex:Heating_Coil2_In a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Heating_Coil2_Out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Medium-Air .
+
+# Room 2 and its connection
+ex:Room2 a s223:Room ;
+    s223:hasInletConnection ex:Room2_Inlet ;
+    s223:hasOutletConnection ex:Return_Duct2_Inlet .
+
+ex:Room2_Inlet a s223:InletConnectionPoint ;
+    s223:cnx ex:VAV2_Outlet ;
+    s223:hasMedium s223:Medium-Air .
+
+# Supply Duct to Room 2
+ex:Supply_Duct_Room2 a s223:Duct ;
+    s223:cnx ex:VAV2_Outlet, ex:Room2_Inlet .
+
+# Return Duct 1 (Upper) connection
+ex:Return_Duct1 a s223:Duct ;
+    s223:cnx ex:Return_Duct1_Inlet, ex:Return_Duct1_Outlet .
+
+ex:Return_Duct1_Inlet a s223:InletConnectionPoint ;
+    s223:cnx ex:Room1_Outlet ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Return_Duct1_Outlet a s223:OutletConnectionPoint ;
+    s223:cnx ex:AHU_Inlet ;
+    s223:hasMedium s223:Medium-Air .
+
+# Return Duct 2 (Lower) connection
+ex:Return_Duct2 a s223:Duct ;
+    s223:cnx ex:Return_Duct2_Inlet, ex:Return_Duct2_Outlet .
+
+ex:Return_Duct2_Inlet a s223:InletConnectionPoint ;
+    s223:cnx ex:Room2_Outlet ;
+    s223:hasMedium s223:Medium-Air .
+
+ex:Return_Duct2_Outlet a s223:OutletConnectionPoint ;
+    s223:cnx ex:AHU_Inlet ;
+    s223:hasMedium s223:Medium-Air .
+

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 600 420">
+  <!-- Define arrowhead markers -->
+  <defs>
+    <!-- Gray arrow for 223P -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+        markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#666"/>
+    </marker>
+    <!-- Green arrow for Brick -->
+    <marker id="greenArrow" viewBox="0 0 10 10" refX="9" refY="5"
+        markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2ecc71"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="600" height="400" fill="#f8f9fa" rx="5"/>
+  
+  <!-- Original 223P nodes -->
+  <g fill="#fff" stroke="#333" stroke-width="2">
+    <circle cx="200" cy="80" r="40"/> <!-- damper -->
+    <circle cx="200" cy="200" r="40"/> <!-- sensor -->
+    <circle cx="200" cy="320" r="40"/> <!-- damper-out -->
+    <circle cx="400" cy="320" r="40"/> <!-- air-temp -->
+  </g>
+
+  <!-- Original 223P node labels -->
+  <g font-family="monospace" font-size="12">
+    <text x="200" y="85" text-anchor="middle">damper</text>
+    <text x="200" y="205" text-anchor="middle">sensor</text>
+    <text x="200" y="325" text-anchor="middle">damper-out</text>
+    <text x="400" y="325" text-anchor="middle">air-temp</text>
+  </g>
+
+  <!-- Original 223P edges -->
+  <g stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M200,165 L200,115"/> <!-- sensor to damper (reversed) -->
+    <path d="M200,235 L200,285"/> <!-- sensor to damper-out -->
+    <path d="M235,320 L365,320"/> <!-- damper-out to air-temp -->
+  </g>
+
+  <!-- Original 223P edge labels -->
+  <g font-family="monospace" font-size="10" fill="#666">
+    <text x="190" y="145" text-anchor="end">s223:hasPhysicalLocation</text>
+    <text x="190" y="265" text-anchor="end">s223:hasObservationLocation</text>
+    <text x="300" y="315" text-anchor="middle">s223:hasProperty</text>
+  </g>
+
+  <!-- Highlighted Brick elements -->
+  <g stroke="#2ecc71" stroke-width="3" fill="none" opacity="0.8" marker-end="url(#greenArrow)">
+    <!-- Curved highlighted edge from damper to air-temp -->
+    <path d="M200,115 Q400,200 400,285"/> <!-- damper to air-temp -->
+  </g>
+
+  <!-- Highlighted Brick edge label -->
+  <g font-family="monospace" font-size="10" fill="#2ecc71">
+    <text x="370" y="200" text-anchor="start">brick:hasPoint</text>
+  </g>
+
+  <!-- Highlighted Brick class annotation -->
+  <g font-family="monospace" font-size="12" fill="#2ecc71">
+    <text x="450" y="310" text-anchor="start">brick:</text>
+    <text x="450" y="325" text-anchor="start">Supply_Air</text>
+    <text x="450" y="340" text-anchor="start">Temperature_Sensor</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(10,30)">
+    <text font-family="monospace" font-size="12" fill="#666">223P Model</text>
+    <text x="0" y="20" font-family="monospace" font-size="12" fill="#2ecc71">Brick Model</text>
+  </g>
+</svg>
