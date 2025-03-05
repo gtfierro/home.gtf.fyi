@@ -1,5 +1,5 @@
 // Sizes
-$max-width: {{ .Param "style.pageWidth" | default "750px;" }};
+$max-width: {{ .Param "style.pageWidth" | default "900px;" }};
 $avatar-size: {{ .Param "style.avatarSize" | default "90px;" }};
 $rightimg-size: {{ .Param "style.rightimgSize" | default "90px;" }};
 
