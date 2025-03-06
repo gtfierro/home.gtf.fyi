@@ -2,9 +2,7 @@
 title: "Home"
 date: 2021-06-12T11:41:50-07:00
 ---
-
 {{< figure class="avatar" src="/avatar.png" alt="Gabe Fierro; Photo credit: Max Witt">}}
-
 I am an assistant professor of Computer Science at [Colorado School of Mines](https://cs.mines.edu/) with a joint appointment at the [National Renewable Energy Laboratory](https://www.nrel.gov/). I work at the intersection of databases, knowledge graphs, the built environment and the Internet of Things. I am driven by building practical, efficient systems with open-source implementations that are proved through real-world deployments.
 
 My research interests include (1) the design and implementation of high-performance databases, including graph and linked-data databases and timeseries databases; (2) IoT platforms that incorporate edge computing and cloud resources; (3) issues of digitization and data management in the built environment; (4) novel datasets or applications of data that motivate new data management techniques and abstractions.

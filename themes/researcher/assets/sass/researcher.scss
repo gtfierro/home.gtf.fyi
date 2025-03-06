@@ -1,7 +1,16 @@
 // Sizes
 $max-width: {{ .Param "style.pageWidth" | default "900px;" }};
-$avatar-size: {{ .Param "style.avatarSize" | default "90px;" }};
+$avatar-size: {{ .Param "style.avatarSize" | default "200px;" }};
 $rightimg-size: {{ .Param "style.rightimgSize" | default "90px;" }};
+
+// add radius on the avatar img
+.avatar > img {
+    border-radius: 5%;
+}
+.avatar {
+    margin-top: 10px;
+    float: right;
+}
 
 // Colors
 $black: {{ .Param "style.colorBlack" | default "#222222" }};

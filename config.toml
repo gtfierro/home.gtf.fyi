@@ -14,7 +14,7 @@ enableRobotsTXT = true
   url = "https://github.com/ojroques/hugo-researcher"
 
   [params.style]
-    avatarSize = "150px;"
+    avatarSize = "200px;"
     rightimgSize = "400px;"
     pageWidth = "1000px;"
 
