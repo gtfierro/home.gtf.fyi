@@ -30,6 +30,10 @@ Brick is an open-source ontology which describes, defines and contextualizes dat
 
 {{< figure width="80%" src="/mortar.png"  alt="Mortar Platform" >}}
 
+**Note: the Mortar dataset is now available on HuggingFace under two datasets:**
+* [Building graphs](https://huggingface.co/datasets/gtfierro/mortargraphs)
+* [Building timeseries](https://huggingface.co/datasets/gtfierro/mortar)
+
 Mortar is an open platform for developing robust, reproducible building analytics against an open testbed of over 100 real buildings, each described with a Brick model. Mortar implements a declarative API enabling *self-adapting analytics* which can be written once and deployed over 10s or 100s of sites without changing a line of code or configuration. Mortar supports a library of [open analytics implementations](https://github.com/SoftwareDefinedBuildings/mortar-analytics) which demonstrate how Brick metadata can be used to author building analytics.
 
 * [Mortar Website](https://mortardata.org)
