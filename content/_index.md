@@ -7,6 +7,7 @@ I am an assistant professor of Computer Science at [Colorado School of Mines](ht
 
 My research interests include (1) the design and implementation of high-performance databases, including graph and linked-data databases and timeseries databases; (2) IoT platforms that incorporate edge computing and cloud resources; (3) issues of digitization and data management in the built environment; (4) novel datasets or applications of data that motivate new data management techniques and abstractions.
 
+
 * <u>Email</u>: gtfierro -AT- mines -DOT- edu
 * <u>Pronouns</u>: he/him
 * <u>Github</u>: [@gtfierro](https://github.com/gtfierro/)
@@ -15,6 +16,11 @@ My research interests include (1) the design and implementation of high-performa
 * <u>ORCID</u>: [0000-0002-2081-4525](https://orcid.org/0000-0002-2081-4525)
 * [Google Scholar](https://scholar.google.com/citations?user=9wj4L7MAAAAJ&hl=en)
 * [CV (last updated 2023)](/fierro-cv.pdf)
+
+Much of my current research enables novel software-defined sustainability and efficiency practices in the built-environment.
+This includes developing new data management techniques and systems for buildings, energy, and water systems that leverage semantic metadata and knowledge graphs to enable data interoperability, sharing, and reuse.
+I'm very interested in how these new data management techniques change the way we develop software in these hetergeneous, complex and cyber-physical settings.
+I also work on the design of next-generation IoT platforms that incorporate edge computing and cloud resources to support data-driven applications in smart cities and smart buildings.
 
 ---
 
