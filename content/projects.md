@@ -3,6 +3,15 @@ title: "Projects"
 date: 2021-06-12T12:13:19-07:00
 ---
 
+## Semantic Metadata Management for Water Treatment Systems
+
+{{< figure width="80%" src="/img/pfd-pid-historian-water.png" alt="Water Treatment Pilot System">}}
+
+- **Enhancing Data-Driven Science for Water Treatment Pilot Systems with Semantic Metadata Management**
+    - funded by the National Alliance for Water Innovation (NAWI), funded by the U.S. Department of Energy, Office of Energy Efficiency and Renewable Energy (EERE), Industrial Efficiency and Decarbonization Office, under Funding Opportunity Announcement DE-FOA-0001905
+    - collaboration between Mines, NREL, and Stanford University
+    - This two-year project aims to develop a standard graph-based metadata ontology for water treatment pilot systems to address the challenges of fragmented, unlinked information across multiple formats. The proposed metadata framework will integrate critical information from process flow diagrams, instrumentation diagrams, and data historians into standardized knowledge graphs based on a new water treatment ontology. By standardizing the organization of critical information about treatment components like sensors, motors, and tanks, the project addresses current challenges posed by unstandardized and ad-hoc data organization schemes. Near-term benefits include built-in mass balance calculations for sensor drift detection, improved data preprocessing pipelines, and streamlined integration between control systems and data historians for modeling applications.  This effort will enable more efficient reasoning about system behavior, ultimately supporting advanced analytics and modeling in water treatment operations. The project involves collaboration with water treatment system operators to ensure the project meets practical needs while laying groundwork for future developments like cross-facility model compatibility and seamless integration with various modeling tools.
+
 ## BuildingMOTIF
 
 {{< figure width="60%" src="/buildingmotif.png" alt="BuildingMOTIF Workflow">}}
