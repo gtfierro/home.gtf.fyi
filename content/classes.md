@@ -3,6 +3,17 @@ title: "Classes"
 date: 2021-06-12T12:13:19-07:00
 ---
 
+## 2025
+
+## Spring
+
+- CSCI403: Introduction to Databases
+
+## 2024
+
+### Spring
+- CSCI598: Advanced Data Systems
+
 ## 2023
 
 ### Fall
