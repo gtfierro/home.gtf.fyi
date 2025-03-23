@@ -2,7 +2,11 @@
 @prefix qudt: <http://qudt.org/schema/qudt/> .
 @prefix qudtqk: <http://qudt.org/vocab/quantitykind/> .
 @prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix ex: <http://example.com/hvac/> .
+
+<http://example.com/hvac> a owl:Ontology ;
+    owl:imports <http://data.ashrae.org/standard223/1.0/model/all> .
 
 # Air Handling Unit (AHU) and its connections
 ex:AHU a s223:AirHandlingUnit ;
