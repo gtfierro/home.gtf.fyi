@@ -5,6 +5,10 @@ categories: ['223p','rdf']
 type: post
 ---
 
+{{< announce >}}
+This is an in-progress post and may contain some errors or incomplete information.
+{{< /announce >}}
+
 Here's a specific example of a simple HVAC system in 223P:
 
 {{< figure width="100%" src="/img/hvac223p.ttl.svg" alt="simple HVAC loop in 223P">}}
