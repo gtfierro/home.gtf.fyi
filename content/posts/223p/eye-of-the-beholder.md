@@ -7,6 +7,10 @@ type: post
 
 *(the model is in the eye of the beholder)*
 
+{{< announce >}}
+[Part 2](/posts/223p/loops/eye-of-the-beholder-2) of this post explores how we can define loops in a knowledge graph and how we can derive different views of the same loop for different applications.
+{{< /announce >}}
+
 Ontologies are a formal representation of a *perspective* on a domain.
 They are specific in what details they care about, and which details they don't.
 This means that some ontologies are more appropriate for certain applications than others.
@@ -121,5 +125,5 @@ Here's a specific example of a simple HVAC system in 223P:
 
 ---
 
-*I've been sitting on this draft for over a week. If I don't publish this now, I'll never finish it.
-I will continue these thoughts in part 2.*
+[Part 2](/posts/223p/loops/eye-of-the-beholder-2) will explore how we can define loops in a knowledge graph and how we can derive different views of the same loop for different applications.
+
