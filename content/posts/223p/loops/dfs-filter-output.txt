@@ -1,0 +1,6 @@
+http://example.com/hvac/AHU -> http://example.com/hvac/VAV1 -> http://example.com/hvac/AHU
+http://example.com/hvac/VAV1
+http://example.com/hvac/AHU -> http://example.com/hvac/VAV1 -> http://example.com/hvac/VAV1_Damper -> http://example.com/hvac/AHU
+http://example.com/hvac/VAV1 -> http://example.com/hvac/Heating_Coil1
+http://example.com/hvac/AHU -> http://example.com/hvac/VAV1 -> http://example.com/hvac/Heating_Coil1 -> http://example.com/hvac/AHU
+http://example.com/hvac/VAV1 -> http://example.com/hvac/VAV1_Damper

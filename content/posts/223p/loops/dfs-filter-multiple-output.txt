@@ -1,0 +1,3 @@
+http://example.com/hvac/Room1HVAC -> http://example.com/hvac/VAV1 -> http://example.com/hvac/AHU
+http://example.com/hvac/VAV1
+http://example.com/hvac/VAV1 -> http://example.com/hvac/VAV1

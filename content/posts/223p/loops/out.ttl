@@ -1,0 +1,252 @@
+@prefix dash:    <http://datashapes.org/dash#> .
+@prefix graphql: <http://datashapes.org/graphql#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix swa:     <http://topbraid.org/swa#> .
+@prefix tosh:    <http://topbraid.org/tosh#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.com/hvac/Heating_Coil2_In>
+        rdfs:label  "Heating_Coil2_In";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV2_Damper_Coil_Duct>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Heating_Coil2> .
+
+<http://example.com/hvac/VAV2_Damper>
+        rdfs:label  "VAV2_Damper";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV2_Damper_Out> , <http://example.com/hvac/VAV2_Damper_In>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/VAV2_Damper_Out> .
+
+<http://example.com/hvac/Room1HVAC>
+        rdfs:label  "Room1HVAC";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Room1_Outlet> , <http://example.com/hvac/Room1_Inlet>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/Room1_Inlet> , <http://example.com/hvac/Room1_Outlet> .
+
+<http://example.com/hvac/VAV2_Damper_In>
+        rdfs:label  "VAV2_Damper_In";
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV2_Damper> .
+
+<http://example.com/hvac/VAV2>
+        rdfs:label  "VAV2";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV2_Outlet> , <http://example.com/hvac/VAV2_Inlet>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/VAV2_Inlet> , <http://example.com/hvac/VAV2_Outlet> .
+
+<http://example.com/hvac/Return_Duct2>
+        rdfs:label  "Return_Duct2";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/AHU_Inlet2> , <http://example.com/hvac/Room2_Outlet>;
+        <http://data.ashrae.org/standard223#connectsAt>
+                <http://example.com/hvac/AHU_Inlet2> , <http://example.com/hvac/Room2_Outlet> .
+
+<http://example.com/hvac/VAV2_Outlet>
+        rdfs:label  "VAV2_Outlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Supply_Duct_Room2>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV2> .
+
+<http://example.com/hvac/AHU_Inlet1>
+        rdfs:label  "AHU_Inlet1";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Return_Duct1>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/AHU> .
+
+<http://example.com/hvac/Room2HVAC>
+        rdfs:label  "Room2HVAC";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Room2_Inlet> , <http://example.com/hvac/Room2_Outlet>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/Room2_Outlet> , <http://example.com/hvac/Room2_Inlet> .
+
+<http://example.com/hvac/Supply_Duct>
+        rdfs:label  "Supply_Duct";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/AHU_Outlet> , <http://example.com/hvac/VAV1_Outlet> , <http://example.com/hvac/VAV1_Inlet> , <http://example.com/hvac/VAV2_Inlet> , <http://example.com/hvac/VAV2_Outlet>;
+        <http://data.ashrae.org/standard223#connectsAt>
+                <http://example.com/hvac/AHU_Outlet> , <http://example.com/hvac/VAV2_Inlet> , <http://example.com/hvac/VAV1_Inlet> .
+
+<http://example.com/hvac/Room1_Outlet>
+        rdfs:label  "Room1_Outlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Return_Duct1>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Room1HVAC> .
+
+<http://example.com/hvac/VAV1_Inlet>
+        rdfs:label  "VAV1_Inlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Supply_Duct>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV1> .
+
+<http://example.com/hvac/VAV1_Damper_In>
+        rdfs:label  "VAV1_Damper_In";
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV1_Damper> .
+
+<http://example.com/hvac/Heating_Coil2_Out>
+        rdfs:label  "Heating_Coil2_Out";
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Heating_Coil2> .
+
+<http://example.com/hvac/AHU_Inlet2>
+        rdfs:label  "AHU_Inlet2";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Return_Duct2>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/AHU> .
+
+<http://example.com/hvac/VAV2_Damper_Out>
+        rdfs:label  "VAV2_Damper_Out";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV2_Damper_Coil_Duct>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV2_Damper> .
+
+<http://example.com/hvac/Room2_Outlet>
+        rdfs:label  "Room2_Outlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Return_Duct2>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Room2HVAC> .
+
+<http://example.com/hvac/Room1_Inlet>
+        rdfs:label  "Room1_Inlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Supply_Duct_Room1>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Room1HVAC> .
+
+<http://example.com/hvac/Room1>
+        rdfs:label  "Room1" .
+
+<http://example.com/hvac/VAV1_Damper_Coil_Duct>
+        rdfs:label  "VAV1_Damper_Coil_Duct";
+        <http://data.ashrae.org/standard223#connectsAt>
+                <http://example.com/hvac/Heating_Coil1_In> , <http://example.com/hvac/VAV1_Damper_Out> .
+
+<http://example.com/hvac/AHU>
+        rdfs:label  "AHU";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/AHU_Inlet2> , <http://example.com/hvac/AHU_Outlet> , <http://example.com/hvac/AHU_Inlet1>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/AHU_Inlet1> , <http://example.com/hvac/AHU_Outlet> , <http://example.com/hvac/AHU_Inlet2> .
+
+<http://example.com/hvac/VAV1_Damper_Out>
+        rdfs:label  "VAV1_Damper_Out";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV1_Damper_Coil_Duct>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV1_Damper> .
+
+<http://example.com/hvac/VAV2_Inlet>
+        rdfs:label  "VAV2_Inlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Supply_Duct>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV2> .
+
+<http://example.com/hvac/Room2>
+        rdfs:label  "Room2" .
+
+<http://example.com/hvac/VAV2_Damper_Coil_Duct>
+        rdfs:label  "VAV2_Damper_Coil_Duct";
+        <http://data.ashrae.org/standard223#connectsAt>
+                <http://example.com/hvac/VAV2_Damper_Out> , <http://example.com/hvac/Heating_Coil2_In> .
+
+<http://example.com/hvac/Supply_Duct_Room1>
+        rdfs:label  "Supply_Duct_Room1";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Room1_Inlet>;
+        <http://data.ashrae.org/standard223#connectsAt>
+                <http://example.com/hvac/VAV1_Outlet> , <http://example.com/hvac/Room1_Inlet> .
+
+<http://example.com/hvac/Heating_Coil1_In>
+        rdfs:label  "Heating_Coil1_In";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV1_Damper_Coil_Duct>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Heating_Coil1> .
+
+<http://example.com/hvac/Heating_Coil1>
+        rdfs:label  "Heating_Coil1";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Heating_Coil1_Out> , <http://example.com/hvac/Heating_Coil1_In>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/Heating_Coil1_In>;
+        <http://data.ashrae.org/standard223#hasRole>
+                <http://data.ashrae.org/standard223#Role-Heating> , <http://data.ashrae.org/standard223#Role-HeatTransfer> .
+
+<http://example.com/hvac/Room2_Inlet>
+        rdfs:label  "Room2_Inlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Supply_Duct_Room2>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Room2HVAC> .
+
+<http://example.com/hvac/VAV1_Damper>
+        rdfs:label  "VAV1_Damper";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV1_Damper_Out> , <http://example.com/hvac/VAV1_Damper_In>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/VAV1_Damper_Out> .
+
+<http://example.com/hvac/Supply_Duct_Room2>
+        rdfs:label  "Supply_Duct_Room2";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Room2_Inlet>;
+        <http://data.ashrae.org/standard223#connectsAt>
+                <http://example.com/hvac/Room2_Inlet> , <http://example.com/hvac/VAV2_Outlet> .
+
+<http://example.com/hvac/Heating_Coil1_Out>
+        rdfs:label  "Heating_Coil1_Out";
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/Heating_Coil1> .
+
+<http://example.com/hvac/VAV1>
+        rdfs:label  "VAV1";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/VAV1_Outlet> , <http://example.com/hvac/VAV1_Inlet>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/VAV1_Inlet> , <http://example.com/hvac/VAV1_Outlet> .
+
+<http://example.com/hvac/Heating_Coil2>
+        rdfs:label  "Heating_Coil2";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Heating_Coil2_In> , <http://example.com/hvac/Heating_Coil2_Out>;
+        <http://data.ashrae.org/standard223#hasConnectionPoint>
+                <http://example.com/hvac/Heating_Coil2_In>;
+        <http://data.ashrae.org/standard223#hasRole>
+                <http://data.ashrae.org/standard223#Role-Heating> , <http://data.ashrae.org/standard223#Role-HeatTransfer> .
+
+<http://example.com/hvac/Return_Duct1>
+        rdfs:label  "Return_Duct1";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/AHU_Inlet1> , <http://example.com/hvac/Room1_Outlet>;
+        <http://data.ashrae.org/standard223#connectsAt>
+                <http://example.com/hvac/AHU_Inlet1> , <http://example.com/hvac/Room1_Outlet> .
+
+<http://example.com/hvac/VAV1_Outlet>
+        rdfs:label  "VAV1_Outlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Supply_Duct_Room1>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/VAV1> .
+
+<http://example.com/hvac/AHU_Outlet>
+        rdfs:label  "AHU_Outlet";
+        <http://data.ashrae.org/standard223#cnx>
+                <http://example.com/hvac/Supply_Duct>;
+        <http://data.ashrae.org/standard223#isConnectionPointOf>
+                <http://example.com/hvac/AHU> .

@@ -116,7 +116,7 @@ Here's a specific example of a simple HVAC system in 223P:
 <details>
 <summary>Expand for Turtle definition of the 223P model</summary>
 
-{{< importcode "2025-02-23-hvac223p.ttl" "turtle" >}}
+{{< importcode "loops/2025-02-23-hvac223p.ttl" "turtle" >}}
 </details>
 
 ---

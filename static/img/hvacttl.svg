@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 350">
+  <!-- [Previous components remain the same until Return Ducts] -->
+  <!-- AHU -->
+  <rect x="50" y="100" width="100" height="80" class="elknode" fill="#ddddff" stroke="#444488" id="ex:AHU"/>
+  <text x="85" y="145" style="font-family: sans-serif; font-size: 14px">AHU</text>
+  
+  <!-- AHU connection points -->
+  <rect x="42" y="135" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:AHU_Inlet"/>
+  <rect x="150" y="135" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:AHU_Outlet"/>
+  
+  <!-- Supply Main Duct -->
+  <rect x="200" y="130" width="60" height="20" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Supply_Duct"/>
+  <text x="213" y="144" style="font-family: sans-serif; font-size: 12px">Duct</text>
+  
+  <!-- Supply Duct connection points -->
+  <rect x="192" y="135" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Supply_Duct_Inlet"/>
+  <rect x="252" y="126" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Supply_Duct_Out1"/>
+  <rect x="252" y="146" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Supply_Duct_Out2"/>
+  
+  <!-- VAV 1 -->
+  <rect x="350" y="30" width="400" height="100" class="elknode" fill="#ddddff" stroke="#444488" id="ex:VAV1"/>
+  <text x="530" y="50" style="font-family: sans-serif; font-size: 14px">VAV 1</text>
+  
+  <!-- VAV 1 connection points -->
+  <rect x="342" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV1_Inlet"/>
+  <rect x="750" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV1_Outlet"/>
+  
+  <!-- VAV 1 Internal Components -->
+  <!-- Damper -->
+  <rect x="400" y="60" width="60" height="30" class="elknode" fill="#ddddff" stroke="#444488" id="ex:VAV1_Damper"/>
+  <text x="410" y="80" style="font-family: sans-serif; font-size: 10px">Damper</text>
+  <rect x="392" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV1_Damper_In"/>
+  <rect x="460" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV1_Damper_Out"/>
+  
+  <!-- Internal Duct VAV1 -->
+  <rect x="510" y="73" width="80" height="14" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Supply_Duct_Room1"/>
+  <text x="535" y="84" style="font-family: sans-serif; font-size: 10px">Duct</text>
+  <rect x="502" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  <rect x="590" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  
+  <!-- Heating Coil -->
+  <rect x="640" y="60" width="60" height="30" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Heating_Coil1"/>
+  <text x="650" y="80" style="font-family: sans-serif; font-size: 10px">Coil</text>
+  <rect x="632" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Heating_Coil1_In"/>
+  <rect x="700" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Heating_Coil1_Out"/>
+  
+  <!-- Room 1 -->
+  <rect x="850" y="40" width="100" height="70" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Room1"/>
+  <text x="880" y="80" style="font-family: sans-serif; font-size: 14px">Room 1</text>
+  <rect x="842" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Room1_Inlet"/>
+  <rect x="942" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  
+  <!-- Supply Duct to Room 1 -->
+  <rect x="780" y="73" width="40" height="14" class="elknode" fill="#ddddff" stroke="#444488"/>
+  <text x="787" y="84" style="font-family: sans-serif; font-size: 10px">Duct</text>
+  <rect x="772" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  <rect x="820" y="75" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  
+  <!-- VAV 2 -->
+  <rect x="350" y="170" width="400" height="100" class="elknode" fill="#ddddff" stroke="#444488" id="ex:VAV2"/>
+  <text x="530" y="190" style="font-family: sans-serif; font-size: 14px">VAV 2</text>
+  
+  <!-- VAV 2 connection points -->
+  <rect x="342" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV2_Inlet"/>
+  <rect x="750" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV2_Outlet"/>
+  
+  <!-- VAV 2 Internal Components -->
+  <!-- Damper -->
+  <rect x="400" y="200" width="60" height="30" class="elknode" fill="#ddddff" stroke="#444488" id="ex:VAV2_Damper"/>
+  <text x="410" y="220" style="font-family: sans-serif; font-size: 10px">Damper</text>
+  <rect x="392" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV2_Damper_In"/>
+  <rect x="460" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:VAV2_Damper_Out"/>
+  
+  <!-- Internal Duct VAV2 -->
+  <rect x="510" y="213" width="80" height="14" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Supply_Duct_Room2"/>
+  <text x="535" y="224" style="font-family: sans-serif; font-size: 10px">Duct</text>
+  <rect x="502" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  <rect x="590" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  
+  <!-- Heating Coil -->
+  <rect x="640" y="200" width="60" height="30" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Heating_Coil2"/>
+  <text x="650" y="220" style="font-family: sans-serif; font-size: 10px">Coil</text>
+  <rect x="632" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Heating_Coil2_In"/>
+  <rect x="700" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Heating_Coil2_Out"/>
+  
+  <!-- Room 2 -->
+  <rect x="850" y="180" width="100" height="70" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Room2"/>
+  <text x="880" y="220" style="font-family: sans-serif; font-size: 14px">Room 2</text>
+  <rect x="842" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Room2_Inlet"/>
+  <rect x="942" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  
+  <!-- Supply Duct to Room 2 -->
+  <rect x="780" y="213" width="40" height="14" class="elknode" fill="#ddddff" stroke="#444488"/>
+  <text x="787" y="224" style="font-family: sans-serif; font-size: 10px">Duct</text>
+  <rect x="772" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  <rect x="820" y="215" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488"/>
+  
+  <!-- Return Duct 1 (Upper) -->
+  <rect x="150" y="10" width="60" height="20" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Return_Duct1"/>
+  <text x="165" y="24" style="font-family: sans-serif; font-size: 12px">Duct</text>
+  <rect x="142" y="15" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Return_Duct1_Inlet"/>
+  <rect x="210" y="15" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Return_Duct1_Outlet"/>
+  
+  <!-- Return Duct 2 (Lower) -->
+  <rect x="150" y="300" width="60" height="20" class="elknode" fill="#ddddff" stroke="#444488" id="ex:Return_Duct2"/>
+  <text x="165" y="314" style="font-family: sans-serif; font-size: 12px">Duct</text>
+  <rect x="142" y="305" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Return_Duct2_Inlet"/>
+  <rect x="210" y="305" width="8" height="8" class="elkport" fill="#6666cc" stroke="#444488" id="ex:Return_Duct2_Outlet"/>
+  
+  <!-- All Connections -->
+  <!-- Supply Side -->
+  <!-- AHU to Supply Duct -->
+  <path d="M 158 139 L 192 139" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 192 139 L 184 142 L 184 136 Z" class="arrow" fill="black"/>
+  
+  <!-- Supply Duct to VAVs -->
+  <path d="M 260 130 L 305 130 L 305 79 L 342 79" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 342 79 L 334 82 L 334 76 Z" class="arrow" fill="black"/>
+  
+  <path d="M 260 150 L 305 150 L 305 219 L 342 219" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 342 219 L 334 222 L 334 216 Z" class="arrow" fill="black"/>
+  
+  <!-- VAV 1 Internal Flow -->
+  <path d="M 350 79 L 392 79" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 392 79 L 384 82 L 384 76 Z" class="arrow" fill="black"/>
+  
+  <path d="M 468 79 L 502 79" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 502 79 L 494 82 L 494 76 Z" class="arrow" fill="black"/>
+  
+  <path d="M 598 79 L 632 79" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 632 79 L 624 82 L 624 76 Z" class="arrow" fill="black"/>
+  
+  <path d="M 708 79 L 772 79" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 772 79 L 764 82 L 764 76 Z" class="arrow" fill="black"/>
+  
+  <!-- Supply Duct to Room 1 -->
+  <path d="M 828 79 L 842 79" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 842 79 L 834 82 L 834 76 Z" class="arrow" fill="black"/>
+  
+  <!-- VAV 2 Internal Flow -->
+  <path d="M 350 219 L 392 219" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 392 219 L 384 222 L 384 216 Z" class="arrow" fill="black"/>
+  
+  <path d="M 468 219 L 502 219" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 502 219 L 494 222 L 494 216 Z" class="arrow" fill="black"/>
+  
+  <path d="M 598 219 L 632 219" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 632 219 L 624 222 L 624 216 Z" class="arrow" fill="black"/>
+  
+  <path d="M 708 219 L 772 219" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 772 219 L 764 222 L 764 216 Z" class="arrow" fill="black"/>
+  
+  <!-- Supply Duct to Room 2 -->
+  <path d="M 828 219 L 842 219" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 842 219 L 834 222 L 834 216 Z" class="arrow" fill="black"/>
+  
+  <!-- Return Air Paths -->
+  <!-- Room 1 to Upper Return Duct -->
+  <path d="M 950 79 L 970 79 L 970 19 L 218 19" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 218 19 L 226 16 L 226 22 Z" class="arrow" fill="black"/>
+  
+  <!-- Room 2 to Lower Return Duct -->
+  <path d="M 950 219 L 970 219 L 970 309 L 218 309" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 218 309 L 226 306 L 226 312 Z" class="arrow" fill="black"/>
+  
+  <!-- Return Ducts to AHU -->
+  <path d="M 142 19 L 30 19 L 30 139 L 42 139" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 42 139 L 34 142 L 34 136 Z" class="arrow" fill="black"/>
+  
+  <path d="M 142 309 L 30 309 L 30 139 L 42 139" class="elkedge" fill="none" stroke="black"/>
+  <path d="M 42 139 L 34 142 L 34 136 Z" class="arrow" fill="black"/>
+</svg>
+

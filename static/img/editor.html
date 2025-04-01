@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Color Changer</title>
+    <style>
+        svg {
+            width: 100%;
+            height: auto;
+            border: 1px solid #000;
+        }
+        .clickable {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Interactive HVAC Diagram</h1>
+
+<!-- Embed the SVG from an external file named "2025-02-23-hvac-diagram.svg" -->
+<object id="svg-container" type="image/svg+xml" data="hvac223p.ttl.svg"></object>
+
+<button id="download-btn">Download Updated SVG</button>
+
+<script>
+    document.getElementById('svg-container').addEventListener('load', function() {
+        const svgDoc = this.contentDocument;
+
+        svgDoc.querySelectorAll('rect').forEach(el => {
+            el.classList.add('clickable');
+            el.addEventListener('click', function() {
+                const currentColor = window.getComputedStyle(el).fill;
+                if(currentColor && currentColor.includes("rgb")) {
+                    el.setAttribute('fill', '#dd4d4d'); // change to red
+                }
+            });
+        });
+
+        document.getElementById('download-btn').addEventListener('click', function() {
+            // Clone the SVG node to manipulate a clean copy
+            const svgNode = svgDoc.querySelector('svg').cloneNode(true);
+            const serializer = new XMLSerializer();
+            const source = serializer.serializeToString(svgNode);
+            const a = document.createElement('a');
+            a.href = 'data:image/svg+xml;base64,' + btoa(source);
+            a.download = 'updated-2025-02-23-hvac-diagram.svg';
+            a.click();
+        });
+    });
+</script>
+
+</body>
+</html>
+
