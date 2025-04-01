@@ -51,7 +51,7 @@ A **key limitation** of the work here is we are assuming that:
 - all connection points are of the same substance (`s223:Fluid-Air`, etc)
 - there is only one input and one output connection point per equipment
 
-These assumptions are not true in general, especially with heat exchangers. These can have multiple input/output pairs whcih might even be of different substances (think of a hot water coil in an air loop). Handling these requires following the [`s223:pairedConnectionPoint`](https://explore.open223.info/s223/pairedConnectionPoint.html) relationship to follow within the equipment.
+These assumptions are not true in general, especially with heat exchangers. These can have multiple input/output pairs which might even be of different substances (think of a hot water coil in an air loop). Handling these requires following the [`s223:pairedConnectionPoint`](https://explore.open223.info/s223/pairedConnectionPoint.html) relationship to follow within the equipment.
 {{< /announce >}}
 
 ### Simple Cycle, Single Component Type
@@ -91,7 +91,7 @@ This gives the following output
 {{< importcode "dfs-output.txt" "txt" >}}
 
 There are 34 cycles in the graph! Many of these are trivially short loops that don't contain any interesting information but exist because of the additional edges added by the 223P ontology.
-Edges like `s223:isConnectionPointOf` (can be inferred) and `s223:maspTo` (added by the modeler) will point "backwards" from the flow of air through
+Edges like `s223:isConnectionPointOf` (can be inferred) and `s223:mapsTo` (added by the modeler) will point "backwards" from the flow of air through
 the HVAC system, creating these loops.
 
 To get our desired loop we need to filter out all non-equipment components from each `VAV1` cycle
@@ -110,6 +110,8 @@ This method of defining loops has a few steps, but you can express most things y
 |---|---|---|---|
 | Single component type | `nx.simple_cycles` + filtering  | ??? | ??? |
 | Multiple component types | ??? | ??? | ??? |
+
+Keep in mind that `nx.simple_cycles` is a brute-force algorithm that will find all cycles in the graph, so it can be slow for large graphs.
 
 ### Simple Cycle, Multiple Component Types
 
