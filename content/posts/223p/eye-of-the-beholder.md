@@ -52,7 +52,7 @@ bldg:air-temp a s223:QuantifiableObservableProperty,
     qudt:hasUnit unit:DEG_C .
 ```
 
-`bldg:air-temp` is a supply air temperature sensor, which observes the temperature of the air flowing out of a damper (`bldg:damper-out`).
+`bldg:sensor` is a supply air temperature sensor, which observes the temperature of the air (`bldg:air-temp`) flowing out of a damper (`bldg:damper-out`).
 However, it is not explicitly labeled as a "supply air temperature sensor" in the model -- this is an application-specific interpretation of the model.
 
 Brick captures the I/O "points" in a building and how they relate to the major architectural, mechanical, electrical components. This involves some modeling of upstream/downstream relationships between components. A Brick model (a specific knowledge graph of a building) is a simplification of the corresponding 223P model:
@@ -60,7 +60,7 @@ A Brick model:
    - *includes* major equipment with significant components, *excluding* connection points and pipes and other details
    - *abstracts* explicit models of physical sensors and properties into *simple* I/O points that directly relate to data sources
 
-Following our example, here is a partial Brick model focusing on the same supply air temperature sensor:
+Following our example, here is a partial Brick model which annotates the `bldg:air-temp` property as a "supply air temperature sensor":
 
 ```ttl
 @prefix bldg: <urn:ex/> .
@@ -81,10 +81,13 @@ bldg:air-temp a s223:QuantifiableObservableProperty,
 ```
 
 The relationship between the damper and the sensor (the *digital* I/O point "sensor") is now a direct link (`brick:hasPoint`) and the sensor has an application-friendly type of "Supply_Air_Temperature_Sensor".
+This also illustrates one difference between the two models: 223P models the physical sensor and its relationship to the damper, while Brick abstracts this into a simple I/O point and does not model the physical sensor itself.
 An illustration of this abstraction is below{{< sn >}}I am experimenting with using Claude to generate SVGs instead of me putting them together by hand{{< /sn >}}.
 
 
 {{< figure width="70%" src="/img/2025-02-23-brick-223p-view.svg" alt="abstracting 223P models with Brick">}}
+
+
 
 ### Modeling Loops
 
