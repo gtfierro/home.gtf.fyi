@@ -4,6 +4,8 @@ title: "Selected Talks"
 
 ## Selected Talks
 
+- **Overview of Brick** 2025.
+    - [Brick introduction](/files/BrickIntroSTT.pdf)
 - **ASHRAE Winter Conference** 2025.
     - [Future Tools and Solutions for Brownfield Deployment of Building Ontologies](/files/2025-ASHRAE-Brownfield-Fierro.pdf)
 - **ASHRAE Summer Conference** 2024.
