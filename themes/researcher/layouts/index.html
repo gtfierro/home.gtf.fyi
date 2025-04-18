@@ -17,7 +17,7 @@
             <ul class="paper-list">
                 {{ range first 5 (sort .Site.Data.papers "year" "desc") }}
                 <li>
-                    <a href="/papers/{{ .pdf }}">{{ .title }}</a>
+                    <a href="/papers/{{ .pdf }}">{{ .title }}</a> [{{ .conference }}]
                 </li>
                 {{ end }}
             </ul>
