@@ -46,6 +46,7 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 
 ## News
 
+* *[May 2025]* I am happy to announce that I am the Vice General Chair and Industrial Relations Chair for [BuildSys 2025](https://buildsys.acm.org/2025) which will be held in Golden, Colorado from November 19-21, 2025.
 * *[March 2025]* Congrats to the research team on being featured in a [Colorado Sun article](https://coloradosun.com/2025/03/03/energy-efficiency-mobile-homes-colorado-school-of-mines-leadville/) about our work in electrification and climate resilience
 * *[March 2024]* Proud to have the ASHRAE 223P draft standard released for [advisory public review](https://osr.ashrae.org/Online-Comment-Database/ShowDoc2/Table/DocumentAttachments/FileName/4289-223P_APRDraft.pdf/download/false)!
 * *[February 2024]* I was on a panel at the [Brains 4 Buildings webinar](https://brains4buildings.org/2024/02/28/webinar-scaling-adoption-of-automated-operational-intelligence-for-energy-productivity-in-smart-buildings/)
