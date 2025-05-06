@@ -27,6 +27,31 @@ date: 2021-06-12T16:51:38-07:00
   </div>
 </div>
 
+### 2025
+
+<div class="pub pub-conference">
+
+**Assessing Student Adoption of Generative Artificial Intelligence across Engineering Education from 2023 to 2024**
+**[[pdf]](/papers/ovi2025assessing.pdf)[[link]](https://arxiv.org/pdf/2503.04696)**
+
+Jesan Ahammed Ovi, Gabe Fierro, C. Estelle Smith
+
+*preprint for ASEE 2025*.  Montreal, Canada, June, 2025.
+
+</div>
+
+
+<div class="pub pub-conference">
+
+**Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs**
+**[[pdf]](/papers/mulayim2025towards.pdf)**
+
+Ozan Baris Mulayim, Gabe Fierro, Mario Bergés, Marco Pritoni
+
+*Proceedings of the 2nd International Workshop on Foundation Models for Cyber-Physical Systems & Internet of Things*.  Irvine, CA, USA, May, 2025.
+
+</div>
+
 ### 2024
 
 <div class="pub pub-workshop">

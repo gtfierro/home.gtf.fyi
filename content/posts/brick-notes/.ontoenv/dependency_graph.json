@@ -1,0 +1,262 @@
+{
+  "nodes": [
+    {
+      "location": {
+        "url": "http://www.linkedmodel.org/schema/vaem"
+      },
+      "name": "http://www.linkedmodel.org/schema/vaem"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/schema/qudt"
+      },
+      "name": "http://qudt.org/2.1/schema/qudt"
+    },
+    {
+      "location": {
+        "url": "http://spinrdf.org/spl"
+      },
+      "name": "http://spinrdf.org/spl"
+    },
+    {
+      "location": {
+        "url": "http://www.w3.org/ns/shacl#"
+      },
+      "name": "http://www.w3.org/ns/shacl#"
+    },
+    {
+      "location": {
+        "file": "./tutorial.ttl"
+      },
+      "name": "http://example.org/vav-system"
+    },
+    {
+      "location": {
+        "url": "http://www.w3.org/2004/02/skos/core"
+      },
+      "name": "http://www.w3.org/2004/02/skos/core"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/prefix"
+      },
+      "name": "http://qudt.org/2.1/vocab/prefix"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/dimensionvector"
+      },
+      "name": "http://qudt.org/2.1/vocab/dimensionvector"
+    },
+    {
+      "location": {
+        "url": "http://spinrdf.org/sp"
+      },
+      "name": "http://spinrdf.org/sp"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/unit"
+      },
+      "name": "http://qudt.org/2.1/vocab/unit"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/sou"
+      },
+      "name": "http://qudt.org/2.1/vocab/sou"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/quantitykind"
+      },
+      "name": "http://qudt.org/2.1/vocab/quantitykind"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/schema/extensions/functions"
+      },
+      "name": "http://qudt.org/2.1/schema/extensions/functions"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/currency"
+      },
+      "name": "http://qudt.org/2.1/vocab/currency"
+    },
+    {
+      "location": {
+        "url": "http://spinrdf.org/spin"
+      },
+      "name": "http://spinrdf.org/spin"
+    },
+    {
+      "location": {
+        "url": "http://www.linkedmodel.org/schema/dtype"
+      },
+      "name": "http://www.linkedmodel.org/schema/dtype"
+    },
+    {
+      "location": {
+        "file": "./223p.ttl"
+      },
+      "name": "http://data.ashrae.org/standard223/1.0/model/all"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/constant"
+      },
+      "name": "http://qudt.org/2.1/vocab/constant"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/2.1/schema/facade/qudt"
+      },
+      "name": "http://qudt.org/2.1/schema/facade/qudt"
+    }
+  ],
+  "node_holes": [],
+  "edge_property": "directed",
+  "edges": [
+    [
+      1,
+      5,
+      null
+    ],
+    [
+      1,
+      0,
+      null
+    ],
+    [
+      1,
+      15,
+      null
+    ],
+    [
+      2,
+      14,
+      null
+    ],
+    [
+      4,
+      16,
+      null
+    ],
+    [
+      6,
+      18,
+      null
+    ],
+    [
+      7,
+      18,
+      null
+    ],
+    [
+      9,
+      6,
+      null
+    ],
+    [
+      9,
+      10,
+      null
+    ],
+    [
+      9,
+      11,
+      null
+    ],
+    [
+      9,
+      18,
+      null
+    ],
+    [
+      10,
+      18,
+      null
+    ],
+    [
+      10,
+      6,
+      null
+    ],
+    [
+      11,
+      7,
+      null
+    ],
+    [
+      11,
+      18,
+      null
+    ],
+    [
+      12,
+      2,
+      null
+    ],
+    [
+      13,
+      9,
+      null
+    ],
+    [
+      13,
+      18,
+      null
+    ],
+    [
+      14,
+      8,
+      null
+    ],
+    [
+      15,
+      0,
+      null
+    ],
+    [
+      16,
+      3,
+      null
+    ],
+    [
+      16,
+      17,
+      null
+    ],
+    [
+      16,
+      9,
+      null
+    ],
+    [
+      16,
+      13,
+      null
+    ],
+    [
+      17,
+      18,
+      null
+    ],
+    [
+      17,
+      9,
+      null
+    ],
+    [
+      18,
+      1,
+      null
+    ],
+    [
+      18,
+      12,
+      null
+    ]
+  ]
+}

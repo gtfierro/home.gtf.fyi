@@ -618,3 +618,28 @@
     Buildings: Requirements and Challenges'
   type: workshop
   year: 2024
+- authors: Jesan Ahammed Ovi, Gabe Fierro, C. Estelle Smith
+  award: null
+  conference: preprint for ASEE 2025
+  link: https://arxiv.org/pdf/2503.04696
+  location: Montreal, Canada
+  month: June
+  pdf: ovi2025assessing.pdf
+  slides: null
+  title: Assessing Student Adoption of Generative Artificial Intelligence across Engineering
+    Education from 2023 to 2024
+  type: conference
+  year: 2025
+- authors: "Ozan Baris Mulayim, Gabe Fierro, Mario Berg\xE9s, Marco Pritoni"
+  award: null
+  conference: Proceedings of the 2nd International Workshop on Foundation Models for
+    Cyber-Physical Systems & Internet of Things
+  link: null
+  location: Irvine, CA, USA
+  month: May
+  pdf: mulayim2025towards.pdf
+  slides: null
+  title: 'Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and
+    Knowledge Graphs'
+  type: conference
+  year: 2025

@@ -1,0 +1,425 @@
+{
+  "ontologies": [
+    {
+      "id": {
+        "location": {
+          "url": "http://www.linkedmodel.org/schema/vaem"
+        },
+        "name": "http://www.linkedmodel.org/schema/vaem"
+      },
+      "name": "http://www.linkedmodel.org/schema/vaem",
+      "imports": [],
+      "location": {
+        "url": "http://www.linkedmodel.org/schema/vaem"
+      },
+      "last_updated": "2025-04-15T21:16:51.730243Z",
+      "version_properties": {}
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/schema/qudt"
+        },
+        "name": "http://qudt.org/2.1/schema/qudt"
+      },
+      "name": "http://qudt.org/2.1/schema/qudt",
+      "imports": [
+        "http://www.w3.org/2004/02/skos/core",
+        "http://www.linkedmodel.org/schema/vaem",
+        "http://www.linkedmodel.org/schema/dtype"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/schema/qudt"
+      },
+      "last_updated": "2025-04-15T21:16:50.568839Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/created": "\"2011-04-20\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT Schema - Version 2.1.47\"",
+        "http://purl.org/dc/terms/title": "\"QUDT Schema - Version 2.1.47\"",
+        "http://purl.org/dc/terms/modified": "\"2025-01-28T18:38:46Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/schema/qudt>",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/schema/qudt>"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://spinrdf.org/spl"
+        },
+        "name": "http://spinrdf.org/spl"
+      },
+      "name": "http://spinrdf.org/spl",
+      "imports": [
+        "http://spinrdf.org/spin"
+      ],
+      "location": {
+        "url": "http://spinrdf.org/spl"
+      },
+      "last_updated": "2025-04-15T21:16:52.490152Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"SPIN Standard Library\"",
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"1.4.2\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://www.w3.org/ns/shacl#"
+        },
+        "name": "http://www.w3.org/ns/shacl#"
+      },
+      "name": "http://www.w3.org/ns/shacl#",
+      "imports": [],
+      "location": {
+        "url": "http://www.w3.org/ns/shacl#"
+      },
+      "last_updated": "2025-04-15T21:16:47.546976Z",
+      "version_properties": {}
+    },
+    {
+      "id": {
+        "location": {
+          "file": "./tutorial.ttl"
+        },
+        "name": "http://example.org/vav-system"
+      },
+      "name": "http://example.org/vav-system",
+      "imports": [
+        "http://data.ashrae.org/standard223/1.0/model/all"
+      ],
+      "location": {
+        "file": "./tutorial.ttl"
+      },
+      "last_updated": "2025-04-15T21:16:46.617440Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/created": "\"2025-04-15\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://purl.org/dc/terms/title": "\"VAV HVAC System Model\"@en"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://www.w3.org/2004/02/skos/core"
+        },
+        "name": "http://www.w3.org/2004/02/skos/core"
+      },
+      "name": "http://www.w3.org/2004/02/skos/core",
+      "imports": [],
+      "location": {
+        "url": "http://www.w3.org/2004/02/skos/core"
+      },
+      "last_updated": "2025-04-15T21:16:51.325677Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/title": "\"SKOS Vocabulary\"@en",
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": "<http://www.w3.org/TR/skos-reference/>"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/vocab/prefix"
+        },
+        "name": "http://qudt.org/2.1/vocab/prefix"
+      },
+      "name": "http://qudt.org/2.1/vocab/prefix",
+      "imports": [
+        "http://qudt.org/2.1/schema/facade/qudt"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/prefix"
+      },
+      "last_updated": "2025-04-15T21:16:49.679160Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/vocab/prefix>",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT Prefix Vocabulary Version Metadata 2.1.47\"",
+        "http://purl.org/dc/terms/modified": "\"2025-01-28T18:38:46Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://purl.org/dc/terms/created": "\"2020-07-15\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://purl.org/dc/terms/title": "\"QUDT Prefixes Version 2.1Vocabulary\"",
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"Created with TopBraid Composer\"",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/vocab/prefix>"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/vocab/dimensionvector"
+        },
+        "name": "http://qudt.org/2.1/vocab/dimensionvector"
+      },
+      "name": "http://qudt.org/2.1/vocab/dimensionvector",
+      "imports": [
+        "http://qudt.org/2.1/schema/facade/qudt"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/dimensionvector"
+      },
+      "last_updated": "2025-04-15T21:16:50.959926Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/vocab/dimensionvector>",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/vocab/dimensionvector>",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT Dimension Vector Vocabulary Metadata Version 2.1.47\"",
+        "http://purl.org/dc/terms/modified": "\"2025-01-28T18:38:46Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://purl.org/dc/terms/created": "\"2019-08-01T16:25:54.850+00:00\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://purl.org/dc/terms/title": "\"QUDT Dimension Vectors Version 2.1Vocabulary\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://spinrdf.org/sp"
+        },
+        "name": "http://spinrdf.org/sp"
+      },
+      "name": "http://spinrdf.org/sp",
+      "imports": [],
+      "location": {
+        "url": "http://spinrdf.org/sp"
+      },
+      "last_updated": "2025-04-15T21:16:53.044580Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"SPIN SPARQL Syntax\"",
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"1.5.1\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/vocab/unit"
+        },
+        "name": "http://qudt.org/2.1/vocab/unit"
+      },
+      "name": "http://qudt.org/2.1/vocab/unit",
+      "imports": [
+        "http://qudt.org/2.1/vocab/prefix",
+        "http://qudt.org/2.1/vocab/sou",
+        "http://qudt.org/2.1/vocab/quantitykind",
+        "http://qudt.org/2.1/schema/facade/qudt"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/unit"
+      },
+      "last_updated": "2025-04-15T21:16:49.153898Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/modified": "\"2025-01-28T18:38:46Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT Unit of Measure Vocabulary Metadata Version 2.1.47\"",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/vocab/unit>",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/vocab/unit>",
+        "http://purl.org/dc/terms/created": "\"2019-07-30\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://purl.org/dc/terms/title": "\"QUDT Units Version 2.1 Vocabulary\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/vocab/sou"
+        },
+        "name": "http://qudt.org/2.1/vocab/sou"
+      },
+      "name": "http://qudt.org/2.1/vocab/sou",
+      "imports": [
+        "http://qudt.org/2.1/schema/facade/qudt",
+        "http://qudt.org/2.1/vocab/prefix"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/sou"
+      },
+      "last_updated": "2025-04-15T21:16:49.829250Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT System of Units Vocabulary Metadata Version v2.1.47\"",
+        "http://purl.org/dc/terms/created": "\"2016-07-04\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"Created with TopBraid Composer\"",
+        "http://purl.org/dc/terms/modified": "\"2025-01-28T18:38:46Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://purl.org/dc/terms/title": "\"QUDT Systems of Units Version 2.1Vocabulary\"",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/vocab/sou>",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/vocab/sou>"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/vocab/quantitykind"
+        },
+        "name": "http://qudt.org/2.1/vocab/quantitykind"
+      },
+      "name": "http://qudt.org/2.1/vocab/quantitykind",
+      "imports": [
+        "http://qudt.org/2.1/vocab/dimensionvector",
+        "http://qudt.org/2.1/schema/facade/qudt"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/quantitykind"
+      },
+      "last_updated": "2025-04-15T21:16:50.347587Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/modified": "\"2024-10-26T14:11:16.049-04:00\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://purl.org/dc/terms/title": "\"QUDT Quantity Kinds Version 2.1 Vocabulary\"",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/vocab/quantitykind>",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT Quantity Kind Vocabulary Metadata Version 2.1.47\"",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/vocab/quantitykind>",
+        "http://purl.org/dc/terms/created": "\"2019-08-01T16:25:54.850+00:00\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/schema/extensions/functions"
+        },
+        "name": "http://qudt.org/2.1/schema/extensions/functions"
+      },
+      "name": "http://qudt.org/2.1/schema/extensions/functions",
+      "imports": [
+        "http://spinrdf.org/spl"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/schema/extensions/functions"
+      },
+      "last_updated": "2025-04-15T21:16:50.714903Z",
+      "version_properties": {
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"Created with TopBraid Composer\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/vocab/currency"
+        },
+        "name": "http://qudt.org/2.1/vocab/currency"
+      },
+      "name": "http://qudt.org/2.1/vocab/currency",
+      "imports": [
+        "http://qudt.org/2.1/vocab/unit",
+        "http://qudt.org/2.1/schema/facade/qudt"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/currency"
+      },
+      "last_updated": "2025-04-15T21:16:49.373702Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/created": "\"2023-03-14\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/vocab/currency>",
+        "http://purl.org/dc/terms/modified": "\"2025-01-28T18:38:46Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT Currency Unit Vocabulary Metadata Version 2.1.47\"",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/vocab/currency>",
+        "http://purl.org/dc/terms/title": "\"Currency UNITS Version 2.1Vocabulary\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://spinrdf.org/spin"
+        },
+        "name": "http://spinrdf.org/spin"
+      },
+      "name": "http://spinrdf.org/spin",
+      "imports": [
+        "http://spinrdf.org/sp"
+      ],
+      "location": {
+        "url": "http://spinrdf.org/spin"
+      },
+      "last_updated": "2025-04-15T21:16:52.755955Z",
+      "version_properties": {
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"1.4\"",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"SPIN Modeling Vocabulary\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://www.linkedmodel.org/schema/dtype"
+        },
+        "name": "http://www.linkedmodel.org/schema/dtype"
+      },
+      "name": "http://www.linkedmodel.org/schema/dtype",
+      "imports": [
+        "http://www.linkedmodel.org/schema/vaem"
+      ],
+      "location": {
+        "url": "http://www.linkedmodel.org/schema/dtype"
+      },
+      "last_updated": "2025-04-15T21:16:51.888810Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/modified": "\"2023-11-14\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://www.linkedmodel.org/schema/dtype>",
+        "http://www.linkedmodel.org/schema/vaem#revision": "\"2.1\"",
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"DTYPE Schema Version 2.1 Metadata\"",
+        "http://purl.org/dc/terms/created": "\"2011-05-29\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://purl.org/dc/terms/title": "\"DTYPE Version 2.1 Metadata\"",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://www.linkedmodel.org/schema/dtype>"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "file": "./223p.ttl"
+        },
+        "name": "http://data.ashrae.org/standard223/1.0/model/all"
+      },
+      "name": "http://data.ashrae.org/standard223/1.0/model/all",
+      "imports": [
+        "http://data.ashrae.org/standard223/1.0/vocab/enumeration",
+        "http://data.ashrae.org/standard223/1.0/model/core",
+        "http://www.w3.org/ns/shacl#",
+        "http://data.ashrae.org/standard223/1.0/model/equipment",
+        "http://qudt.org/2.1/vocab/constant",
+        "http://data.ashrae.org/standard223/1.0/extensions/settings",
+        "http://qudt.org/2.1/vocab/unit",
+        "http://qudt.org/2.1/vocab/currency"
+      ],
+      "location": {
+        "file": "./223p.ttl"
+      },
+      "last_updated": "2025-04-15T21:16:46.617443Z",
+      "version_properties": {
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"Created with TopBraid Composer\""
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/vocab/constant"
+        },
+        "name": "http://qudt.org/2.1/vocab/constant"
+      },
+      "name": "http://qudt.org/2.1/vocab/constant",
+      "imports": [
+        "http://qudt.org/2.1/schema/facade/qudt",
+        "http://qudt.org/2.1/vocab/unit"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/vocab/constant"
+      },
+      "last_updated": "2025-04-15T21:16:48.245741Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"Physical Constant Vocabulary Version 2.1.47 Metadata\"",
+        "http://purl.org/dc/terms/title": "\"QUDT Constants Version 2.1Vocabulary\"",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/2.1/vocab/constant>",
+        "http://purl.org/dc/terms/created": "\"2010-02-05\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/2.1/vocab/constant>",
+        "http://purl.org/dc/terms/modified": "\"2025-01-28T18:38:46Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"
+      }
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/2.1/schema/facade/qudt"
+        },
+        "name": "http://qudt.org/2.1/schema/facade/qudt"
+      },
+      "name": "http://qudt.org/2.1/schema/facade/qudt",
+      "imports": [
+        "http://qudt.org/2.1/schema/qudt",
+        "http://qudt.org/2.1/schema/extensions/functions"
+      ],
+      "location": {
+        "url": "http://qudt.org/2.1/schema/facade/qudt"
+      },
+      "last_updated": "2025-04-15T21:16:49.531672Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT SCHEMA Facade graph - v2.1.33\"",
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"Created with TopBraid Composer\""
+      }
+    }
+  ],
+  "default_policy": "default"
+}

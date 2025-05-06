@@ -1,0 +1,134 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix s223: <http://data.ashrae.org/standard223#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/vav-system#> .
+
+# Ontology Declaration
+<http://example.org/vav-system> a owl:Ontology ;
+    owl:imports <http://data.ashrae.org/standard223/1.0/model/all> ;
+    rdfs:label "VAV System Ontology"^^xsd:string .
+
+# Main Components
+:VAVBoxController a s223:Controller ;
+    rdfs:label "VAV Box Controller"^^xsd:string ;
+    s223:actuates :Damper, :HotWaterValve ;
+    s223:executes :TemperatureControl .
+
+:TemperatureControl a s223:Function ;
+    rdfs:label "Temperature Control Function"^^xsd:string .
+
+:VAVBox a s223:SingleDuctTerminal ;
+    rdfs:label "VAV Box"^^xsd:string ;
+    s223:contains :Damper ;
+    s223:hasConnectionPoint :VAVBox_AirInlet, :VAVBox_AirOutlet .
+
+:VAVBox_AirInlet a s223:InletConnectionPoint ;
+    rdfs:label "VAV Box Air Inlet"^^xsd:string ;
+    s223:hasMedium s223:Fluid-Air .
+
+:VAVBox_AirOutlet a s223:OutletConnectionPoint ;
+    rdfs:label "VAV Box Air Outlet"^^xsd:string ;
+    s223:hasMedium s223:Fluid-Air .
+
+:Damper a s223:Damper ;
+    rdfs:label "VAV Box Damper"^^xsd:string ;
+    s223:hasConnectionPoint :Damper_AirInlet, :Damper_AirOutlet ;
+    s223:actuatedBy :VAVBoxController .
+
+:Damper_AirInlet a s223:InletConnectionPoint ;
+    rdfs:label "Damper Air Inlet"^^xsd:string ;
+    s223:hasMedium s223:Fluid-Air .
+
+:Damper_AirOutlet a s223:OutletConnectionPoint ;
+    rdfs:label "Damper Air Outlet"^^xsd:string ;
+    s223:hasMedium s223:Fluid-Air .
+
+:HydronicReheatCoil a s223:HydronicHeatExchanger ;
+    rdfs:label "Hydronic Reheat Coil"^^xsd:string ;
+    s223:hasConnectionPoint :HydronicReheatCoil_WaterInlet, :HydronicReheatCoil_WaterOutlet, :HydronicReheatCoil_AirInlet, :HydronicReheatCoil_AirOutlet ;
+    s223:hasRole s223:Role-Heating .
+
+:HydronicReheatCoil_WaterInlet a s223:InletConnectionPoint ;
+    rdfs:label "Hydronic Reheat Coil Water Inlet"^^xsd:string ;
+    s223:hasMedium s223:Water-HotWater .
+
+:HydronicReheatCoil_WaterOutlet a s223:OutletConnectionPoint ;
+    rdfs:label "Hydronic Reheat Coil Water Outlet"^^xsd:string ;
+    s223:hasMedium s223:Water-HotWater ;
+    s223:pairedConnectionPoint :HydronicReheatCoil_WaterInlet .
+
+:HydronicReheatCoil_AirInlet a s223:InletConnectionPoint ;
+    rdfs:label "Hydronic Reheat Coil Air Inlet"^^xsd:string ;
+    s223:hasMedium s223:Fluid-Air .
+
+:HydronicReheatCoil_AirOutlet a s223:OutletConnectionPoint ;
+    rdfs:label "Hydronic Reheat Coil Air Outlet"^^xsd:string ;
+    s223:hasMedium s223:Fluid-Air ;
+    s223:pairedConnectionPoint :HydronicReheatCoil_AirInlet .
+
+:HotWaterValve a s223:Valve ;
+    rdfs:label "Hot Water Valve"^^xsd:string ;
+    s223:hasConnectionPoint :HotWaterValve_Inlet, :HotWaterValve_Outlet ;
+    s223:actuatedBy :VAVBoxController .
+
+:HotWaterValve_Inlet a s223:InletConnectionPoint ;
+    rdfs:label "Hot Water Valve Inlet"^^xsd:string ;
+    s223:hasMedium s223:Water-HotWater .
+
+:HotWaterValve_Outlet a s223:OutletConnectionPoint ;
+    rdfs:label "Hot Water Valve Outlet"^^xsd:string ;
+    s223:hasMedium s223:Water-HotWater .
+
+:DischargeAirTempSensor a s223:TemperatureSensor ;
+    rdfs:label "Discharge Air Temperature Sensor"^^xsd:string ;
+    s223:observes :DischargeAirTemperature .
+
+:DischargeAirTemperature a s223:QuantifiableObservableProperty ;
+    rdfs:label "Discharge Air Temperature"^^xsd:string ;
+    <http://qudt.org/schema/qudt/hasQuantityKind> <http://qudt.org/vocab/quantitykind/Temperature> .
+
+:FlowSensor a s223:FlowSensor ;
+    rdfs:label "Supply Air Flow Sensor"^^xsd:string ;
+    s223:observes :SupplyAirFlow .
+
+:SupplyAirFlow a s223:QuantifiableObservableProperty ;
+    rdfs:label "Supply Air Flow"^^xsd:string ;
+    <http://qudt.org/schema/qudt/hasQuantityKind> <http://qudt.org/vocab/quantitykind/VolumeFlowRate> .
+
+:Zone a s223:Zone ;
+    rdfs:label "Conditioned Zone"^^xsd:string ;
+    s223:hasDomain s223:Domain-HVAC .
+
+:Thermostat a s223:Thermostat ;
+    rdfs:label "Zone Thermostat"^^xsd:string ;
+    s223:hasPhysicalLocation :Zone ;
+    s223:actuates :VAVBoxController ;
+    s223:observes :ZoneTemperature .
+
+:ZoneTemperature a s223:QuantifiableObservableProperty ;
+    rdfs:label "Zone Temperature"^^xsd:string ;
+    <http://qudt.org/schema/qudt/hasQuantityKind> <http://qudt.org/vocab/quantitykind/Temperature> .
+
+# Air Flow Connections
+:SupplyAir a s223:ConnectionPoint ;
+    rdfs:label "Supply Air"^^xsd:string ;
+    s223:connectsTo :VAVBox_AirInlet ;
+    s223:hasMedium s223:Fluid-Air .
+
+:VAVBox_AirOutlet s223:connectsTo :HydronicReheatCoil_AirInlet .
+:HydronicReheatCoil_AirOutlet s223:connectsTo :Zone .
+
+# Water Flow Connections
+:HotWaterSupply a s223:ConnectionPoint ;
+    rdfs:label "Hot Water Supply"^^xsd:string ;
+    s223:connectsTo :HotWaterValve_Inlet ;
+    s223:hasMedium s223:Water-HotWater .
+
+:HotWaterValve_Outlet s223:connectsTo :HydronicReheatCoil_WaterInlet .
+:HydronicReheatCoil_WaterOutlet s223:connectsTo :HotWaterReturn .
+
+:HotWaterReturn a s223:ConnectionPoint ;
+    rdfs:label "Hot Water Return"^^xsd:string ;
+    s223:hasMedium s223:Water-HotWater .

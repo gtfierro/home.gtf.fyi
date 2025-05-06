@@ -1,0 +1,31 @@
+
+# 2025-04-07 23:21:53.993773
++n
+
+# 2025-04-07 23:22:18.280533
++/add themes
+
+# 2025-04-07 23:22:39.704079
++change the style of the site so that I can wrap paragraphs in a div which creates a box and a subtle shadow effect
+
+# 2025-04-07 23:23:06.996213
++/undo
+
+# 2025-04-22 08:58:24.107541
++n
+
+# 2025-04-22 09:00:12.142997
++this is a hugo blog repository. Implement link shortening functionality in this repository, so I can have a link map to a short identifier. Implement this in a way that makes it easy for me to add new links. This should give me both the ability to choose the shortened link as well as generate a new short code
+
+# 2025-04-22 09:01:05.932367
++I want to be able to generate links to external URLs, so I would prefer the use of a data file
+
+# 2025-04-22 09:03:39.001181
++n
+
+# 2025-04-22 10:15:03.168323
++add an alias.html to this repo that handles redirects
+
+# 2025-04-22 10:15:46.044076
++make sure I can refer to this template using something like `{{- template "alias.html" (dict "Permalink" .Params.target) -}}
++`

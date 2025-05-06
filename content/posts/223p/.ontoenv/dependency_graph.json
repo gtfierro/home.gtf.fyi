@@ -1,0 +1,416 @@
+{
+  "nodes": [
+    {
+      "location": {
+        "url": "http://spinrdf.org/sp"
+      },
+      "name": "http://spinrdf.org/sp"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/schema/extensions/functions"
+      },
+      "name": "http://qudt.org/3.1.0/schema/extensions/functions"
+    },
+    {
+      "location": {
+        "url": "http://spinrdf.org/spl"
+      },
+      "name": "http://spinrdf.org/spl"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/vocab/currency"
+      },
+      "name": "http://qudt.org/3.0.0/vocab/currency"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/vocab/prefix"
+      },
+      "name": "http://qudt.org/3.1.0/vocab/prefix"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/schema/qudt"
+      },
+      "name": "http://qudt.org/3.1.0/schema/qudt"
+    },
+    {
+      "location": {
+        "url": "http://spinrdf.org/spin"
+      },
+      "name": "http://spinrdf.org/spin"
+    },
+    {
+      "location": {
+        "file": "2025-02-23-hvac223p.ttl"
+      },
+      "name": "http://example.com/hvac"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/vocab/quantitykind"
+      },
+      "name": "http://qudt.org/3.1.0/vocab/quantitykind"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/vocab/constant"
+      },
+      "name": "http://qudt.org/3.1.0/vocab/constant"
+    },
+    {
+      "location": {
+        "url": "http://www.w3.org/ns/shacl#"
+      },
+      "name": "http://www.w3.org/ns/shacl#"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/schema/facade/qudt"
+      },
+      "name": "http://qudt.org/3.0.0/schema/facade/qudt"
+    },
+    {
+      "location": {
+        "url": "http://www.linkedmodel.org/schema/vaem"
+      },
+      "name": "http://www.linkedmodel.org/schema/vaem"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/vocab/sou"
+      },
+      "name": "http://qudt.org/3.0.0/vocab/sou"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/vocab/quantitykind"
+      },
+      "name": "http://qudt.org/3.0.0/vocab/quantitykind"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/schema/facade/qudt"
+      },
+      "name": "http://qudt.org/3.1.0/schema/facade/qudt"
+    },
+    {
+      "location": {
+        "url": "http://www.linkedmodel.org/schema/dtype"
+      },
+      "name": "http://www.linkedmodel.org/schema/dtype"
+    },
+    {
+      "location": {
+        "file": "/Users/gabe/src/open223/223p.ttl"
+      },
+      "name": "http://data.ashrae.org/standard223/1.0/model/all"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/vocab/dimensionvector"
+      },
+      "name": "http://qudt.org/3.0.0/vocab/dimensionvector"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/vocab/prefix"
+      },
+      "name": "http://qudt.org/3.0.0/vocab/prefix"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/vocab/sou"
+      },
+      "name": "http://qudt.org/3.1.0/vocab/sou"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/vocab/constant"
+      },
+      "name": "http://qudt.org/3.0.0/vocab/constant"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/vocab/unit"
+      },
+      "name": "http://qudt.org/3.0.0/vocab/unit"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/vocab/unit"
+      },
+      "name": "http://qudt.org/3.1.0/vocab/unit"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/schema/extensions/functions"
+      },
+      "name": "http://qudt.org/3.0.0/schema/extensions/functions"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.1.0/vocab/dimensionvector"
+      },
+      "name": "http://qudt.org/3.1.0/vocab/dimensionvector"
+    },
+    {
+      "location": {
+        "url": "http://www.w3.org/2004/02/skos/core"
+      },
+      "name": "http://www.w3.org/2004/02/skos/core"
+    },
+    {
+      "location": {
+        "url": "http://qudt.org/3.0.0/schema/qudt"
+      },
+      "name": "http://qudt.org/3.0.0/schema/qudt"
+    }
+  ],
+  "node_holes": [],
+  "edge_property": "directed",
+  "edges": [
+    [
+      1,
+      2,
+      null
+    ],
+    [
+      2,
+      6,
+      null
+    ],
+    [
+      3,
+      11,
+      null
+    ],
+    [
+      3,
+      22,
+      null
+    ],
+    [
+      4,
+      15,
+      null
+    ],
+    [
+      5,
+      16,
+      null
+    ],
+    [
+      5,
+      12,
+      null
+    ],
+    [
+      5,
+      26,
+      null
+    ],
+    [
+      6,
+      0,
+      null
+    ],
+    [
+      7,
+      17,
+      null
+    ],
+    [
+      8,
+      15,
+      null
+    ],
+    [
+      8,
+      25,
+      null
+    ],
+    [
+      9,
+      15,
+      null
+    ],
+    [
+      9,
+      23,
+      null
+    ],
+    [
+      11,
+      27,
+      null
+    ],
+    [
+      11,
+      24,
+      null
+    ],
+    [
+      13,
+      19,
+      null
+    ],
+    [
+      13,
+      11,
+      null
+    ],
+    [
+      14,
+      18,
+      null
+    ],
+    [
+      14,
+      11,
+      null
+    ],
+    [
+      15,
+      5,
+      null
+    ],
+    [
+      15,
+      1,
+      null
+    ],
+    [
+      16,
+      12,
+      null
+    ],
+    [
+      17,
+      21,
+      null
+    ],
+    [
+      17,
+      22,
+      null
+    ],
+    [
+      17,
+      23,
+      null
+    ],
+    [
+      17,
+      9,
+      null
+    ],
+    [
+      17,
+      10,
+      null
+    ],
+    [
+      17,
+      3,
+      null
+    ],
+    [
+      18,
+      11,
+      null
+    ],
+    [
+      19,
+      11,
+      null
+    ],
+    [
+      20,
+      15,
+      null
+    ],
+    [
+      20,
+      4,
+      null
+    ],
+    [
+      21,
+      22,
+      null
+    ],
+    [
+      21,
+      11,
+      null
+    ],
+    [
+      22,
+      13,
+      null
+    ],
+    [
+      22,
+      11,
+      null
+    ],
+    [
+      22,
+      14,
+      null
+    ],
+    [
+      22,
+      19,
+      null
+    ],
+    [
+      23,
+      20,
+      null
+    ],
+    [
+      23,
+      8,
+      null
+    ],
+    [
+      23,
+      4,
+      null
+    ],
+    [
+      23,
+      15,
+      null
+    ],
+    [
+      24,
+      2,
+      null
+    ],
+    [
+      25,
+      15,
+      null
+    ],
+    [
+      27,
+      12,
+      null
+    ],
+    [
+      27,
+      16,
+      null
+    ],
+    [
+      27,
+      26,
+      null
+    ]
+  ]
+}

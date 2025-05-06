@@ -1,0 +1,13 @@
+{
+  "root": "/Users/gabe/Documents/home.gtf.fyi/content/posts/223p",
+  "search_directories": [],
+  "includes": [
+    "*.ttl"
+  ],
+  "excludes": [],
+  "require_ontology_names": false,
+  "strict": false,
+  "offline": false,
+  "resolution_policy": "default",
+  "temporary": false
+}
