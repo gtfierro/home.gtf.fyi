@@ -44,7 +44,7 @@ Jesan Ahammed Ovi, Gabe Fierro, C. Estelle Smith
 <div class="pub pub-conference">
 
 **Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs**
-**[[pdf]](/papers/mulayim2025towards.pdf)**
+**[[pdf]](/papers/mulayim2025towards.pdf)<i style="color:red">  Best Paper Award</i>**
 
 Ozan Baris Mulayim, Gabe Fierro, Mario Bergés, Marco Pritoni
 
