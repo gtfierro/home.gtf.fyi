@@ -60,9 +60,9 @@ jobs:
           sparse-checkout: |
             publications.rss
           sparse-checkout-cone-mode: false
-
       - run: |
-          cp publications.rss static/mybrilliantcollagues.rss
+          ls
+          cp my-brilliant-colleagues/publications.rss static/mybrilliantcollagues.rss
       - name: build publication page
         run: |
           cd publications
