@@ -50,6 +50,18 @@ jobs:
         run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
       - name: Install uv
         uses: astral-sh/setup-uv@v5
+        # updating mybrilliantcollagues.rss
+      - name: Checkout faculty rss repo
+        uses: actions/checkout@v4
+        with:
+          repository: gtfierro/my-brilliant-colleagues
+          token: ${{ secrets.PAT }}
+          sparse-checkout: |
+            publications.rss
+          sparse-checkout-cone-mode: false
+
+      - run: |
+          cp publications.rss static/mybrilliantcollagues.rss
       - name: build publication page
         run: |
           cd publications
