@@ -57,12 +57,13 @@ jobs:
         with:
           repository: gtfierro/my-brilliant-colleagues
           token: ${{ secrets.PAT }}
+          path: mbc
           sparse-checkout: |
             publications.rss
           sparse-checkout-cone-mode: false
       - run: |
           ls
-          cp my-brilliant-colleagues/publications.rss static/mybrilliantcollagues.rss
+          cp mbc/publications.rss static/mybrilliantcollagues.rss
       - name: build publication page
         run: |
           cd publications
