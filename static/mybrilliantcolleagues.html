@@ -44,7 +44,7 @@
 
     <script>
         async function fetchRSS() {
-            const response = await fetch('https://gtf.fyi/mybrilliantcollagues.rss');
+            const response = await fetch('/mybrilliantcollagues.rss');
             const text = await response.text();
             const parser = new DOMParser();
             const xml = parser.parseFromString(text, 'application/xml');
