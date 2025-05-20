@@ -52,6 +52,18 @@ Ozan Baris Mulayim, Gabe Fierro, Mario Bergés, Marco Pritoni
 
 </div>
 
+
+<div class="pub pub-demoposter">
+
+**Poster Abstract: Graph Learning on Cyber-Physical Knowledge Graphs**
+**[[pdf]](/papers/anwar2025graph.pdf)[[link]](https://dl.acm.org/doi/abs/10.1145/3715014.3724049)**
+
+Avia Anwar, Umut Mete Saka, and Gabe Fierro
+
+*Proceedings of the 23rd ACM Conference on Embedded Networked Sensor Systems (SenSys 2025)*.  Irvine, CA, USA, May, 2025.
+
+</div>
+
 ### 2024
 
 <div class="pub pub-workshop">

@@ -643,3 +643,15 @@
     Knowledge Graphs'
   type: conference
   year: 2025
+- authors: Avia Anwar, Umut Mete Saka, and Gabe Fierro
+  award: null
+  conference: Proceedings of the 23rd ACM Conference on Embedded Networked Sensor
+    Systems (SenSys 2025)
+  link: https://dl.acm.org/doi/abs/10.1145/3715014.3724049
+  location: Irvine, CA, USA
+  month: May
+  pdf: anwar2025graph.pdf
+  slides: null
+  title: 'Poster Abstract: Graph Learning on Cyber-Physical Knowledge Graphs'
+  type: demoposter
+  year: 2025
