@@ -47,8 +47,15 @@
             const text = await response.text();
             const parser = new DOMParser();
             const xml = parser.parseFromString(text, 'application/xml');
-            const items = xml.querySelectorAll('item');
+            const items = Array.from(xml.querySelectorAll('item'));
             const container = document.getElementById('cards');
+
+            // Sort the items by date (newest first)
+            items.sort((a, b) => {
+                const dateA = new Date(a.querySelector('pubDate').textContent);
+                const dateB = new Date(b.querySelector('pubDate').textContent);
+                return dateB - dateA;
+            });
 
             items.forEach(item => {
                 const title = item.querySelector('title').textContent;
