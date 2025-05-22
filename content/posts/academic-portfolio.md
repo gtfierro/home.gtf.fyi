@@ -3,7 +3,6 @@ title: "Making Your Academic Portfolio Website"
 date: 2025-05-21T09:40:12-06:00
 categories: ['Grad School','Student']
 type: post
-draft: true
 ---
 
 Graduate students --- especially PhD students --- should have an up-to-date academic portfolio website outside of a Google Scholar or LinkedIn profile.
