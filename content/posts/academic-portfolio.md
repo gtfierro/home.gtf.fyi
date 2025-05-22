@@ -70,6 +70,14 @@ You should set up your website in a way that makes it easy to update. It only ta
 The best way to learn how to put together an academic portfolio website is to just do it!
 You'll learn about web design, domain names, configuring web platforms, and how to advertise your work and present yourself as a professional researcher.
 
+My recommendation for how to get started is:
+- Buy a domain name
+- Set up a GitHub account
+- Set up a repository with GitHub pages
+- Choose a static site generator (like Hugo or Jekyll)
+- Choose a theme and customize it to your liking
+- Start pushing content to your website!
+
 Send me an email if you have any suggestions for other links or tutorials to include here, or if any information is wrong or out-of-date.
 
 Good luck!
