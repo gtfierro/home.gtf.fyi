@@ -4,6 +4,8 @@ title: "Selected Talks"
 
 ## Selected Talks
 
+- **Brick / RealEstateCore Conference** 2025.
+    - [Slides](/files/Brick-RECCon-2025.pdf)
 - **Overview of Brick** 2025.
     - [Brick introduction](/files/BrickIntroSTT.pdf)
 - **ASHRAE Winter Conference** 2025.
