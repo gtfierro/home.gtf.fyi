@@ -69,7 +69,7 @@ T(?x, "rdf:type", ?c2) :- T(?c1, "rdfs:subClassOf", ?c2), T(?x, "rdf:type", ?c1)
 ```
 
 The rule is of the traditional Datalog form.
-One detail relevant to the Datalog formalization of OWL 2 RL is there is only one relation, `T`{{< sn >}}My [dissertation](https://home.gtf.fyi/papers/fierro-dissertation.pdf) discusses more efficient transformations of OWL 2 RL rules. See Chapter 7.{{< /sn >}}, which contains all triples in an RDF graph.
+One detail relevant to the Datalog formalization of OWL 2 RL is there is only one relation, `T`{{< sn >}}My [dissertation](https://gtf.fyi/papers/fierro-dissertation.pdf) discusses more efficient transformations of OWL 2 RL rules. See Chapter 7.{{< /sn >}}, which contains all triples in an RDF graph.
 It is important to reiterate that the RDF graph must contain the "instance" triples (for example, the Brick model of a building) as well as the "ontology" triples (for example, the Brick ontology).
 
 The *body* of the rule --- to the right of the `:-` --- is true if there are triples that fulfill the conjunctive predicate given.

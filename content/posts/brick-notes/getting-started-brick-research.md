@@ -16,13 +16,13 @@ So you want to do research on or with Brick -- great!
 One common question I get or find myself answering is "what background do I need to get myself up to speed with using Brick at a level where I can do research?"
 This post attempts to answer that question.
 
-For high-level background, please read through [Chapter 2 of my PhD thesis](https://home.gtf.fyi/papers/fierro-dissertation.pdf) -- this is a decent overview of the information detailed below.
+For high-level background, please read through [Chapter 2 of my PhD thesis](https://gtf.fyi/papers/fierro-dissertation.pdf) -- this is a decent overview of the information detailed below.
 
 ## Vision Papers
 
 These are some high-level vision papers that can provide additional background and context into this work:
 
-- [Semantic Interoperability to Enable Smart, Grid-Interactive Efficient Buildings](https://home.gtf.fyi/papers/semantic_interop.pdf) from Harry Bergmann at US DOE
+- [Semantic Interoperability to Enable Smart, Grid-Interactive Efficient Buildings](https://gtf.fyi/papers/semantic_interop.pdf) from Harry Bergmann at US DOE
 - [Towards Digital and Performance-Based Supervisory HVAC Control Delivery](https://escholarship.org/uc/item/59z6d46m) from Dr. Amir Roth at US DOE
 
 ## RDF Background and Related Technologies
@@ -60,28 +60,28 @@ Some resources to check out:
 
 These are papers about Brick, extensions to Brick, or related ontologies:
 
-- [Original Brick paper](https://home.gtf.fyi/papers/brick2016balaji.pdf) (BuildSys 2016): describes the original vision and implementation; many of the property names have changed since
-- [Brick and Tag-based metadata](https://home.gtf.fyi/papers/house2020fierro.pdf) (FrontiersIn 2020): describes how Brick metadata is compatible with tag-based metadata schemes
-- [Occupancy Datasets and Brick](https://home.gtf.fyi/papers/extending2022luo.pdf) (Automation in Construction 2022): extends Brick with concepts for occupancy modeling and describing occupancy datasets
+- [Original Brick paper](https://gtf.fyi/papers/brick2016balaji.pdf) (BuildSys 2016): describes the original vision and implementation; many of the property names have changed since
+- [Brick and Tag-based metadata](https://gtf.fyi/papers/house2020fierro.pdf) (FrontiersIn 2020): describes how Brick metadata is compatible with tag-based metadata schemes
+- [Occupancy Datasets and Brick](https://gtf.fyi/papers/extending2022luo.pdf) (Automation in Construction 2022): extends Brick with concepts for occupancy modeling and describing occupancy datasets
 
 ## Brick Applications
 
 These are papers about applying Brick to data-driven analytics, and other applications
 
-- [Mortar](https://home.gtf.fyi/papers/mortar2020fierro.pdf) (ACM Transactions on Sensor Networks 2019): large dataset of buildings and Brick models, enabling portable analytics
-- [Thermal comfort application](https://home.gtf.fyi/papers/enabling2022sun.pdf) (ASHRAE 2022): example of Brick being used to perform thermal comfort analysis
-- [Simulated Digital Twins](https://home.gtf.fyi/papers/fierro2022simulated.pdf) (BuildSys 22): using Brick with BOPtest, Modelica and BACnet to present a physically realistic simulation abstracted behind a Brick model and a virtual BACnet network
+- [Mortar](https://gtf.fyi/papers/mortar2020fierro.pdf) (ACM Transactions on Sensor Networks 2019): large dataset of buildings and Brick models, enabling portable analytics
+- [Thermal comfort application](https://gtf.fyi/papers/enabling2022sun.pdf) (ASHRAE 2022): example of Brick being used to perform thermal comfort analysis
+- [Simulated Digital Twins](https://gtf.fyi/papers/fierro2022simulated.pdf) (BuildSys 22): using Brick with BOPtest, Modelica and BACnet to present a physically realistic simulation abstracted behind a Brick model and a virtual BACnet network
 
 ## Constructing Semantic Metadata Models
 
-- [BuildingMOTIF and Semantic Sufficiency](https://home.gtf.fyi/papers/fierro2022application.pdf): defines the important *semantic sufficiency* concept and defines some methods for automated construction and verification of RDF models
+- [BuildingMOTIF and Semantic Sufficiency](https://gtf.fyi/papers/fierro2022application.pdf): defines the important *semantic sufficiency* concept and defines some methods for automated construction and verification of RDF models
 - [Dr. Bhattacharya's work](https://cseweb.ucsd.edu/~dehong/pdf/buildsys15-paper2.pdf) on active learning applied to BMS label parsing predates Brick, but still outlines many of the challenges involved
 - [Dr. Koh's work](https://dl.acm.org/doi/abs/10.1145/3276774.3276795) explores application of classic NLP techniques to tokenizing BMS labels and closes the loop by producing Brick metadata as a result
 - [This Brick docs page](https://docs.brickschema.org/lifecycle/creation.html)  lists a few techniques and provides a link to a helpful video demonstrating the use of [OpenRefine](https://openrefine.org) for parsing BMS labels
 
 ## Data Systems and Programming
 
-- [Mortar](https://home.gtf.fyi/papers/mortar2020fierro.pdf) (ACM Transactions on Sensor Networks 2019): large dataset of buildings and Brick models, enabling portable analytics
-- [HodDB](https://home.gtf.fyi/papers/hoddb2017fierro.pdf): (BuildSys 17) SPARQL database specialized for Brick workloads
-- [Chapter 5](https://home.gtf.fyi/papers/fierro-dissertation.pdf) of my PhD thesis covers how self-adapting software might be expressed
-- [Chapter 7](https://home.gtf.fyi/papers/fierro-dissertation.pdf) of my PhD thesis covers the design and implementation of data systems supporting inference/storage for Brick models
+- [Mortar](https://gtf.fyi/papers/mortar2020fierro.pdf) (ACM Transactions on Sensor Networks 2019): large dataset of buildings and Brick models, enabling portable analytics
+- [HodDB](https://gtf.fyi/papers/hoddb2017fierro.pdf): (BuildSys 17) SPARQL database specialized for Brick workloads
+- [Chapter 5](https://gtf.fyi/papers/fierro-dissertation.pdf) of my PhD thesis covers how self-adapting software might be expressed
+- [Chapter 7](https://gtf.fyi/papers/fierro-dissertation.pdf) of my PhD thesis covers the design and implementation of data systems supporting inference/storage for Brick models
