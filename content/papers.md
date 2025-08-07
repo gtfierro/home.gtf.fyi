@@ -29,6 +29,18 @@ date: 2021-06-12T16:51:38-07:00
 
 ### 2025
 
+<div class="pub pub-misc">
+
+**Systematic Evaluation of Knowledge Graph Repair with Large Language Models**
+**[[pdf]](/papers/lin2025systematic.pdf)[[link]](https://arxiv.org/abs/2507.22419)**
+
+Tung-Wei Lin, Gabe Fierro, Han Li, Tianzhen Hong, Pierluigi Nuzzo, Alberto Sangiovanni-Vinentelli
+
+*arXiv*.  July, 2025.
+
+</div>
+
+
 <div class="pub pub-conference">
 
 **Assessing Student Adoption of Generative Artificial Intelligence across Engineering Education from 2023 to 2024**

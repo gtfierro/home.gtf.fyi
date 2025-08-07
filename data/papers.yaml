@@ -655,3 +655,15 @@
   title: 'Poster Abstract: Graph Learning on Cyber-Physical Knowledge Graphs'
   type: demoposter
   year: 2025
+- authors: Tung-Wei Lin, Gabe Fierro, Han Li, Tianzhen Hong, Pierluigi Nuzzo, Alberto
+    Sangiovanni-Vinentelli
+  award: null
+  conference: arXiv
+  link: https://arxiv.org/abs/2507.22419
+  location: null
+  month: July
+  pdf: lin2025systematic.pdf
+  slides: null
+  title: Systematic Evaluation of Knowledge Graph Repair with Large Language Models
+  type: misc
+  year: 2025
