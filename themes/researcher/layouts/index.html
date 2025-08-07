@@ -15,7 +15,7 @@
             </ul>
             <h3>Recent Papers</h3>
             <ul class="paper-list">
-                {{ range first 5 (sort .Site.Data.papers "year" "desc") }}
+                {{ range first 5 (sort (sort .Site.Data.papers "month" "desc") "year" "desc") }}
                 <li>
                     <a href="/papers/{{ .pdf }}">{{ .title }}</a> [{{ .conference }}]
                 </li>
