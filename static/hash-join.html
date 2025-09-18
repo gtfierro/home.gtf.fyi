@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hash Join Animation</title>
+<style>
+  :root {
+    --border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+    --bg: #ffffff;
+    --bg2: #f9fafb;
+    --bg3: #eef2ff;
+    --highlight: #fffbeb;
+    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
+    --green: #10b981;
+    --blue: #3b82f6;
+    --amber: #f59e0b;
+  }
+  * { box-sizing: border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
+  body { margin: 0; background: #f3f4f6; color: var(--text); }
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  h1 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+  p { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+  .controls { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  button { padding: 8px 12px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg); box-shadow: var(--shadow); font-size: 13px; cursor: pointer; }
+  button:active { transform: translateY(1px); }
+  .range { display: flex; align-items: center; gap: 8px; margin-left: 8px; }
+  .subtle { font-size: 12px; color: var(--muted); }
+  input[type="range"] { width: 160px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 980px) { .grid { grid-template-columns: 1.2fr 1fr; } }
+  .card { border: 1px solid var(--border); border-radius: 16px; background: var(--bg); box-shadow: var(--shadow); overflow: hidden; }
+  .card .title { padding: 10px 12px; background: var(--bg2); font-weight: 600; font-size: 14px; }
+  .rowgrid { display: grid; }
+  .cell { padding: 10px; border-top: 1px solid var(--border); }
+  .cell + .cell { border-left: 1px solid var(--border); }
+  .muted { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; }
+  .small { font-size: 13px; }
+  .highlight { background: var(--highlight); transition: background .25s ease; }
+  .pointer { position: absolute; top: -22px; text-align: center; width: var(--segw); left: var(--left); transition: left .3s ease; }
+  .pointer .label { font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  .pointer .tri { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #374151; margin: 2px auto 0; }
+  .tablewrap { position: relative; padding-top: 24px; }
+  .status { font-size: 14px; margin: 8px 0 2px; }
+  .tag { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .outputs { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 980px) { .outputs { grid-template-columns: 1fr 1fr 1fr; } }
+  .out { border: 1px solid var(--border); border-radius: 16px; background: var(--bg); box-shadow: var(--shadow); padding: 10px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tuple { border: 1px solid var(--border); border-radius: 10px; background: var(--bg2); padding: 8px; }
+  .kv { font-size: 13px; }
+  .kv .k { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: var(--muted); }
+  .ht { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 12px; background: var(--bg2); border-top: 1px solid var(--border); }
+  .bucket { border: 1px dashed var(--border); border-radius: 12px; background: #fff; min-height: 86px; padding: 8px; position: relative; }
+  .bucket .btitle { position: absolute; top: -10px; left: 8px; background: #fff; padding: 0 6px; font-size: 12px; color: var(--muted); }
+  .pill { display: inline-block; border-radius: 9999px; border: 1px solid var(--border); padding: 2px 8px; font-size: 12px; background: #fff; margin: 2px 4px 2px 0; box-shadow: var(--shadow); }
+  .pill.r { background: #ecfeff; border-color: #a5f3fc; }
+  .pill.s { background: #fef9c3; border-color: #fde68a; }
+  .activeBucket { outline: 2px solid var(--blue); }
+  .phase { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); background: #fff; box-shadow: var(--shadow); margin-left: 6px;}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hash Join Animation</h1>
+    <p>Simple in-memory hash join on <span class="muted">key</span>, with a build phase on <strong>R</strong> and probe phase over <strong>S</strong>. Hash function: <span class="muted">h(key) = key mod 4</span>.</p>
+
+    <div class="controls">
+      <button id="play">Pause</button>
+      <button id="stepb">Step ◀︎</button>
+      <button id="stepf">Step ▶︎</button>
+      <button id="reset">Reset</button>
+      <div class="range">
+        <span class="subtle">Speed</span>
+        <input id="speed" type="range" min="0.5" max="3" step="0.5" value="1" />
+        <span id="speedv" class="subtle">1.0×</span>
+      </div>
+      <span id="phase" class="phase">Phase: build(R)</span>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="title">R (build side)</div>
+        <div class="tablewrap">
+          <div id="ptrR" class="pointer"><div class="label">r</div><div class="tri"></div></div>
+          <div id="tableR" class="rowgrid"></div>
+        </div>
+
+        <div class="title">S (probe side)</div>
+        <div class="tablewrap">
+          <div id="ptrS" class="pointer"><div class="label">s</div><div class="tri"></div></div>
+          <div id="tableS" class="rowgrid"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="title">Hash Table (built from R)</div>
+        <div id="htable" class="ht"></div>
+      </div>
+    </div>
+
+    <div class="status" id="status"></div>
+    <div class="subtle" id="stepinfo"></div>
+
+    <div style="margin-top:16px">
+      <h2 style="margin:0 0 8px;font-size:18px">Output (R ⋈ S on key)</h2>
+      <div id="outputs" class="outputs"></div>
+    </div>
+  </div>
+
+<script>
+  // === Data ===
+  const R = [
+    { id: "r1", key: 1, a: "alpha" },
+    { id: "r2", key: 2, a: "beta" },
+    { id: "r3", key: 4, a: "gamma" },
+    { id: "r4", key: 5, a: "delta" },
+    { id: "r5", key: 7, a: "epsilon" },
+    { id: "r6", key: 9, a: "zeta" },
+  ];
+  const S = [
+    { id: "s1", key: 0, b: "red" },
+    { id: "s2", key: 3, b: "green" },
+    { id: "s3", key: 4, b: "blue" },
+    { id: "s4", key: 4, b: "yellow" },
+    { id: "s5", key: 7, b: "purple" },
+    { id: "s6", key: 10, b: "orange" },
+  ];
+
+  const NUM_BUCKETS = 4;
+  function hash(key) { return key % NUM_BUCKETS; }
+
+  // === Build a step script ===
+  // Phases: build R into HT; then probe S against HT; emit matches (walk entire bucket, match by exact key)
+  function buildSteps() {
+    const steps = [];
+    // Build phase
+    for (let i = 0; i < R.length; i++) {
+      const idx = hash(R[i].key);
+      steps.push({ type: 'build-hash', i, bucket: idx, r: R[i] });
+      steps.push({ type: 'insert', i, bucket: idx, r: R[i] });
+    }
+    // Probe phase
+    for (let j = 0; j < S.length; j++) {
+      const idx = hash(S[j].key);
+      steps.push({ type: 'probe', j, bucket: idx, s: S[j] });
+      // bucket scan + conditional emits happen during UI update by reading HT state at this step
+      steps.push({ type: 'scan-bucket', j, bucket: idx, s: S[j] });
+      // Emit steps will be materialized as separate 'emit' entries (for deterministic playback)
+      // However, to keep the script static, we will generate emits on-the-fly in update() when we see scan-bucket.
+    }
+    return steps;
+  }
+  const stepsScript = buildSteps();
+
+  // === DOM Refs ===
+  const tableR = document.getElementById('tableR');
+  const tableS = document.getElementById('tableS');
+  const ptrR = document.getElementById('ptrR');
+  const ptrS = document.getElementById('ptrS');
+  const htable = document.getElementById('htable');
+  const status = document.getElementById('status');
+  const stepinfo = document.getElementById('stepinfo');
+  const outputsEl = document.getElementById('outputs');
+  const btnPlay = document.getElementById('play');
+  const btnStepB = document.getElementById('stepb');
+  const btnStepF = document.getElementById('stepf');
+  const btnReset = document.getElementById('reset');
+  const speedInput = document.getElementById('speed');
+  const speedVal = document.getElementById('speedv');
+  const phaseBadge = document.getElementById('phase');
+
+  // === State ===
+  let stepIdx = 0;
+  let playing = true;
+  let timer = null;
+  let speed = 1;
+  const outputs = [];
+  // Hash table state we build over time: array of buckets, each bucket is array of R tuples
+  const HT = Array.from({length: NUM_BUCKETS}, () => []);
+
+  // === Rendering ===
+  function renderTable(el, data, highlightIndex, label) {
+    el.innerHTML = '';
+    el.style.gridTemplateColumns = 'repeat(' + data.length + ', minmax(0, 1fr))';
+    for (let idx = 0; idx < data.length; idx++) {
+      const t = data[idx];
+      const d = document.createElement('div');
+      d.className = 'cell' + (idx !== 0 ? '' : '') + (idx === highlightIndex ? ' highlight' : '');
+      d.style.borderLeft = idx !== 0 ? '1px solid var(--border)' : 'none';
+      d.innerHTML = '<div class="muted">' + t.id + '</div>' +
+        '<div class="small"><span class="muted">key</span>: ' + t.key + '</div>' +
+        '<div class="small">' + (label === 'R' ? ('a: ' + t.a) : ('b: ' + t.b)) + '</div>';
+      el.appendChild(d);
+    }
+  }
+
+  function setPointer(ptrEl, index, total) {
+    const segw = (100 / total) + '%';
+    const left = Math.max(0, Math.min(index, total - 1)) * (100 / total) + '%';
+    ptrEl.style.setProperty('--segw', segw);
+    ptrEl.style.setProperty('--left', left);
+  }
+
+  function renderHashTable(activeBucket = -1) {
+    htable.innerHTML = '';
+    for (let b = 0; b < NUM_BUCKETS; b++) {
+      const bucketEl = document.createElement('div');
+      bucketEl.className = 'bucket' + (b === activeBucket ? ' activeBucket' : '');
+      const title = document.createElement('div');
+      title.className = 'btitle';
+      title.textContent = 'b' + b;
+      bucketEl.appendChild(title);
+
+      // pills for R tuples in this bucket
+      for (const r of HT[b]) {
+        const p = document.createElement('span');
+        p.className = 'pill r';
+        p.textContent = r.id + ' (k=' + r.key + ')';
+        bucketEl.appendChild(p);
+      }
+
+      htable.appendChild(bucketEl);
+    }
+  }
+
+  function tupleCardHTML(t, fields) {
+    return '<div class="tuple">' + fields.map(f => (
+      '<div class="kv"><span class="k">' + f + '</span>: ' + String(t[f]) + '</div>'
+    )).join('') + '</div>';
+  }
+
+  function describeStep(s) {
+    if (!s) return '';
+    switch (s.type) {
+      case 'build-hash': return 'Build: compute bucket for ' + s.r.id + ' (key=' + s.r.key + ') → b' + s.bucket + '.';
+      case 'insert': return 'Insert ' + s.r.id + ' into bucket b' + s.bucket + '.';
+      case 'probe': return 'Probe: compute bucket for ' + s.s.id + ' (key=' + s.s.key + ') → b' + s.bucket + '.';
+      case 'scan-bucket': return 'Scan bucket b' + s.bucket + ' for matches with key=' + s.s.key + '.';
+      case 'emit': return 'Emit joined tuple key=' + s.k + ': (' + s.r.id + '×' + s.s.id + ').';
+      default: return '';
+    }
+  }
+
+  // For reproducible playback, we materialize HT and outputs by simulating steps from start to stepIdx
+  function simulateThrough(stepIdxInclusive) {
+    // Reset HT and outputs each time (small data, fine for teaching demo)
+    for (let b = 0; b < NUM_BUCKETS; b++) HT[b] = [];
+    outputs.length = 0;
+
+    for (let k = 0; k <= stepIdxInclusive && k < stepsScript.length; k++) {
+      const s = stepsScript[k];
+      if (s.type === 'build-hash') {
+        // nothing to mutate yet
+      } else if (s.type === 'insert') {
+        HT[s.bucket].push(s.r);
+      } else if (s.type === 'probe') {
+        // nothing to mutate
+      } else if (s.type === 'scan-bucket') {
+        // generate emits for any r with exact key match
+        const bucket = HT[s.bucket];
+        for (const r of bucket) {
+          if (r.key === s.s.key) {
+            outputs.push({ r, s: s.s, k: r.key, id: r.id + '-' + s.s.id });
+          }
+        }
+      } else if (s.type === 'emit') {
+        // (not used in this script variant)
+      }
+    }
+  }
+
+  function update() {
+    // Simulate state up to current step
+    simulateThrough(stepIdx);
+
+    // Determine current indices/pointers for R and S
+    let iPtr = -1, jPtr = -1;
+    let currentBucket = -1;
+    let isBuildPhase = true;
+    for (let k = 0; k <= stepIdx && k < stepsScript.length; k++) {
+      const s = stepsScript[k];
+      if (s.type === 'build-hash' || s.type === 'insert') {
+        isBuildPhase = true;
+        iPtr = (s.i !== undefined ? s.i : iPtr);
+        currentBucket = s.bucket;
+      } else if (s.type === 'probe' || s.type === 'scan-bucket') {
+        isBuildPhase = false;
+        jPtr = (s.j !== undefined ? s.j : jPtr);
+        currentBucket = s.bucket;
+      }
+    }
+
+    // Render tables and pointers
+    renderTable(tableR, R, Math.max(0, iPtr), 'R');
+    renderTable(tableS, S, Math.max(0, jPtr), 'S');
+    setPointer(ptrR, Math.max(0, iPtr), R.length);
+    setPointer(ptrS, Math.max(0, jPtr), S.length);
+
+    // Render hash table with active bucket
+    renderHashTable(currentBucket);
+
+    // Outputs
+    outputsEl.innerHTML = '';
+    for (const o of outputs) {
+      const card = document.createElement('div');
+      card.className = 'out';
+      card.innerHTML = '<div class="tag">key=' + o.k + '</div>' +
+        '<div class="two">' +
+          '<div><div class="subtle" style="text-transform:uppercase;font-size:11px;margin-bottom:4px">R</div>' +
+            tupleCardHTML(o.r, ['id','key','a']) + '</div>' +
+          '<div><div class="subtle" style="text-transform:uppercase;font-size:11px;margin-bottom:4px">S</div>' +
+            tupleCardHTML(o.s, ['id','key','b']) + '</div>' +
+        '</div>';
+      outputsEl.appendChild(card);
+    }
+
+    // Status + phase
+    const s = stepsScript[stepIdx];
+    status.textContent = describeStep(s);
+    stepinfo.textContent = 'Step ' + (stepIdx + 1) + ' / ' + stepsScript.length;
+    phaseBadge.textContent = 'Phase: ' + (isBuildPhase ? 'build(R)' : 'probe(S)');
+  }
+
+  function playLoop() {
+    if (!playing) return;
+    timer = setInterval(() => {
+      if (stepIdx + 1 < stepsScript.length) {
+        stepIdx += 1;
+        update();
+      }
+    }, 900 / speed);
+  }
+
+  // === Controls ===
+  btnPlay.addEventListener('click', () => {
+    playing = !playing;
+    btnPlay.textContent = playing ? 'Pause' : 'Play';
+    clearInterval(timer);
+    if (playing) playLoop();
+  });
+  btnStepB.addEventListener('click', () => {
+    stepIdx = Math.max(0, stepIdx - 1);
+    update();
+  });
+  btnStepF.addEventListener('click', () => {
+    stepIdx = Math.min(stepsScript.length - 1, stepIdx + 1);
+    update();
+  });
+  btnReset.addEventListener('click', () => {
+    stepIdx = 0;
+    update();
+  });
+  speedInput.addEventListener('input', () => {
+    speed = parseFloat(speedInput.value);
+    document.getElementById('speedv').textContent = speed.toFixed(1) + '×';
+    clearInterval(timer);
+    if (playing) playLoop();
+  });
+
+  // === Initialize ===
+  // Initial draw of tables and empty hash table
+  update();
+  playLoop();
+</script>
+</body>
+</html>
