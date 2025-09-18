@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sort-Merge Join Pointer Animation</title>
+<style>
+  :root {
+    --border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+    --bg: #ffffff;
+    --bg-alt: #f9fafb;
+    --highlight: #fffbeb;
+    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 1px 1px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
+  body { margin: 0; background: #f3f4f6; color: var(--text); }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  h1 { margin: 0 0 8px; font-size: 24px; font-weight: 700; }
+  p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+  .controls { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  button { padding: 8px 12px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg); box-shadow: var(--shadow); font-size: 13px; cursor: pointer; }
+  button:active { transform: translateY(1px); }
+  .range { display: flex; align-items: center; gap: 8px; margin-left: 8px; }
+  input[type="range"] { width: 160px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 16px; }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  .card { border: 1px solid var(--border); border-radius: 16px; background: var(--bg); box-shadow: var(--shadow); overflow: hidden; }
+  .card .title { padding: 10px 12px; background: var(--bg-alt); font-weight: 600; font-size: 14px; }
+  .rowgrid { display: grid; }
+  .cell { padding: 10px; border-top: 1px solid var(--border); }
+  .cell + .cell { border-left: 1px solid var(--border); }
+  .muted { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; }
+  .small { font-size: 13px; }
+  .highlight { background: var(--highlight); transition: background .25s ease; }
+  .pointer { position: absolute; top: -22px; text-align: center; width: var(--segw); left: var(--left); transition: left .3s ease; }
+  .pointer .label { font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  .pointer .tri { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #374151; margin: 2px auto 0; }
+  .tablewrap { position: relative; padding-top: 24px; }
+  .status { font-size: 14px; margin: 8px 0 2px; }
+  .subtle { font-size: 12px; color: var(--muted); }
+  .outputs { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 900px) { .outputs { grid-template-columns: 1fr 1fr 1fr; } }
+  .out { border: 1px solid var(--border); border-radius: 16px; background: var(--bg); box-shadow: var(--shadow); padding: 10px; }
+  .fade { opacity: 0; transform: translateY(-4px) scale(.98); animation: fadeIn .25s ease forwards; }
+  @keyframes fadeIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+  .tag { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tuple { border: 1px solid var(--border); border-radius: 10px; background: var(--bg-alt); padding: 8px; }
+  .kv { font-size: 13px; }
+  .kv .k { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sort‑Merge Join Animation</h1>
+    <p>Join on <span class="muted">key</span>. Tables are pre‑sorted. Pointers move forward only; when duplicates occur, we walk one side until the key changes.</p>
+
+    <div class="controls">
+      <button id="play">Pause</button>
+      <button id="stepb">Step ◀︎</button>
+      <button id="stepf">Step ▶︎</button>
+      <button id="reset">Reset</button>
+      <div class="range">
+        <span class="subtle">Speed</span>
+        <input id="speed" type="range" min="0.5" max="3" step="0.5" value="1" />
+        <span id="speedv" class="subtle">1.0×</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="title">R</div>
+        <div class="tablewrap">
+          <div id="ptrR" class="pointer"><div class="label">i</div><div class="tri"></div></div>
+          <div id="tableR" class="rowgrid"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="title">S</div>
+        <div class="tablewrap">
+          <div id="ptrS" class="pointer"><div class="label">j</div><div class="tri"></div></div>
+          <div id="tableS" class="rowgrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status" id="status"></div>
+    <div class="subtle" id="stepinfo"></div>
+
+    <div style="margin-top:16px">
+      <h2 style="margin:0 0 8px;font-size:18px">Output (R ⋈ S on key)</h2>
+      <div id="outputs" class="outputs"></div>
+    </div>
+  </div>
+
+<script>
+  // Data (sorted)
+  const R = [
+    { id: "r1", key: 1, a: "alpha" },
+    { id: "r2", key: 2, a: "beta" },
+    { id: "r3", key: 4, a: "gamma" },
+    { id: "r4", key: 5, a: "delta" },
+    { id: "r5", key: 7, a: "epsilon" },
+    { id: "r6", key: 9, a: "zeta" },
+  ];
+
+  const S = [
+    { id: "s1", key: 0, b: "red" },
+    { id: "s2", key: 3, b: "green" },
+    { id: "s3", key: 4, b: "blue" },
+    { id: "s4", key: 4, b: "yellow" },
+    { id: "s5", key: 7, b: "purple" },
+    { id: "s6", key: 10, b: "orange" },
+  ];
+
+  // Build steps according to pointer-walking duplicate handling
+  function buildSteps() {
+    const steps = [];
+    let i = 0, j = 0;
+    while (i < R.length && j < S.length) {
+      steps.push({ i, j, type: "compare" });
+      const rk = R[i].key, sk = S[j].key;
+
+      if (rk < sk) {
+        steps.push({ i, j, type: "advanceR" });
+        i++; continue;
+      }
+      if (rk > sk) {
+        steps.push({ i, j, type: "advanceS" });
+        j++; continue;
+      }
+
+      // equal -> emit
+      steps.push({ i, j, type: "emit", r: R[i], s: S[j], k: rk });
+
+      const nextSameS = (j + 1 < S.length) && (S[j + 1].key === sk);
+      const nextSameR = (i + 1 < R.length) && (R[i + 1].key === rk);
+
+      if (nextSameS && !nextSameR) {
+        steps.push({ i, j, type: "advanceS" });
+        j++;
+      } else if (!nextSameS && nextSameR) {
+        steps.push({ i, j, type: "advanceR" });
+        i++;
+      } else {
+        steps.push({ i, j, type: "advanceR" });
+        i++;
+        steps.push({ i, j, type: "advanceS" });
+        j++;
+      }
+    }
+    return steps;
+  }
+
+  const stepsScript = buildSteps();
+
+  // DOM refs
+  const tableR = document.getElementById('tableR');
+  const tableS = document.getElementById('tableS');
+  const ptrR = document.getElementById('ptrR');
+  const ptrS = document.getElementById('ptrS');
+  const status = document.getElementById('status');
+  const stepinfo = document.getElementById('stepinfo');
+  const outputsEl = document.getElementById('outputs');
+  const btnPlay = document.getElementById('play');
+  const btnStepB = document.getElementById('stepb');
+  const btnStepF = document.getElementById('stepf');
+  const btnReset = document.getElementById('reset');
+  const speedInput = document.getElementById('speed');
+  const speedVal = document.getElementById('speedv');
+
+  // Render tables
+  function renderTable(el, data, highlightIndex, isR) {
+    el.innerHTML = '';
+    el.style.gridTemplateColumns = 'repeat(' + data.length + ', minmax(0, 1fr))';
+    data.forEach((t, idx) => {
+      const d = document.createElement('div');
+      d.className = 'cell' + (idx !== 0 ? ' hasleft' : '') + (idx === highlightIndex ? ' highlight' : '');
+      d.style.borderLeft = idx !== 0 ? '1px solid var(--border)' : 'none';
+      d.innerHTML = '<div class="muted">' + t.id + '</div>' +
+        '<div class="small"><span class="muted">key</span>: ' + t.key + '</div>' +
+        '<div class="small">' + (isR ? ('a: ' + t.a) : ('b: ' + t.b)) + '</div>';
+      el.appendChild(d);
+    });
+  }
+
+  function setPointer(ptrEl, index, total) {
+    const segw = (100 / total) + '%';
+    const left = Math.max(0, Math.min(index, total - 1)) * (100 / total) + '%';
+    ptrEl.style.setProperty('--segw', segw);
+    ptrEl.style.setProperty('--left', left);
+  }
+
+  // State
+  let stepIdx = 0;
+  let playing = true;
+  let timer = null;
+  let speed = 1;
+  const outputs = [];
+
+  function update() {
+    // compute current pointer positions by replaying advance steps up to stepIdx
+    let i = 0, j = 0;
+    for (let k = 0; k <= stepIdx && k < stepsScript.length; k++) {
+      const s = stepsScript[k];
+      if (s.type === 'advanceR') i++;
+      if (s.type === 'advanceS') j++;
+    }
+
+    renderTable(tableR, R, Math.min(i, R.length - 1), true);
+    renderTable(tableS, S, Math.min(j, S.length - 1), false);
+    setPointer(ptrR, Math.min(i, R.length - 1), R.length);
+    setPointer(ptrS, Math.min(j, S.length - 1), S.length);
+
+    // outputs up to current step
+    outputsEl.innerHTML = '';
+    outputs.length = 0;
+    for (let k = 0; k <= stepIdx && k < stepsScript.length; k++) {
+      const s = stepsScript[k];
+      if (s.type === 'emit') {
+        outputs.push({ r: s.r, s: s.s, k: s.k, id: s.r.id + '-' + s.s.id });
+      }
+    }
+    outputs.forEach((o, idx) => {
+      const card = document.createElement('div');
+      card.className = 'out fade';
+      card.innerHTML = '<div class="tag">key=' + o.k + '</div>' +
+        '<div class="two">' +
+          '<div><div class="subtle" style="text-transform:uppercase;font-size:11px;margin-bottom:4px">R</div>' +
+            tupleHTML(o.r, ['id','key','a']) + '</div>' +
+          '<div><div class="subtle" style="text-transform:uppercase;font-size:11px;margin-bottom:4px">S</div>' +
+            tupleHTML(o.s, ['id','key','b']) + '</div>' +
+        '</div>';
+      outputsEl.appendChild(card);
+    });
+
+    // status
+    const s = stepsScript[stepIdx];
+    status.textContent = describeStep(s);
+    stepinfo.textContent = 'Step ' + (stepIdx + 1) + ' / ' + stepsScript.length;
+  }
+
+  function tupleHTML(t, fields) {
+    return '<div class="tuple">' + fields.map(f => (
+      '<div class="kv"><span class="k">' + f + '</span>: ' + String(t[f]) + '</div>'
+    )).join('') + '</div>';
+  }
+
+  function describeStep(s) {
+    if (!s) return '';
+    switch (s.type) {
+      case 'compare': return 'Comparing R[i].key and S[j].key.';
+      case 'advanceR': return 'R[i].key <= S[j].key and no S-dup left → advance i.';
+      case 'advanceS': return 'R[i].key >= S[j].key or S has dup → advance j.';
+      case 'emit': return 'Emit joined tuple for key=' + s.k + ': (' + s.r.id + '×' + s.s.id + ').';
+      default: return '';
+    }
+  }
+
+  function playLoop() {
+    if (!playing) return;
+    timer = setInterval(() => {
+      if (stepIdx + 1 < stepsScript.length) {
+        stepIdx += 1;
+        update();
+      }
+    }, 900 / speed);
+  }
+
+  // Controls
+  btnPlay.addEventListener('click', () => {
+    playing = !playing;
+    btnPlay.textContent = playing ? 'Pause' : 'Play';
+    clearInterval(timer);
+    if (playing) playLoop();
+  });
+  btnStepB.addEventListener('click', () => {
+    stepIdx = Math.max(0, stepIdx - 1);
+    update();
+  });
+  btnStepF.addEventListener('click', () => {
+    stepIdx = Math.min(stepsScript.length - 1, stepIdx + 1);
+    update();
+  });
+  btnReset.addEventListener('click', () => {
+    stepIdx = 0; update();
+  });
+  speedInput.addEventListener('input', () => {
+    speed = parseFloat(speedInput.value);
+    speedVal.textContent = speed.toFixed(1) + '×';
+    clearInterval(timer);
+    if (playing) playLoop();
+  });
+
+  // Initial render & start
+  update();
+  playLoop();
+</script>
+</body>
+</html>
