@@ -5,6 +5,16 @@ date: 2021-06-12T12:13:19-07:00
 
 ## 2025
 
+## Fall
+
+- CSCI598: Advanced Databases
+
+I used generative AI to make a series of interactive demos to
+illustrate some concepts in the class. Here's a list:
+- [Hash Join](/hash-join.html)
+- [Sort Merge Join](/sort-merge-join.html)
+- [Volcano iterators vs Data-centric query compilation](/iterator-vs-compiled.html)
+
 ## Spring
 
 - CSCI403: Introduction to Databases

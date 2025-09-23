@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Volcano next() Call Stack vs Compiled Code Tracing</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root{
+  --bg:#0b1020; --panel:#121831; --muted:#96a0bf; --accent:#5eead4;
+  --pink:#f472b6; --yellow:#facc15; --blue:#93c5fd; --border:#1f2a4a;
+}
+*{box-sizing:border-box;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+body{margin:0;background:var(--bg);color:#e5e7eb}
+.wrap{max-width:1280px;margin:28px auto;padding:0 16px}
+h1{font-size:22px;margin:0 0 8px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+
+/* LEFT pane widened so R3 fits nicely */
+.grid{display:grid;grid-template-columns:520px 1fr;gap:16px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{background:#1a2344;color:#e5e7eb;border:1px solid #26335e;border-radius:10px;padding:8px 12px;cursor:pointer}
+button:hover{border-color:#41538a}
+.btn-ghost{background:transparent;border-color:#3b466e}
+.btn-danger{border-color:#7a2945;color:#ffd7e8}
+
+.legend{display:flex;gap:12px;margin:8px 0 4px;color:var(--muted);font-size:13px;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+.dot-spill{background:var(--pink)} .dot-mat{background:var(--yellow)} .dot-reload{background:var(--blue)}
+
+.counter{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.pill{background:#0e142a;border:1px solid #27325a;border-radius:10px;padding:10px}
+.pill b{display:block;font-size:20px;color:var(--accent)}
+.pill small{color:var(--muted)}
+
+.register{padding:12px;border:1px dashed #2e3a69;border-radius:12px;margin-top:10px;background:#0e142a}
+.register code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+.caption{color:var(--muted);font-size:13px;margin-top:6px}
+.kbd{padding:2px 6px;border:1px solid #36436f;border-radius:6px;background:#0e142a;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#c9d4ff}
+
+.tables{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.table{width:100%;border-collapse:collapse;font-size:14px}
+.table th,.table td{border-bottom:1px dashed #25315a;padding:6px 8px;text-align:left}
+.hi{outline:2px solid var(--accent);background:rgba(94,234,212,.07)}
+
+/* RIGHT: two alternate panels (Volcano = call stack; Compiled = code tracing) */
+.rightgrid{display:grid;grid-template-rows:auto 1fr;gap:10px}
+
+/* Call stack panel (Volcano) */
+.stackwrap{display:grid;grid-template-columns:420px 1fr;gap:12px}
+.stack{background:#0e142a;border:1px solid #27325a;border-radius:12px;padding:10px;min-height:420px;max-height:420px;overflow:auto}
+.stack h3{margin:0 0 6px;font-size:14px;color:#c9d4ff}
+.frame{border:1px solid #27325a;background:#0b132d;border-left:4px solid #3b82f6;border-radius:8px;padding:6px 8px;margin:6px 0}
+.frame.top{border-left-color:#5eead4;background:rgba(94,234,212,.06)}
+.frame small{display:block;color:#9aa6d1}
+
+/* Code tracing panel (Compiled) */
+.codewrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.codeblock{background:#0e142a;border:1px solid #27325a;border-radius:12px;padding:10px;max-height:420px;overflow:auto}
+.codeblock h3{margin:0 0 6px;font-size:14px;color:#c9d4ff}
+pre{margin:0;white-space:pre;tab-size:2;font-size:12px;line-height:1.25}
+.line{padding:1px 8px;border-radius:6px}
+.hl{background:#12224a}
+
+/* Shared log */
+.log{background:#0e142a;border:1px solid #27325a;border-radius:12px;padding:10px;height:420px;overflow:auto;line-height:1.35}
+.log .spill{color:var(--pink)} .log .mat{color:var(--yellow)} .log .agg{color:#d8b4fe} .log .reload{color:var(--blue)}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid #27325a;margin-bottom:8px}
+.tab{appearance:none;background:transparent;border:none;color:#c9d4ff;padding:8px 12px;border-bottom:2px solid transparent;cursor:pointer}
+.tab.active{border-color:var(--accent);color:#eafffb}
+
+/* Visibility toggles */
+.hidden{display:none}
+
+/* Responsive */
+@media (max-width: 1080px){
+  .grid{grid-template-columns:1fr}
+  .stackwrap,.codewrap{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Volcano <code>next()</code> Call Stack vs Compiled Code Tracing</h1>
+  <div class="sub">
+    Volcano: <b>pull from the final join</b> — each <code>next()</code> pushes a frame (spill) and returning pops (reload).  
+    Compiled: single fused loop — we trace the <i>paper-style</i> pseudocode as it runs.
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: tabs + controls + counters + register + tiny tables -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" data-mode="volcano">Volcano (iterator)</button>
+        <button class="tab" data-mode="compiled">Compiled (data-centric)</button>
+      </div>
+
+      <div class="row" style="justify-content:space-between">
+        <div class="row">
+          <button id="stepBtn">Step ▷</button>
+          <button id="autoBtn" class="btn-ghost">Auto</button>
+          <button id="resetBtn" class="btn-danger">Reset</button>
+        </div>
+        <div class="row"><span class="kbd" id="phaseLabel">Phase: open root (build structures)</span></div>
+      </div>
+
+      <div class="legend">
+        <span><span class="dot dot-spill"></span>Volcano: CALL (push frame / spill)</span>
+        <span><span class="dot dot-reload"></span>Volcano: RETURN (pop frame / reload)</span>
+        <span><span class="dot dot-mat"></span>Materialize / aggregate</span>
+      </div>
+
+      <div class="counter">
+        <div class="pill"><b id="evictCount">0</b><small>Spills (CALL frames)</small></div>
+        <div class="pill"><b id="matCount">0</b><small>Materializations</small></div>
+        <div class="pill"><b id="aggCount">0</b><small>Aggregations (Γ)</small></div>
+        <div class="pill"><b id="stepCount">0</b><small>Steps</small></div>
+      </div>
+
+      <div class="register">
+        <div><strong>“Register” (current payload):</strong></div>
+        <div id="regBox"><code>—</code></div>
+        <div class="caption">We treat a new <b>frame</b> (Volcano) as a spill point. Compiled keeps tuples live in the hot loop and only touches memory at pipeline breakers.</div>
+      </div>
+
+      <div class="tables">
+        <div>
+          <b>R1</b> (build Hₐ=b from σ)
+          <table class="table" id="r1Table"></table>
+        </div>
+        <div>
+          <b>R2</b> (σ → Γ<sub>z</sub>)
+          <table class="table" id="r2Table"></table>
+        </div>
+        <div>
+          <b>R3</b> (probe)
+          <table class="table" id="r3Table"></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: two alternative panels -->
+    <div class="card rightgrid">
+      <!-- Volcano panel: call stack + shared log -->
+      <div id="volcanoPanel" class="">
+        <div class="stackwrap">
+          <div class="stack">
+            <h3>Call stack</h3>
+            <div id="stack"></div>
+          </div>
+          <div>
+            <b>Step log</b>
+            <div class="log" id="log"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compiled panel: code tracing + shared log -->
+      <div id="compiledPanel" class="hidden">
+        <div class="codewrap">
+          <div class="codeblock">
+            <h3>Compiled pseudocode (paper-style)</h3>
+            <pre id="compiledCode"></pre>
+          </div>
+          <div>
+            <b>Step log</b>
+            <div class="log" id="log2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/*** Demo data ***/
+const R1=[{id:'r1',a:1,x:5},{id:'r2',a:2,x:7},{id:'r3',a:3,x:1},{id:'r4',a:2,x:7},{id:'r5',a:4,x:9},{id:'r6',a:5,x:2}];
+const R2=[{id:'s1',z:10,y:3},{id:'s2',z:11,y:3},{id:'s3',z:10,y:1},{id:'s4',z:10,y:3}];
+const R3=[{id:'t1',b:2,c:10},{id:'t2',b:3,c:11},{id:'t3',b:99,c:42}];
+
+/*** UI refs ***/
+const tabs=[...document.querySelectorAll('.tab')];
+const volcanoPanel=document.getElementById('volcanoPanel');
+const compiledPanel=document.getElementById('compiledPanel');
+
+const stepBtn=document.getElementById('stepBtn');
+const autoBtn=document.getElementById('autoBtn');
+const resetBtn=document.getElementById('resetBtn');
+const r1Table=document.getElementById('r1Table');
+const r2Table=document.getElementById('r2Table');
+const r3Table=document.getElementById('r3Table');
+const logVol=document.getElementById('log');   // volcano log
+const logComp=document.getElementById('log2'); // compiled log
+const regBox=document.getElementById('regBox');
+const evictEl=document.getElementById('evictCount');
+const matEl=document.getElementById('matCount');
+const aggEl=document.getElementById('aggCount');
+const stepEl=document.getElementById('stepCount');
+const stackEl=document.getElementById('stack');
+const phaseLabel=document.getElementById('phaseLabel');
+const compiledPre=document.getElementById('compiledCode');
+
+let timer=null, S=null;
+
+/*** Tables ***/
+function renderTable(tbl,rows,activeId,cols){
+  tbl.innerHTML=`<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r=>`<tr class="${r.id===activeId?'hi':''}">
+      ${cols.map(c=>`<td>${
+        c==='σ' ? (r.x===7?'✅':'—')
+      : c==='keep?' ? (r.y===3?'✅':'—')
+      : (r[c]??'')}</td>`).join('')}
+    </tr>`).join('')}</tbody>`;
+}
+function renderAll(active={}){renderTable(r1Table,R1,active.r1,['id','a','x','σ']);renderTable(r2Table,R2,active.r2,['id','z','y','keep?']);renderTable(r3Table,R3,active.r3,['id','b','c']);}
+
+/*** Logs + “register” ***/
+function log(el,msg,cls=''){const d=document.createElement('div');d.textContent=msg;if(cls)d.classList.add(cls);el.appendChild(d);el.scrollTop=el.scrollHeight;}
+function setRegister(payload){regBox.innerHTML=`<code>${payload?JSON.stringify(payload):'—'}</code>`}
+
+/*** Volcano: call stack UI ***/
+function renderStack(){ stackEl.innerHTML = S.stack.map((f,i)=>`<div class="frame ${i===S.stack.length-1?'top':''}"><div><b>${f.name}</b></div>${f.detail?`<small>${f.detail}</small>`:''}</div>`).join(''); }
+function pushFrame(name, detail=''){ S.stack.push({name, detail}); renderStack(); }
+function popFrame(){ if(S.stack.length) S.stack.pop(); renderStack(); }
+
+/*** Compiled pseudocode (paper-style) + highlighting ***/
+const CLINES=[
+  {id:'C_INIT',s:`initialize memory of ⋈₍a=b₎, ⋈₍z=c₎, and Γ_z`},
+  {id:'C_BUILD_R1',s:`for each tuple t₁ in R₁
+  if t₁.x = 7
+    materialize t₁ in hash table of ⋈₍a=b₎`},
+  {id:'C_BUILD_R2',s:`for each tuple t₂ in R₂
+  if t₂.y = 3
+    aggregate t₂ in hash table of Γ_z`},
+  {id:'C_MAT_GZ',s:`for each group g in Γ_z
+  materialize g in hash table of ⋈₍z=c₎`},
+  {id:'C_PROBE_R3',s:`for each tuple t₃ in R₃
+  for each match t₂ in ⋈₍z=c₎[t₃.c]
+    for each match t₁ in ⋈₍a=b₎[t₃.b]
+      output t₁ ∘ t₂ ∘ t₃`}
+];
+function renderCompiledCode(){ compiledPre.innerHTML = CLINES.map(l=>`<div class="line" data-line="${l.id}">${l.s.replace(/ /g,'&nbsp;')}</div>`).join('\n\n'); }
+function hlCompiled(id){ [...compiledPre.querySelectorAll('.line')].forEach(el=>el.classList.remove('hl')); if(!id)return; const el=compiledPre.querySelector(`[data-line="${id}"]`); if(el){el.classList.add('hl'); el.scrollIntoView({block:'nearest'});} }
+
+/*** Build event streams ***/
+function buildEventsVolcano(){
+  const ev=[], H_ab=new Map(), Gz=new Map(), H_zc=new Map();
+
+  // OPEN / build
+  ev.push({kind:'phase', msg:'Phase: open root (build structures)'});
+  ev.push({kind:'call', name:'ROOT.open', detail:'setup & build hash tables'});
+
+  // build H_ab
+  ev.push({kind:'call', name:'⋈(a=b).open', detail:'build left H_ab from σ(x=7) on R1'});
+  for(const t of R1){
+    ev.push({kind:'call', name:'Σ_R1.next', detail:'pull from Scan_R1'});
+    ev.push({kind:'call', name:'Scan_R1.next', detail:'read tuple from R1'});
+    ev.push({kind:'ret',  name:'Scan_R1.next', payload:{src:'R1',...t}});
+    if (t.x===7){
+      ev.push({kind:'ret', name:'Σ_R1.next', payload:{src:'R1',...t}});
+      H_ab.set(t.a,(H_ab.get(t.a)||[]).concat([t]));
+      ev.push({kind:'mat', payload:{src:'R1',...t}, msg:`Hₐ.insert(a=${t.a}, ${t.id})`});
+    } else {
+      ev.push({kind:'ret', name:'Σ_R1.next', note:`predicate false (x=${t.x})`});
+    }
+  }
+  ev.push({kind:'ret',  name:'⋈(a=b).open'});
+
+  // build Γ_z
+  ev.push({kind:'call', name:'Γ.open', detail:'build Γ_z from σ(y=3) on R2'});
+  for(const s of R2){
+    ev.push({kind:'call', name:'Σ_R2.next', detail:'pull from Scan_R2'});
+    ev.push({kind:'call', name:'Scan_R2.next', detail:'read tuple from R2'});
+    ev.push({kind:'ret',  name:'Scan_R2.next', payload:{src:'R2',...s}});
+    if (s.y===3){
+      ev.push({kind:'ret', name:'Σ_R2.next', payload:{src:'R2',...s}});
+      Gz.set(s.z,(Gz.get(s.z)||0)+1);
+      ev.push({kind:'agg', payload:{src:'R2',...s}, msg:`Γ: z=${s.z} count=${Gz.get(s.z)}`});
+    } else {
+      ev.push({kind:'ret', name:'Σ_R2.next', note:`predicate false (y=${s.y})`});
+    }
+  }
+  ev.push({kind:'ret', name:'Γ.open'});
+
+  // materialize Γ → H_{z=c}
+  ev.push({kind:'call', name:'⋈(z=c).open', detail:'materialize Γ groups into H_{z=c}'});
+  for(const [z,count] of Gz.entries()){
+    H_zc.set(z,{z,count});
+    ev.push({kind:'mat', payload:{src:'GZ', z, count}, msg:`H_{z=c}[${z}] ← {count=${count}}`});
+  }
+  ev.push({kind:'ret', name:'⋈(z=c).open'});
+  ev.push({kind:'ret', name:'ROOT.open'});
+
+  // PULL from final join (top-down)
+  ev.push({kind:'phase', msg:'Phase: pull from final join (top-down)'});
+  for (const u of R3){
+    ev.push({kind:'call', name:'⋈(z=c).next', detail:'root pulls pair (g,t3)'}); // boundary
+    ev.push({kind:'call', name:'Scan_R3.next', detail:'read tuple from R3'});    // boundary
+    ev.push({kind:'ret',  name:'Scan_R3.next', payload:{src:'R3',...u}});
+    const g = H_zc.get(u.c);
+    if (!g){ ev.push({kind:'ret', name:'⋈(z=c).next', note:`no Γ group for c=${u.c}`}); continue; }
+    ev.push({kind:'ret', name:'⋈(z=c).next', payload:{pair:`(g[z=${g.z},cnt=${g.count}], R3:${u.id})`}});
+
+    // ROOT probes H_ab on a=b to produce outputs
+    const lefts = (H_ab.get(u.b)||[]);
+    for (const t1 of lefts){
+      ev.push({kind:'out', msg:`OUTPUT ⟨R1:${t1.id}, Γ[z=${g.z},count=${g.count}], R3:${u.id}⟩`});
+    }
+  }
+  return ev;
+}
+
+function buildEventsCompiled(){
+  const ev=[], H_ab=new Map(), Gz=new Map(), H_zc=new Map();
+
+  ev.push({kind:'phase', msg:'Phase: initialize + build (compiled)'});  
+  ev.push({kind:'code', id:'C_INIT', msg:'init structures'});
+
+  // BUILD R1
+  for(const t of R1){
+    ev.push({kind:'code', id:'C_BUILD_R1'});
+    if (t.x===7){
+      H_ab.set(t.a,(H_ab.get(t.a)||[]).concat([t]));
+      ev.push({kind:'mat', payload:{src:'R1',...t}, msg:`Hₐ.insert(a=${t.a}, ${t.id})`, code:'C_BUILD_R1'});
+    } else {
+      ev.push({kind:'note', msg:`predicate fails (x=${t.x})`, code:'C_BUILD_R1'});
+    }
+  }
+
+  // BUILD R2 → Γ
+  for(const s of R2){
+    ev.push({kind:'code', id:'C_BUILD_R2'});
+    if (s.y===3){
+      Gz.set(s.z,(Gz.get(s.z)||0)+1);
+      ev.push({kind:'agg', payload:{src:'R2',...s}, msg:`Γ: z=${s.z} count=${Gz.get(s.z)}`, code:'C_BUILD_R2'});
+    } else {
+      ev.push({kind:'note', msg:`predicate fails (y=${s.y})`, code:'C_BUILD_R2'});
+    }
+  }
+
+  // MAT Γ → H_{z=c}
+  for(const [z,count] of Gz.entries()){
+    H_zc.set(z,{z,count});
+    ev.push({kind:'code', id:'C_MAT_GZ'});
+    ev.push({kind:'mat', payload:{src:'GZ', z, count}, msg:`H_{z=c}[${z}] ← {count=${count}}`, code:'C_MAT_GZ'});
+  }
+
+  // PROBE R3
+  ev.push({kind:'phase', msg:'Phase: probe (compiled)'});  
+  for(const u of R3){
+    ev.push({kind:'code', id:'C_PROBE_R3'});
+    const g = H_zc.get(u.c);
+    if(!g){ ev.push({kind:'note', msg:`no Γ group for c=${u.c}`, code:'C_PROBE_R3'}); continue; }
+    const lefts = (H_ab.get(u.b)||[]);
+    if(lefts.length===0){ ev.push({kind:'note', msg:`no Hₐ match for b=${u.b}`, code:'C_PROBE_R3'}); }
+    for(const t1 of lefts){
+      ev.push({kind:'out', msg:`OUTPUT ⟨R1:${t1.id}, Γ[z=${g.z},count=${g.count}], R3:${u.id}⟩`, code:'C_PROBE_R3'});
+    }
+  }
+  return ev;
+}
+
+/*** State & rendering ***/
+function renderStackPanel(){ renderStack(); }
+function applyActiveRow(payload){
+  const a={r1:null,r2:null,r3:null};
+  if(payload && payload.src==='R1') a.r1=payload.id;
+  if(payload && payload.src==='R2') a.r2=payload.id;
+  if(payload && payload.src==='R3') a.r3=payload.id;
+  renderAll(a);
+}
+function reset(){
+  if(timer){clearInterval(timer);timer=null;autoBtn.textContent='Auto';}
+  const mode=document.querySelector('.tab.active').dataset.mode;
+  // toggle panels
+  if(mode==='volcano'){ volcanoPanel.classList.remove('hidden'); compiledPanel.classList.add('hidden'); }
+  else{ compiledPanel.classList.remove('hidden'); volcanoPanel.classList.add('hidden'); }
+
+  // init state
+  S={ mode, idx:0, spills:0, mats:0, aggs:0,
+      events: (mode==='volcano'? buildEventsVolcano():buildEventsCompiled()),
+      stack:[] };
+  // reset UI
+  logVol.innerHTML=''; logComp.innerHTML='';
+  stackEl.innerHTML=''; evictEl.textContent=matEl.textContent=aggEl.textContent=stepEl.textContent=0;
+  setRegister(null); renderAll(); renderStackPanel(); renderCompiledCode(); hlCompiled('C_INIT');
+  const firstPhase=S.events.find(e=>e.kind==='phase'); if(firstPhase) phaseLabel.textContent=firstPhase.msg;
+}
+function step(){
+  if(S.idx>=S.events.length){
+    (S.mode==='volcano'?logVol:logComp) && log((S.mode==='volcano'?logVol:logComp),'— done —');
+    return;
+  }
+  const e=S.events[S.idx++];
+
+  if(e.kind==='phase'){
+    phaseLabel.textContent=e.msg;
+    log((S.mode==='volcano'?logVol:logComp),'== '+e.msg+' ==');
+    return step();
+  }
+
+  if(S.mode==='volcano'){
+    if(e.kind==='call'){ S.spills++; evictEl.textContent=S.spills; pushFrame(e.name, e.detail||''); log(logVol,`🟣 CALL ${e.name}${e.detail?` — ${e.detail}`:''}`,'spill'); }
+    else if(e.kind==='ret'){ popFrame(); if(e.payload){ setRegister(e.payload); applyActiveRow(e.payload); } log(logVol,`🔵 RETURN ${e.name}`,'reload'); }
+    else if(e.kind==='mat'){ S.mats++; matEl.textContent=S.mats; setRegister(e.payload); applyActiveRow(e.payload); log(logVol,`🟡 ${e.msg}`,'mat'); }
+    else if(e.kind==='agg'){ S.aggs++; aggEl.textContent=S.aggs; setRegister(e.payload); applyActiveRow(e.payload); log(logVol,`🟡 ${e.msg}`,'agg'); }
+    else if(e.kind==='out'){ log(logVol,e.msg); }
+    else if(e.kind==='note'){ log(logVol,e.msg); }
+  } else {
+    // compiled mode with code tracing
+    if(e.kind==='code'){ hlCompiled(e.id); log(logComp,`trace → ${e.id}`); }
+    else if(e.kind==='mat'){ if(e.code) hlCompiled(e.code); S.mats++; matEl.textContent=S.mats; setRegister(e.payload); applyActiveRow(e.payload); log(logComp,`🟡 ${e.msg}`,'mat'); }
+    else if(e.kind==='agg'){ if(e.code) hlCompiled(e.code); S.aggs++; aggEl.textContent=S.aggs; setRegister(e.payload); applyActiveRow(e.payload); log(logComp,`🟡 ${e.msg}`,'agg'); }
+    else if(e.kind==='note'){ if(e.code) hlCompiled(e.code); log(logComp,e.msg); }
+    else if(e.kind==='out'){ if(e.code) hlCompiled(e.code); log(logComp,e.msg); }
+  }
+
+  stepEl.textContent=S.idx;
+  if(S.idx>=S.events.length && timer){ clearInterval(timer); timer=null; autoBtn.textContent='Auto'; }
+}
+function toggleAuto(){ if(timer){clearInterval(timer);timer=null;autoBtn.textContent='Auto';return;} timer=setInterval(step,520); autoBtn.textContent='Pause'; }
+
+/*** Tabs ***/
+tabs.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    tabs.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    reset();
+  });
+});
+
+/*** Wire up ***/
+document.getElementById('stepBtn').addEventListener('click', step);
+document.getElementById('autoBtn').addEventListener('click', toggleAuto);
+document.getElementById('resetBtn').addEventListener('click', reset);
+renderCompiledCode();
+reset();
+</script>
+</body>
+</html>
+
