@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Write-Ahead Logging (WAL) Simulator</title>
+  <style>
+    :root {
+      --bg: #f9fafb; /* light gray */
+      --panel: #ffffff; /* white */
+      --muted: #4b5563; /* gray-700 */
+      --text: #111827; /* gray-900 */
+      --accent: #16a34a; /* green-600 */
+      --accent2: #2563eb; /* blue-600 */
+      --warn: #d97706; /* amber-600 */
+      --danger: #dc2626; /* red-600 */
+      --shadow: 0 4px 10px rgba(0,0,0,.1);
+      --highlight-redo: #e0f2fe; /* light blue */
+      --highlight-undo: #fee2e2; /* light red */
+      --highlight-dirty: #dcfce7; /* light green */
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial; font-size: 26px; }
+    header { padding: 24px; border-bottom: 1px solid #e5e7eb; position: sticky; top:0; background: rgba(255,255,255,.95); backdrop-filter: blur(6px); z-index: 3; }
+    header h1 { margin: 0; font-size: 40px; }
+    header small { color: var(--muted); font-size: 28px; }
+
+    .banner { position: sticky; top:80px; z-index:2; background:#fef3c7; color:#7c2d12; border:1px solid #fde68a; margin: 8px 16px 0; padding:16px 20px; border-radius:10px; font-size:26px; display:none; }
+
+    .wrap { padding: 24px; display: grid; grid-template-columns: 420px 1fr 1fr; gap: 28px; align-items: start; }
+
+    .card { background: var(--panel); border: 1px solid #e5e7eb; border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+    .card h2 { font-size: 28px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin: 0; padding: 22px; border-bottom: 1px solid #f3f4f6; background: #f9fafb; }
+    .card h3 { font-size: 24px; color: var(--muted); text-transform: uppercase; margin:0 0 8px 0; }
+    .section { padding: 22px; font-size:26px; }
+
+    .controls { display:flex; flex-wrap: wrap; gap:18px; align-items: center; font-size:26px; }
+    button { border:1px solid #d1d5db; background:#f3f4f6; color:var(--text); padding:18px 22px; border-radius:12px; cursor:pointer; font-weight:600; font-size:26px; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    button.primary { background: var(--accent2); border-color: transparent; color:#fff; }
+    button.warn { background: var(--warn); border-color: transparent; color:#fff; }
+    button.danger { background: var(--danger); border-color: transparent; color:#fff; }
+    .toggle { display:inline-flex; align-items:center; gap:16px; padding:16px 20px; border-radius:999px; border:1px solid #d1d5db; background:#f3f4f6; font-size:26px; }
+    .toggle input { accent-color: var(--accent2); transform: scale(1.8); }
+    select, input[type="number"] { background:#f9fafb; color:var(--text); border:1px solid #d1d5db; border-radius:10px; padding:16px 20px; font-size:26px; }
+
+    .schedule { display:grid; gap:18px; font-size:26px; }
+    .event { padding:16px 20px; border:1px solid #d1d5db; border-radius:10px; background:#f9fafb; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:26px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .event.active { outline:3px solid var(--accent2); background:#dbeafe; }
+    .event.done { opacity:.6; }
+
+    .kv { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:18px; font-size:26px; }
+    .box { padding:22px; border:1px solid #d1d5db; border-radius:12px; background:#f9fafb; text-align:center; transition: background .2s ease, outline-color .2s ease; font-size:26px; }
+    .box .key { color:var(--muted); font-size:24px; text-transform: uppercase; }
+    .box .val { font-size:44px; font-weight:800; margin-top:8px; }
+    .box.changed { outline:4px solid var(--accent); background: var(--highlight-dirty); }
+    .box.redo { outline:4px solid #60a5fa; background: var(--highlight-redo); }
+    .box.undo { outline:4px solid #f87171; background: var(--highlight-undo); }
+
+    .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:22px; }
+
+    .log { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#f9fafb; border:1px dashed #d1d5db; border-radius:12px; padding:18px; line-height:1.6; max-height:400px; overflow:auto; font-size:26px; }
+    .log .rec { padding:12px 14px; border-radius:8px; }
+    .log .rec.persisted { background:#e0f2fe; }
+    .log .rec.buffered { background:#fde68a; }
+
+    .legend { display:flex; gap:18px; align-items:center; color:var(--muted); font-size:24px; }
+    .dot { width:22px; height:22px; border-radius:999px; display:inline-block; }
+    .dot.p { background:#e0f2fe; border:1px solid #93c5fd; }
+    .dot.b { background:#fde68a; border:1px solid #facc15; }
+
+    .hint { color: var(--muted); font-size: 24px; }
+    footer { color: var(--muted); text-align:center; padding:26px; font-size:26px; }
+    .pill { display:inline-block; padding:12px 18px; border-radius:999px; font-size:24px; background:#f3f4f6; border:1px solid #d1d5db; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WAL Simulator <small>— STEAL + NO-FORCE by default</small></h1>
+  </header>
+  <div id="recoveryBanner" class="banner">Recovery Mode: Step to ANALYSIS → REDO → UNDO. <button id="btnExitRecovery" style="margin-left:8px; font-size:26px;">Exit</button></div>
+
+  <div class="wrap">
+    <!-- Left: Schedule / Controls -->
+    <div class="card">
+      <h2>Schedule & Controls</h2>
+      <div class="section">
+        <div class="controls" style="margin-bottom:10px;">
+          <label>
+            <span class="pill">Scenario</span>
+            <select id="scenario">
+              <option value="one">One Transaction (T1)</option>
+              <option value="two">Two Transactions (Group Commit)</option>
+            </select>
+          </label>
+          <button id="btnPrev">◀︎ Step Back</button>
+          <button id="btnStep" class="primary">Step ▶︎</button>
+          <button id="btnAuto">Auto ▶︎▶︎</button>
+          <button id="btnReset">Reset ⟲</button>
+        </div>
+        <div class="controls" style="margin-bottom:10px;">
+          <span class="pill">Buffer Policies</span>
+          <label class="toggle"><input type="checkbox" id="steal" checked /> <span>STEAL</span></label>
+          <label class="toggle"><input type="checkbox" id="force" /> <span>FORCE</span></label>
+          <button id="btnFlushWAL" title="Flush WAL buffer to disk">Flush WAL</button>
+          <button id="btnFlushDirty" title="Flush some dirty pages to disk">Flush Pages</button>
+          <button id="btnCrash" class="danger" title="Simulate a crash">Crash ⚡</button>
+        </div>
+        <div class="controls" style="margin-bottom:10px;">
+          <label>Auto delay (ms) <input type="number" id="delay" value="700" min="100" step="50" /></label>
+        </div>
+        <div id="schedule" class="schedule"></div>
+      </div>
+    </div>
+
+    <!-- Middle: Memory panel -->
+    <div class="card">
+      <h2>Memory (Buffer Pool)</h2>
+      <div class="section">
+        <div class="kv" id="memKV"></div>
+        <p class="hint" id="memHint">Dirty pages outlined in green after writes. During recovery, REDO steps highlight blue; UNDO steps highlight red.</p>
+        <div style="margin-top:10px;" class="legend">
+          <span>WAL buffer size: <span class="pill" id="walBufCount">0</span></span>
+          <span>Dirty pages: <span class="pill" id="dirtyCount">0</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Disk + WAL -->
+    <div class="card">
+      <h2>Disk (Data Files & WAL)</h2>
+      <div class="section">
+        <div class="grid2">
+          <div>
+            <h3>Disk Data</h3>
+            <div class="kv" id="diskKV"></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <h3>Write-Ahead Log</h3>
+              <div class="legend">
+                <span class="dot b"></span><span>buffered</span>
+                <span class="dot p"></span><span>persisted</span>
+              </div>
+            </div>
+            <div class="log" id="walView"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Tip: Toggle <b>STEAL</b>/<b>FORCE</b>, then <b>Crash</b> after WAL flush to step through recovery.
+  </footer>
+
+<script>
+(function(){
+  // --- Simulation Core ------------------------------------------------------
+  const initialDisk = { A: 1, B: 5, C: 7, D: 3 };
+  let mem = {}, disk = {}, dirty = new Set();
+  let walBuffer = []; // not yet persisted
+  let walPersisted = []; // on stable storage
+  let txns = {}; // { T1: { status: 'active'|'committed'|'aborted' } }
+  let steps = []; // schedule of events (normal run)
+  let stepIndex = -1;
+  let autoTimer = null;
+
+  // Recovery state
+  let mode = 'run'; // 'run' | 'recovery'
+  let recoverySteps = []; // derived from WAL
+  let rIndex = -1;
+  let lastRecoveryHighlight = { type: null, key: null };
+
+  const el = (id) => document.getElementById(id);
+  const scheduleEl = el('schedule');
+  const memKV = el('memKV');
+  const diskKV = el('diskKV');
+  const walView = el('walView');
+
+  const stealCB = el('steal');
+  const forceCB = el('force');
+
+  const btnPrev = el('btnPrev');
+  const btnStep = el('btnStep');
+  const btnAuto = el('btnAuto');
+  const btnReset = el('btnReset');
+  const btnFlushWAL = el('btnFlushWAL');
+  const btnFlushDirty = el('btnFlushDirty');
+  const btnCrash = el('btnCrash');
+  const walBufCount = el('walBufCount');
+  const dirtyCount = el('dirtyCount');
+  const delayInput = el('delay');
+  const scenarioSel = el('scenario');
+  const recoveryBanner = el('recoveryBanner');
+  const btnExitRecovery = el('btnExitRecovery');
+
+  function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+
+  function resetState(){
+    mem = clone(initialDisk);
+    disk = clone(initialDisk);
+    dirty = new Set();
+    walBuffer = [];
+    walPersisted = [];
+    txns = {};
+    stepIndex = -1;
+    mode = 'run';
+    rIndex = -1; recoverySteps = [];
+    recoveryBanner.style.display = 'none';
+    buildSchedule();
+    render();
+  }
+
+  // Build scenarios
+  function buildSchedule(){
+    const sc = scenarioSel.value;
+    steps = [];
+    if(sc === 'one'){
+      steps = [
+        {t:'begin', txn:'T1'},
+        {t:'write', txn:'T1', key:'A', before:1, after:8},
+        {t:'write', txn:'T1', key:'B', before:5, after:9},
+        {t:'commit', txn:'T1'},
+      ];
+    } else {
+      steps = [
+        {t:'begin', txn:'T1'},
+        {t:'write', txn:'T1', key:'A', before:1, after:8},
+        {t:'write', txn:'T1', key:'B', before:5, after:9},
+        {t:'begin', txn:'T2'},
+        {t:'write', txn:'T2', key:'C', before:7, after:2},
+        // Demonstrate group commit later via Flush WAL
+        {t:'commit', txn:'T1'},
+        {t:'write', txn:'T2', key:'D', before:3, after:4},
+        {t:'commit', txn:'T2'},
+      ];
+    }
+    renderSchedule();
+  }
+
+  // WAL helpers
+  function log(rec, buffered=true){
+    const base = { lsn: nextLSN(), ...rec };
+    if(buffered) walBuffer.push(base); else walPersisted.push(base);
+  }
+  let _lsn = 1; function nextLSN(){ return _lsn++; }
+
+  function flushWAL(){
+    if(walBuffer.length){
+      walPersisted.push(...walBuffer);
+      walBuffer = [];
+      hint(`Flushed WAL to disk.`);
+      render();
+    }
+  }
+
+  // Data flush respecting STEAL/NO-STEAL and FORCE/NO-FORCE
+  function flushSomePages(){
+    if(!stealCB.checked){
+      hint(`NO-STEAL: cannot flush uncommitted pages.`);
+      return;
+    }
+    // Pick up to 2 dirty pages and flush if their log records are persisted
+    let flushed = 0;
+    for(const k of Array.from(dirty)){
+      // Ensure WAL contains corresponding log records persisted before page flush (WAL rule)
+      const hasPersistedLog = walPersisted.some(r => r.type==='update' && r.key===k);
+      if(hasPersistedLog){
+        disk[k] = mem[k];
+        dirty.delete(k);
+        flushed++;
+        if(flushed>=2) break;
+      }
+    }
+    if(flushed>0){ hint(`Flushed ${flushed} dirty page(s) to disk.`);} else { hint(`No eligible dirty pages to flush (WAL not persisted yet).`)}
+    render();
+  }
+
+  function forceAtCommit(txn){
+    // Flush WAL first (group commit can override, but FORCE requires data pages too)
+    flushWAL();
+    // FORCE requires flushing all pages dirtied by this txn to disk now
+    const keys = Object.keys(initialDisk);
+    let c = 0;
+    keys.forEach(k => {
+      const updatedByTxn = walPersisted.some(r => r.type==='update' && r.txn===txn && r.key===k);
+      if(updatedByTxn){
+        disk[k] = mem[k];
+        dirty.delete(k);
+        c++;
+      }
+    });
+    hint(`FORCE: flushed ${c} page(s) updated by ${txn} at commit.`);
+  }
+
+  // --- Recovery construction & stepping -----------------------------------
+  function buildRecoverySteps(){
+    const committed = new Set(walPersisted.filter(r=>r.type==='commit').map(r=>r.txn));
+    const begun = new Set(walPersisted.filter(r=>r.type==='begin').map(r=>r.txn));
+    const losers = [...begun].filter(t=>!committed.has(t));
+
+    const redo = walPersisted.filter(r=>r.type==='update' && committed.has(r.txn)).sort((a,b)=>a.lsn-b.lsn);
+    const undo = walPersisted.filter(r=>r.type==='update' && losers.includes(r.txn)).sort((a,b)=>b.lsn-a.lsn);
+
+    const steps = [];
+    steps.push({ phase:'analysis', info:{ committed:[...committed], losers } });
+    redo.forEach(r=> steps.push({ phase:'redo', rec:r }));
+    undo.forEach(r=> steps.push({ phase:'undo', rec:r }));
+    steps.push({ phase:'end' });
+    return steps;
+  }
+
+  function enterRecovery(){
+    mode = 'recovery';
+    rIndex = -1;
+    recoverySteps = buildRecoverySteps();
+    // On restart, memory equals disk (clean), WAL buffer lost
+    mem = clone(disk);
+    dirty = new Set();
+    walBuffer = [];
+    recoveryBanner.style.display = 'block';
+    hint(`Crash! Volatile state lost. Step through ANALYSIS → REDO → UNDO.`);
+    render();
+  }
+
+  function applyRecovery(step){
+    // Clear prior recovery highlight styles on disk grid
+    lastRecoveryHighlight = { type:null, key:null };
+    if(step.phase==='analysis'){
+      const c = step.info.committed.length;
+      const l = step.info.losers.length;
+      hint(`Analysis: found ${c} committed txn(s): ${step.info.committed.join(', ') || '—'}; losers: ${step.info.losers.join(', ') || '—'}.`);
+    } else if(step.phase==='redo'){
+      const r = step.rec; // after-image
+      disk[r.key] = r.after;
+      lastRecoveryHighlight = { type:'redo', key:r.key };
+      hint(`REDO ${r.txn} @ LSN ${r.lsn}: set ${r.key} = ${r.after}.`);
+    } else if(step.phase==='undo'){
+      const r = step.rec; // before-image
+      disk[r.key] = r.before;
+      lastRecoveryHighlight = { type:'undo', key:r.key };
+      hint(`UNDO ${r.txn} @ LSN ${r.lsn}: restore ${r.key} = ${r.before}.`);
+    } else if(step.phase==='end'){
+      hint(`Recovery complete. Database is consistent.`);
+    }
+  }
+
+  // Execute one schedule step (run mode)
+  function apply(step){
+    switch(step.t){
+      case 'begin': {
+        txns[step.txn] = { status:'active' };
+        log({ type:'begin', txn: step.txn });
+        hint(`${step.txn} begins.`);
+        break;
+      }
+      case 'write': {
+        log({ type:'update', txn: step.txn, key: step.key, before: step.before, after: step.after });
+        mem[step.key] = step.after;
+        dirty.add(step.key);
+        hint(`${step.txn} writes ${step.key}: ${step.before} → ${step.after} (memory only).`);
+        break;
+      }
+      case 'commit': {
+        log({ type:'commit', txn: step.txn });
+        txns[step.txn].status = 'committed';
+        hint(`${step.txn} issues COMMIT (WAL must reach disk before ack).`);
+        if(forceCB.checked){
+          forceAtCommit(step.txn);
+        } else {
+          hint(`NO-FORCE: data pages may remain dirty; ensure WAL is flushed before pages.`);
+        }
+        break;
+      }
+    }
+  }
+
+  // Step and Render
+  function stepForward(){
+    if(mode==='run'){
+      if(stepIndex >= steps.length-1) return;
+      stepIndex++;
+      apply(steps[stepIndex]);
+      render();
+    } else {
+      if(rIndex >= recoverySteps.length-1) return;
+      rIndex++;
+      applyRecovery(recoverySteps[rIndex]);
+      render();
+    }
+  }
+
+  function stepBack(){
+    if(mode==='run'){
+      if(stepIndex < 0) return;
+      const target = stepIndex - 1;
+      const sc = scenarioSel.value;
+      resetState();
+      scenarioSel.value = sc; buildSchedule();
+      for(let i=0;i<=target;i++){ apply(steps[i]); }
+      stepIndex = target;
+      render();
+    } else {
+      if(rIndex < 0) return;
+      const target = rIndex - 1;
+      // Re-enter recovery fresh and replay to target
+      const savedDisk = clone(disk);
+      // simulate a restart state: mem=disk at crash time; but disk should be state before recovery started.
+      // We don't have the pre-recovery disk snapshot, so rebuild from persisted WAL pre-recovery:
+      disk = clone(initialDisk);
+      walPersisted.filter(r=>r.type==='update').sort((a,b)=>a.lsn-b.lsn).forEach(()=>{}); // no-op; leaving disk as it was at crash time requires tracking; keep simple: step back disabled effectively
+      rIndex = target; // best-effort
+      render();
+    }
+  }
+
+  function autoPlay(){
+    if(autoTimer){ clearInterval(autoTimer); autoTimer=null; btnAuto.textContent='Auto ▶︎▶︎'; return; }
+    btnAuto.textContent='Stop ⏹';
+    autoTimer = setInterval(()=>{
+      if(mode==='run'){
+        if(stepIndex >= steps.length-1){ clearInterval(autoTimer); autoTimer=null; btnAuto.textContent='Auto ▶︎▶︎'; return; }
+        stepForward();
+      } else {
+        if(rIndex >= recoverySteps.length-1){ clearInterval(autoTimer); autoTimer=null; btnAuto.textContent='Auto ▶︎▶︎'; return; }
+        stepForward();
+      }
+    }, Math.max(100, Number(delayInput.value||700)));
+  }
+
+  function crash(){
+    // Simulate crash: keep persisted WAL + disk; lose memory + WAL buffer
+    enterRecovery();
+  }
+
+  // UI Rendering
+  function renderSchedule(){
+    scheduleEl.innerHTML = '';
+    if(mode==='run'){
+      steps.forEach((s, i)=>{
+        const div = document.createElement('div');
+        div.className = 'event' + (i===stepIndex? ' active':'') + (i<stepIndex? ' done':'');
+        let text = '';
+        if(s.t==='begin') text = `${s.txn}: BEGIN`;
+        if(s.t==='write') text = `${s.txn}: WRITE(${s.key}) ${s.before}→${s.after}`;
+        if(s.t==='commit') text = `${s.txn}: COMMIT`;
+        div.textContent = text;
+        scheduleEl.appendChild(div);
+      });
+    } else {
+      recoverySteps.forEach((s, i)=>{
+        const div = document.createElement('div');
+        div.className = 'event' + (i===rIndex? ' active':'') + (i<rIndex? ' done':'');
+        let text = '';
+        if(s.phase==='analysis') text = `ANALYSIS: find committed and losers`;
+        if(s.phase==='redo') text = `REDO LSN ${s.rec.lsn}: ${s.rec.txn} ${s.rec.key}=${s.rec.after}`;
+        if(s.phase==='undo') text = `UNDO LSN ${s.rec.lsn}: ${s.rec.txn} ${s.rec.key}→${s.rec.before}`;
+        if(s.phase==='end') text = `END RECOVERY`;
+        div.textContent = text;
+        scheduleEl.appendChild(div);
+      });
+    }
+  }
+
+  function renderKV(container, obj, changedSet){
+    container.innerHTML = '';
+    const highlight = lastRecoveryHighlight;
+    Object.keys(initialDisk).forEach(k=>{
+      const val = obj[k];
+      const box = document.createElement('div');
+      let cls = 'box';
+      if(changedSet && changedSet.has(k)) cls += ' changed';
+      if(mode==='recovery' && highlight.key===k){
+        cls += highlight.type==='redo' ? ' redo' : (highlight.type==='undo' ? ' undo' : '');
+      }
+      box.className = cls;
+      box.innerHTML = `<div class="key">${k}</div><div class="val">${val}</div>`;
+      container.appendChild(box);
+    });
+  }
+
+  function renderWAL(){
+    walView.innerHTML = '';
+    function recLine(r, cls){
+      const d = document.createElement('div');
+      d.className = `rec ${cls}`;
+      let t='';
+      if(r.type==='begin') t = `LSN ${r.lsn} — <${r.txn} BEGIN>`;
+      if(r.type==='update') t = `LSN ${r.lsn} — <${r.txn}, ${r.key}, ${r.before}, ${r.after}>`;
+      if(r.type==='commit') t = `LSN ${r.lsn} — <${r.txn} COMMIT>`;
+      d.textContent = t;
+      return d;
+    }
+    walPersisted.forEach(r => walView.appendChild(recLine(r,'persisted')));
+    walBuffer.forEach(r => walView.appendChild(recLine(r,'buffered')));
+    walBufCount.textContent = walBuffer.length;
+  }
+
+  function renderBadges(){
+    dirtyCount.textContent = dirty.size;
+  }
+
+  function hint(msg){ el('memHint').textContent = msg; }
+
+  function render(){
+    renderSchedule();
+    renderKV(memKV, mem, dirty);
+    renderKV(diskKV, disk);
+    renderWAL();
+    renderBadges();
+    if(mode==='run'){
+      recoveryBanner.style.display = 'none';
+      btnPrev.disabled = (stepIndex<=-1);
+      btnStep.disabled = (stepIndex>=steps.length-1);
+    } else {
+      recoveryBanner.style.display = 'block';
+      btnPrev.disabled = true; // simplified back for recovery
+      btnStep.disabled = (rIndex>=recoverySteps.length-1);
+    }
+  }
+
+  // Wire up
+  btnStep.addEventListener('click', stepForward);
+  btnPrev.addEventListener('click', stepBack);
+  btnAuto.addEventListener('click', autoPlay);
+  btnReset.addEventListener('click', ()=>{ const sc=scenarioSel.value; resetState(); scenarioSel.value=sc; buildSchedule(); });
+  btnFlushWAL.addEventListener('click', flushWAL);
+  btnFlushDirty.addEventListener('click', flushSomePages);
+  btnCrash.addEventListener('click', ()=>{
+    if(walPersisted.length===0){ hint('Crash before WAL persisted: nothing to redo/undo.'); }
+    crash();
+  });
+  btnExitRecovery.addEventListener('click', ()=>{ mode='run'; rIndex=-1; recoverySteps=[]; recoveryBanner.style.display='none'; hint('Exited recovery mode.'); render(); });
+  stealCB.addEventListener('change', ()=>{ hint(stealCB.checked? 'STEAL enabled: uncommitted pages may flush (with WAL safety).':'NO-STEAL: uncommitted pages cannot flush.'); });
+  forceCB.addEventListener('change', ()=>{ hint(forceCB.checked? 'FORCE enabled: data pages flushed at COMMIT.':'NO-FORCE: data pages may remain dirty after COMMIT.'); render(); });
+  scenarioSel.addEventListener('change', ()=>{ resetState(); buildSchedule(); });
+
+  // Init
+  resetState();
+})();
+</script>
+</body>
+</html>
