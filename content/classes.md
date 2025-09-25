@@ -14,6 +14,7 @@ illustrate some concepts in the class. Here's a list:
 - [Hash Join](/hash-join.html)
 - [Sort Merge Join](/sort-merge-join.html)
 - [Volcano iterators vs Data-centric query compilation](/iterator-vs-compiled.html)
+- [WAL simulator](/wal-simulator.html)
 
 ## Spring
 
