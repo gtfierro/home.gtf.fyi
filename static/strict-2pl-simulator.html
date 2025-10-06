@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Strict 2PL Timeline Simulator — Deadlock Detection (Single‑Page)</title>
+  <style>
+    :root{--bg:#f8fafc;--fg:#0f172a;--muted:#64748b;--ok:#e8f5e9;--s:#e3f2fd;--wait:#ffebee;--unlock:#fffde7;--commit:#e0f7fa;--grid:#e2e8f0}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif}
+    header{padding:16px 20px;border-bottom:1px solid var(--grid);background:white;position:sticky;top:0;z-index:1}
+    h1{font-size:20px;margin:0 0 6px}
+    .sub{color:var(--muted);font-size:13px}
+    main{max-width:1200px;margin:20px auto;padding:0 20px 40px}
+    textarea{width:100%;min-height:160px;resize:vertical;border:1px solid var(--grid);border-radius:10px;padding:12px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    button{border:1px solid var(--grid);background:white;padding:10px 14px;border-radius:10px;cursor:pointer}
+    button:hover{background:#f1f5f9}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .tablewrap{overflow:auto;border:1px solid var(--grid);border-radius:10px;background:white;margin-top:16px}
+    table{border-collapse:separate;border-spacing:0;width:100%}
+    th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px 8px;font-size:12px;vertical-align:top}
+    th:first-child, td:first-child{border-left:0}
+    tr:first-child th{border-top:0}
+    tr:last-child td{border-bottom:0}
+    th{position:sticky;top:0;background:#f8fafc;text-align:left}
+    .cell-wait{background:var(--wait)}
+    .cell-s{background:var(--s)}
+    .cell-x{background:var(--ok)}
+    .cell-unlock{background:var(--unlock)}
+    .cell-commit{background:var(--commit)}
+    .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;color:var(--muted);font-size:12px}
+    .tag{display:inline-flex;align-items:center;gap:6px}
+    .box{width:14px;height:14px;border:1px solid var(--grid)}
+    .foot{margin-top:8px;color:var(--muted);font-size:12px}
+    .error{color:#b91c1c}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Strict 2PL Timeline Simulator — Deadlock Detection</h1>
+    <div class="sub">Paste transactions, simulate S/X locks, and render a row‑by‑row timeline table. Locks obey shared/exclusive compatibility and S→X upgrade rules. <b>COMMIT automatically releases all locks held by the transaction.</b> Deadlocks are detected with a wait‑for graph; on detection a random victim is <b>ABORT</b>ed and shown in the schedule. <b>Tip:</b> Schedules are bookmarkable — the input is mirrored into the page URL and loaded on refresh.</div>
+  </header>
+  <main>
+    <section>
+      <label for="input" class="sub">Input format — one transaction per line: <span class="mono">T1: S(A) R(A) X(B) W(B) COMMIT</span>. Tokens: <span class="mono">S(X), X(X), U(X), R(X), W(X), COMMIT, ABORT</span>. Aliases: <span class="mono">LOCK-S, LOCK-X</span>.</label>
+      <textarea id="input" spellcheck="false"></textarea>
+      <div class="row">
+        <button id="btnExample">Load Example</button>
+        <button id="btnRun">Generate Timeline</button>
+        <button id="btnClear">Clear Output</button>
+      </div>
+      <div id="msg" class="foot"></div>
+      <div class="legend">
+        <span class="tag"><span class="box" style="background:var(--s)"></span> S(lock)</span>
+        <span class="tag"><span class="box" style="background:var(--ok)"></span> X(lock)</span>
+        <span class="tag"><span class="box" style="background:var(--wait)"></span> WAIT (blocked)</span>
+        <span class="tag"><span class="box" style="background:var(--unlock)"></span> U(unlock)</span>
+        <span class="tag"><span class=\"box\" style=\"background:var\(--commit\)\"></span> COMMIT / ABORT (auto‑unlock)</span>
+      </div>
+      <div class="row" style="margin-top:6px">
+        <button id="btnCopyLink">Copy Link</button>
+      </div>
+    </section>
+
+    <section class="tablewrap" id="outwrap" style="display:none">
+      <table id="out"></table>
+    </section>
+  </main>
+
+<script>
+// -----------------------------
+// Parsing
+// -----------------------------
+const TOKEN_RE = /^(?<op>LOCK-S|LOCK-X|S|X|U|R|W|COMMIT|ABORT)(?:\((?<arg>[A-Za-z0-9_]+)\))?$/i;
+
+function parseTransactions(text){
+  const txns = [];
+  const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(s=>s && !s.startsWith('#'));
+  for(const line of lines){
+    const idx = line.indexOf(':');
+    if(idx < 0) throw new Error(`Invalid line (missing ':'): ${line}`);
+    const name = line.slice(0, idx).trim();
+    const rest = line.slice(idx+1).trim();
+    const tokens = rest.split(/[\s,]+/).filter(Boolean);
+    const ops = tokens.map(tok => {
+      const m = tok.match(TOKEN_RE);
+      if(!m) throw new Error(`Unrecognized token '${tok}' in line: ${line}`);
+      const op = m.groups.op.toUpperCase();
+      const arg = m.groups.arg || null;
+      return {op, arg};
+    });
+    // Auto-insert unlocks for any locked items before COMMIT (for visualization)
+    const seenLocks = new Set();
+    for(const op of ops){
+      if((op.op==='S' || op.op==='LOCK-S' || op.op==='X' || op.op==='LOCK-X') && op.arg){ seenLocks.add(op.arg); }
+    }
+    const last = ops[ops.length-1];
+    if(last && last.op==='COMMIT'){
+      const unlockOps = Array.from(seenLocks).map(item=>({op:'U', arg:item}));
+      ops.splice(ops.length-1, 0, ...unlockOps);
+    }
+    txns.push({name, ops, pc:0, done:false});
+  }
+  if(!txns.length) throw new Error('No transactions found.');
+  return txns;
+}
+
+// -----------------------------
+// Lock Table
+// -----------------------------
+class LockTable{
+  constructor(){ this.items = new Map(); }
+  _state(item){
+    if(!this.items.has(item)) this.items.set(item, {mode:null, holders:new Set()});
+    return this.items.get(item);
+  }
+  can_lock_s(txn, item){
+    const st = this._state(item);
+    if(st.mode === null || st.mode === 'S') return true; // S compatible or free
+    if(st.mode === 'X') return st.holders.has(txn); // already owns X
+    return false;
+  }
+  can_lock_x(txn, item){
+    const st = this._state(item);
+    if(st.mode === null) return true;
+    if(st.mode === 'S') return st.holders.size === 1 && st.holders.has(txn); // upgrade
+    if(st.mode === 'X') return st.holders.has(txn);
+    return false;
+  }
+  lock_s(txn, item){
+    const st = this._state(item);
+    if(st.mode === null){ st.mode = 'S'; st.holders = new Set([txn]); }
+    else if(st.mode === 'S'){ st.holders.add(txn); }
+    // if X by same txn, no-op (already exclusive)
+  }
+  lock_x(txn, item){
+    const st = this._state(item);
+    if(st.mode === null){ st.mode = 'X'; st.holders = new Set([txn]); return; }
+    if(st.mode === 'S'){ st.mode = 'X'; st.holders = new Set([txn]); return; } // upgrade
+    if(st.mode === 'X'){ st.holders = new Set([txn]); }
+  }
+  unlock(txn, item){
+    const st = this._state(item);
+    if(st.mode === null) return;
+    if(st.mode === 'X'){
+      if(st.holders.has(txn)){ st.holders.clear(); st.mode = null; }
+    }else{ // 'S'
+      st.holders.delete(txn);
+      if(st.holders.size === 0) st.mode = null;
+    }
+  }
+  release_all(txn){
+    for(const [item, st] of this.items.entries()){
+      if(st.holders.has(txn)){
+        if(st.mode === 'X'){ st.holders.clear(); st.mode = null; }
+        else{ st.holders.delete(txn); if(st.holders.size===0) st.mode = null; }
+      }
+    }
+  }
+}
+
+// -----------------------------
+// Deadlock detection via Wait-For Graph (WFG)
+// -----------------------------
+function buildWaitForGraph(txns, lt){
+  const adj = new Map();
+  function addEdge(from,to){ if(!adj.has(from)) adj.set(from,new Set()); adj.get(from).add(to); }
+  for(const t of txns){
+    if(t.done) continue;
+    const op = (t.pc < t.ops.length) ? t.ops[t.pc] : null;
+    if(!op) continue;
+    let o = op.op.toUpperCase(); let arg = op.arg;
+    if(o==='LOCK-S') o='S'; if(o==='LOCK-X') o='X';
+    const blockers = new Set();
+    const st = arg ? lt._state(arg) : null;
+    if(o==='S' && arg){ if(!lt.can_lock_s(t.name,arg)){ for(const h of st.holders) if(h!==t.name) blockers.add(h); } }
+    else if(o==='X' && arg){ if(!lt.can_lock_x(t.name,arg)){ for(const h of st.holders) if(h!==t.name) blockers.add(h); } }
+    else if((o==='R'||o==='W') && arg){
+      if(o==='R'){
+        const ok = (st.mode==='S'||st.mode==='X') && st.holders.has(t.name);
+        if(!ok){ for(const h of st.holders) if(h!==t.name) blockers.add(h); }
+      }else{
+        const ok = (st.mode==='X') && st.holders.has(t.name);
+        if(!ok){ for(const h of st.holders) if(h!==t.name) blockers.add(h); }
+      }
+    }
+    if(blockers.size){ for(const b of blockers) addEdge(t.name,b); }
+  }
+  return adj;
+}
+function findCycleNodes(adj){
+  const WHITE=0,GRAY=1,BLACK=2; const color=new Map(); const inCycle=new Set(); const stack=[];
+  for(const v of adj.keys()) color.set(v,WHITE);
+  function dfs(u){ color.set(u,GRAY); stack.push(u); const nbrs=adj.get(u)||new Set();
+    for(const v of nbrs){ const c=color.get(v)??WHITE; if(c===WHITE){ if(dfs(v)) return true; } else if(c===GRAY){ const idx=stack.lastIndexOf(v); for(let i=idx;i<stack.length;i++) inCycle.add(stack[i]); return true; } }
+    stack.pop(); color.set(u,BLACK); return false; }
+  for(const v of adj.keys()){ if((color.get(v)??WHITE)===WHITE){ if(dfs(v)) break; } }
+  return Array.from(inCycle);
+}
+
+// -----------------------------
+// Simulator
+// -----------------------------
+function simulate(txns){
+  const lt = new LockTable();
+  const rows = []; // array of arrays of {text, cls}
+  const MAX_STEPS = 10000;
+  let steps = 0;
+
+  function currentOp(t){ if(t.done || t.pc >= t.ops.length) return null; return t.ops[t.pc]; }
+
+  function stepTxn(t){
+    if(t.done) return {text:'', cls:''};
+    const op = currentOp(t);
+    if(!op){ t.done = true; return {text:'', cls:''}; }
+
+    let o = op.op.toUpperCase();
+    let arg = op.arg;
+    if(o === 'LOCK-S') o = 'S';
+    if(o === 'LOCK-X') o = 'X';
+
+    if(o === 'S'){
+      if(!arg) throw new Error('S() requires an item');
+      if(lt.can_lock_s(t.name, arg)){ lt.lock_s(t.name, arg); t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:`S(${arg})`, cls:'cell-s'}; }
+      return {text:`WAIT S(${arg})`, cls:'cell-wait'};
+    }
+    if(o === 'X'){
+      if(!arg) throw new Error('X() requires an item');
+      if(lt.can_lock_x(t.name, arg)){ lt.lock_x(t.name, arg); t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:`X(${arg})`, cls:'cell-x'}; }
+      return {text:`WAIT X(${arg})`, cls:'cell-wait'};
+    }
+    if(o === 'U'){
+      if(!arg) throw new Error('U() requires an item');
+      lt.unlock(t.name, arg); t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:`U(${arg})`, cls:'cell-unlock'};
+    }
+    if(o === 'R' || o === 'W'){
+      if(!arg) throw new Error(`${o}() requires an item`);
+      const st = lt._state(arg);
+      if(o === 'R'){
+        const ok = (st.mode==='S' || st.mode==='X') && st.holders.has(t.name);
+        if(ok){ t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:`R(${arg})`, cls:''}; }
+        return {text:`WAIT R(${arg})`, cls:'cell-wait'};
+      }else{
+        const ok = (st.mode==='X') && st.holders.has(t.name);
+        if(ok){ t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:`W(${arg})`, cls:''}; }
+        return {text:`WAIT W(${arg})`, cls:'cell-wait'};
+      }
+    }
+    if(o === 'COMMIT'){
+      // Auto-unlock on commit: release all locks held by this transaction (strict-2PL behavior)
+      lt.release_all(t.name); t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:'COMMIT', cls:'cell-commit'};
+    }
+    if(o === 'ABORT'){
+      // Also release all locks on abort
+      lt.release_all(t.name); t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:'ABORT', cls:'cell-commit'};
+    }
+    t.pc++; if(t.pc>=t.ops.length) t.done=true; return {text:op.op + (op.arg?`(${op.arg})`:''), cls:''};
+  }
+
+  while(!txns.every(t=>t.done)){
+    steps++; if(steps>MAX_STEPS) throw new Error('Exceeded max steps; possible deadlock. Add unlocks or change schedule.');
+    let progress = false;
+    const row = [];
+    for(const t of txns){
+      const before = t.pc;
+      const cell = stepTxn(t);
+      row.push(cell);
+      if(t.pc !== before) progress = true;
+    }
+    rows.push(row);
+
+    if(!progress){
+      const adj = buildWaitForGraph(txns, lt);
+      const cyc = findCycleNodes(adj);
+      if(cyc.length){
+        const victimName = cyc[Math.floor(Math.random()*cyc.length)];
+        const victim = txns.find(t=>t.name===victimName);
+        const abortRow = txns.map(t=>({text:'', cls:''}));
+        abortRow[txns.indexOf(victim)] = {text:'ABORT', cls:'cell-commit'};
+        rows.push(abortRow);
+        lt.release_all(victim.name);
+        victim.done = true;
+        victim.pc = victim.ops.length;
+      }
+    }
+  }
+  return {rows};
+}
+
+// -----------------------------
+// Rendering
+// -----------------------------
+function renderTable(container, txns, rows){
+  const table = document.getElementById('out');
+  table.innerHTML = '';
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  for(const t of txns){
+    const th = document.createElement('th');
+    th.textContent = t.name;
+    trh.appendChild(th);
+  }
+  thead.appendChild(trh);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  for(const r of rows){
+    const tr = document.createElement('tr');
+    for(const c of r){
+      const td = document.createElement('td');
+      td.textContent = c.text || '';
+      if(c.cls) td.className = c.cls;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  container.style.display = 'block';
+}
+
+// -----------------------------
+// URL helpers (bookmarkable schedules)
+// -----------------------------
+function debounce(fn, wait){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); }; }
+function updateURLFromInput(){
+  const url = new URL(window.location);
+  const val = inputEl.value;
+  if(val.trim().length){ url.searchParams.set('sched', val); }
+  else { url.searchParams.delete('sched'); }
+  history.replaceState(null, '', url);
+}
+function initFromURL(){
+  const url = new URL(window.location);
+  const s = url.searchParams.get('sched');
+  if(s !== null){ inputEl.value = s; setMsg('Loaded schedule from URL params.'); }
+}
+
+// -----------------------------
+// UI Wire-up
+// -----------------------------
+const inputEl = document.getElementById('input');
+const msgEl = document.getElementById('msg');
+const outwrap = document.getElementById('outwrap');
+
+function setMsg(text, isError=false){
+  msgEl.textContent = text;
+  msgEl.className = isError ? 'foot error' : 'foot';
+}
+
+document.getElementById('btnExample').addEventListener('click', ()=>{
+  inputEl.value = `# Sample inputs
+T1: S(A) R(A) X(B) W(B) COMMIT
+T2: S(B) R(B) X(A) W(A) COMMIT
+T3: S(A) R(A) U(A) COMMIT
+`;
+  updateURLFromInput();
+  setMsg('Loaded example. Click "Generate Timeline".');
+});
+
+document.getElementById('btnRun').addEventListener('click', ()=>{
+  updateURLFromInput();
+  setMsg('');
+  try{
+    const txns = parseTransactions(inputEl.value);
+    const cloned = txns.map(t=>({name:t.name, ops: t.ops.map(o=>({op:o.op, arg:o.arg})), pc:0, done:false}));
+    const {rows} = simulate(cloned);
+    renderTable(outwrap, txns, rows);
+    setMsg(`Generated ${rows.length} rows.`);
+  }catch(e){
+    console.error(e);
+    setMsg(e.message || String(e), true);
+  }
+});
+
+document.getElementById('btnClear').addEventListener('click', ()=>{
+  outwrap.style.display = 'none';
+  document.getElementById('out').innerHTML = '';
+  setMsg('Cleared output.');
+  inputEl.value = '';
+  updateURLFromInput();
+});
+
+// Mirror edits into URL (debounced)
+inputEl.addEventListener('input', debounce(updateURLFromInput, 300));
+
+// Copy Link button — copies current URL with sched param
+const btnCopy = document.getElementById('btnCopyLink');
+if(btnCopy){
+  btnCopy.addEventListener('click', async ()=>{
+    try{
+      // Ensure URL reflects current textarea first
+      updateURLFromInput();
+      const link = window.location.href;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        await navigator.clipboard.writeText(link);
+        setMsg('Copied link to clipboard.');
+      } else {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = link;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        setMsg('Copied link to clipboard.');
+      }
+    }catch(err){
+      console.error(err);
+      setMsg('Unable to copy link — you can manually copy the URL from the address bar.', true);
+    }
+  });
+}
+
+// Initialize from URL on load
+initFromURL();
+</script>
+</body>
+</html>
