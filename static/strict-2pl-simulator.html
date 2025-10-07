@@ -10,11 +10,27 @@
     header{padding:16px 20px;border-bottom:1px solid var(--grid);background:white;position:sticky;top:0;z-index:1}
     h1{font-size:20px;margin:0 0 6px}
     .sub{color:var(--muted);font-size:13px}
-    main{max-width:1200px;margin:20px auto;padding:0 20px 40px}
-    textarea{width:100%;min-height:160px;resize:vertical;border:1px solid var(--grid);border-radius:10px;padding:12px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    main{max-width:1200px;margin:16px auto;padding:0 20px 28px}
+    textarea{width:100%;min-height:140px;max-height:220px;height:180px;resize:vertical;border:1px solid var(--grid);border-radius:10px;padding:12px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
     button{border:1px solid var(--grid);background:white;padding:10px 14px;border-radius:10px;cursor:pointer}
     button:hover{background:#f1f5f9}
+    .layout{display:flex;gap:24px;align-items:flex-start;flex-wrap:nowrap}
+    .input-panel{flex:2 1 0;min-width:0;display:flex;flex-direction:column}
+    .input-panel > * + *{margin-top:10px}
+    .example-panel{flex:1 1 240px;min-width:220px;max-width:300px;display:flex;flex-direction:column;gap:12px;align-self:stretch}
+    .example-title{font-weight:600;font-size:14px}
+    .scenario-scroll{flex:1 1 auto;border:1px solid var(--grid);border-radius:10px;background:white;padding:10px;overflow:auto;box-shadow:0 1px 2px rgba(15,23,42,0.04);max-height:240px}
+    .scenario-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+    .scenario-button{width:100%;text-align:left;border:1px solid var(--grid);background:white;padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:box-shadow .18s ease, transform .18s ease}
+    .scenario-button:hover{background:#f8fafc;box-shadow:0 2px 6px rgba(15,23,42,0.08);transform:translateY(-1px)}
+    .scenario-title{font-weight:600;font-size:13px}
+    .scenario-desc{font-size:12px;color:var(--muted);line-height:1.3}
+    @media (max-width:960px){
+      .layout{flex-direction:column;flex-wrap:wrap}
+      .example-panel{max-width:none;width:100%}
+      .scenario-scroll{max-height:220px}
+    }
     .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
     .tablewrap{overflow:auto;border:1px solid var(--grid);border-radius:10px;background:white;margin-top:16px}
     table{border-collapse:separate;border-spacing:0;width:100%}
@@ -41,25 +57,32 @@
     <div class="sub">Paste transactions, simulate S/X locks, and render a row‑by‑row timeline table. Locks obey shared/exclusive compatibility and S→X upgrade rules. <b>COMMIT automatically releases all locks held by the transaction.</b> Deadlocks are detected with a wait‑for graph; on detection a random victim is <b>ABORT</b>ed and shown in the schedule. <b>Tip:</b> Schedules are bookmarkable — the input is mirrored into the page URL and loaded on refresh.</div>
   </header>
   <main>
-    <section>
-      <label for="input" class="sub">Input format — one transaction per line: <span class="mono">T1: S(A) R(A) X(B) W(B) COMMIT</span>. Tokens: <span class="mono">S(X), X(X), U(X), R(X), W(X), COMMIT, ABORT</span>. Aliases: <span class="mono">LOCK-S, LOCK-X</span>.</label>
-      <textarea id="input" spellcheck="false"></textarea>
-      <div class="row">
-        <button id="btnExample">Load Example</button>
-        <button id="btnRun">Generate Timeline</button>
-        <button id="btnClear">Clear Output</button>
+    <section class="layout">
+      <div class="input-panel">
+        <label for="input" class="sub">Input format — one transaction per line: <span class="mono">T1: S(A) R(A) X(B) W(B) COMMIT</span>. Tokens: <span class="mono">S(X), X(X), U(X), R(X), W(X), COMMIT, ABORT</span>. Aliases: <span class="mono">LOCK-S, LOCK-X</span>.</label>
+        <textarea id="input" spellcheck="false"></textarea>
+        <div class="row">
+          <button id="btnRun">Generate Timeline</button>
+          <button id="btnClear">Clear Output</button>
+        </div>
+        <div id="msg" class="foot"></div>
+        <div class="legend">
+          <span class="tag"><span class="box" style="background:var(--s)"></span> S(lock)</span>
+          <span class="tag"><span class="box" style="background:var(--ok)"></span> X(lock)</span>
+          <span class="tag"><span class="box" style="background:var(--wait)"></span> WAIT (blocked)</span>
+          <span class="tag"><span class="box" style="background:var(--unlock)"></span> U(unlock)</span>
+          <span class="tag"><span class="box" style="background:var(--commit)"></span> COMMIT / ABORT (auto‑unlock)</span>
+        </div>
+        <div class="row" style="margin-top:6px">
+          <button id="btnCopyLink">Copy Link</button>
+        </div>
       </div>
-      <div id="msg" class="foot"></div>
-      <div class="legend">
-        <span class="tag"><span class="box" style="background:var(--s)"></span> S(lock)</span>
-        <span class="tag"><span class="box" style="background:var(--ok)"></span> X(lock)</span>
-        <span class="tag"><span class="box" style="background:var(--wait)"></span> WAIT (blocked)</span>
-        <span class="tag"><span class="box" style="background:var(--unlock)"></span> U(unlock)</span>
-        <span class="tag"><span class=\"box\" style=\"background:var\(--commit\)\"></span> COMMIT / ABORT (auto‑unlock)</span>
-      </div>
-      <div class="row" style="margin-top:6px">
-        <button id="btnCopyLink">Copy Link</button>
-      </div>
+      <aside class="example-panel">
+        <div class="example-title">Strict 2PL Scenarios</div>
+        <div class="scenario-scroll">
+          <ul id="scenarioList" class="scenario-list"></ul>
+        </div>
+      </aside>
     </section>
 
     <section class="tablewrap" id="outwrap" style="display:none">
@@ -163,28 +186,34 @@ class LockTable{
 // Deadlock detection via Wait-For Graph (WFG)
 // -----------------------------
 function buildWaitForGraph(txns, lt){
+  // Strict 2PL WFG: only transactions currently WAITING on S/X lock acquisition
+  // create edges to the holders that block them. Non-lock ops are ignored.
   const adj = new Map();
-  function addEdge(from,to){ if(!adj.has(from)) adj.set(from,new Set()); adj.get(from).add(to); }
+  const addEdge = (from, to) => {
+    if(!adj.has(from)) adj.set(from, new Set());
+    adj.get(from).add(to);
+  };
+
   for(const t of txns){
     if(t.done) continue;
     const op = (t.pc < t.ops.length) ? t.ops[t.pc] : null;
     if(!op) continue;
-    let o = op.op.toUpperCase(); let arg = op.arg;
-    if(o==='LOCK-S') o='S'; if(o==='LOCK-X') o='X';
-    const blockers = new Set();
-    const st = arg ? lt._state(arg) : null;
-    if(o==='S' && arg){ if(!lt.can_lock_s(t.name,arg)){ for(const h of st.holders) if(h!==t.name) blockers.add(h); } }
-    else if(o==='X' && arg){ if(!lt.can_lock_x(t.name,arg)){ for(const h of st.holders) if(h!==t.name) blockers.add(h); } }
-    else if((o==='R'||o==='W') && arg){
-      if(o==='R'){
-        const ok = (st.mode==='S'||st.mode==='X') && st.holders.has(t.name);
-        if(!ok){ for(const h of st.holders) if(h!==t.name) blockers.add(h); }
-      }else{
-        const ok = (st.mode==='X') && st.holders.has(t.name);
-        if(!ok){ for(const h of st.holders) if(h!==t.name) blockers.add(h); }
+
+    let o = op.op.toUpperCase();
+    const arg = op.arg;
+    if(o === 'LOCK-S') o = 'S';
+    if(o === 'LOCK-X') o = 'X';
+
+    if((o === 'S' || o === 'X') && arg){
+      const st = lt._state(arg);
+      const can = (o === 'S') ? lt.can_lock_s(t.name, arg) : lt.can_lock_x(t.name, arg);
+      if(!can){
+        for(const h of st.holders){
+          if(h !== t.name) addEdge(t.name, h);
+        }
       }
     }
-    if(blockers.size){ for(const b of blockers) addEdge(t.name,b); }
+    // Ignore R/W/U/COMMIT/ABORT for WFG under strict 2PL.
   }
   return adj;
 }
@@ -258,7 +287,7 @@ function simulate(txns){
   }
 
   while(!txns.every(t=>t.done)){
-    steps++; if(steps>MAX_STEPS) throw new Error('Exceeded max steps; possible deadlock. Add unlocks or change schedule.');
+    steps++; if(steps>MAX_STEPS) throw new Error('Exceeded max steps; possible deadlock or livelock. Change schedule.');
     let progress = false;
     const row = [];
     for(const t of txns){
@@ -347,15 +376,96 @@ function setMsg(text, isError=false){
   msgEl.className = isError ? 'foot error' : 'foot';
 }
 
-document.getElementById('btnExample').addEventListener('click', ()=>{
-  inputEl.value = `# Sample inputs
-T1: S(A) R(A) X(B) W(B) COMMIT
-T2: S(B) R(B) X(A) W(A) COMMIT
-T3: S(A) R(A) U(A) COMMIT
-`;
-  updateURLFromInput();
-  setMsg('Loaded example. Click "Generate Timeline".');
-});
+const scenarios = [
+  {
+    id: 'dirty-write',
+    title: 'Dirty Write Blocked',
+    description: 'T2 must wait for T1 to commit before overwriting A.',
+    schedule: `# Dirty write prevented by strict 2PL
+T1: X(A) W(A) COMMIT
+T2: X(A) W(A) COMMIT`
+  },
+  {
+    id: 'dirty-read',
+    title: 'Dirty Read Blocked',
+    description: 'T2 cannot read A while T1 holds an exclusive lock.',
+    schedule: `# Dirty read prevented by strict 2PL
+T1: X(A) W(A) COMMIT
+T2: S(A) R(A) COMMIT`
+  },
+  {
+    id: 'non-repeatable-read',
+    title: 'Non-Repeatable Read Avoided',
+    description: 'T1 keeps its shared lock so it rereads A consistently.',
+    schedule: `# Non-repeatable read avoided by strict 2PL
+T1: S(A) R(A) R(A) COMMIT
+T2: X(A) W(A) COMMIT`
+  },
+  {
+    id: 'read-skew',
+    title: 'Read Skew Avoided',
+    description: 'T1 sees a consistent snapshot across A and B.',
+    schedule: `# Read skew prevented by strict 2PL
+T1: S(A) R(A) S(B) R(B) COMMIT
+T2: X(A) W(A) X(B) W(B) COMMIT`
+  },
+  {
+    id: 'lost-update',
+    title: 'Lost Update Prevented',
+    description: 'T2 waits for T1 before writing A again.',
+    schedule: `# Lost update prevented by strict 2PL
+T1: X(A) R(A) W(A) COMMIT
+T2: X(A) R(A) W(A) COMMIT`
+  },
+  {
+    id: 'cascading-abort',
+    title: 'Cascading Abort Prevented',
+    description: 'T2 never reads T1’s uncommitted write before the abort.',
+    schedule: `# Cascading abort prevented by strict 2PL
+T1: X(A) W(A) ABORT
+T2: S(A) R(A) COMMIT`
+  },
+  {
+    id: 'rmw-serialization',
+    title: 'Read-Modify-Write Serialized',
+    description: 'T2 waits for T1’s upgrade before performing its own RMW on A.',
+    schedule: `# Read-modify-write serialized by strict 2PL
+T1: S(A) R(A) X(A) W(A) COMMIT
+T2: X(A) R(A) W(A) COMMIT`
+  },
+  {
+    id: 'constraint-preservation',
+    title: 'Constraint Preservation',
+    description: 'Simultaneous checks on A and B upgrade safely without violating invariants.',
+    schedule: `# Constraint-preserving update with strict 2PL upgrades
+T1: S(A) R(A) S(B) R(B) X(A) W(A) COMMIT
+T2: S(A) R(A) S(B) R(B) X(B) W(B) COMMIT`
+  }
+];
+
+const scenarioListEl = document.getElementById('scenarioList');
+if(scenarioListEl){
+  scenarioListEl.innerHTML = scenarios.map(sc => `
+    <li>
+      <button type="button" class="scenario-button" data-scenario="${sc.id}">
+        <span class="scenario-title">${sc.title}</span>
+        <span class="scenario-desc">${sc.description}</span>
+      </button>
+    </li>
+  `).join('');
+
+  scenarioListEl.addEventListener('click', (evt)=>{
+    const btn = evt.target.closest('.scenario-button');
+    if(!btn) return;
+    const sc = scenarios.find(item => item.id === btn.dataset.scenario);
+    if(!sc) return;
+    inputEl.value = `${sc.schedule.trim()}\n`;
+    updateURLFromInput();
+    setMsg(`Loaded scenario: ${sc.title}. Click "Generate Timeline".`);
+    inputEl.focus();
+    inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+  });
+}
 
 document.getElementById('btnRun').addEventListener('click', ()=>{
   updateURLFromInput();
