@@ -16,6 +16,7 @@ illustrate some concepts in the class. Here's a list:
 - [Volcano iterators vs Data-centric query compilation](/iterator-vs-compiled.html)
 - [WAL simulator](/wal-simulator.html)
 - [Strict 2PL simulator](/strict-2pl-simulator.html)
+- [Dynamo Key Partitioning](/dynamo-partitioning.html)
 
 ## Spring
 

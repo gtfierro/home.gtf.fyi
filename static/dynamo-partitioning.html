@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dynamo-Style Consistent Hashing Ring — Interactive Demo</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --muted:#5b6068;
+      --text:#0f172a;
+      --accent:#2563eb;
+      --accent2:#10b981;
+      --danger:#ef4444;
+      --ring: 280px;
+      --inner: 200px;
+      --border:#e5e7eb;
+      --panel-border:#e5e7eb;
+      --soft:#f6f8fa;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg);
+      color:var(--text);
+    }
+    header{
+      padding: 18px 20px; border-bottom: 1px solid var(--border); backdrop-filter: blur(6px);
+      position: sticky; top:0; background: rgba(255,255,255,0.8);
+    }
+    header h1{margin:0; font-size: 20px; letter-spacing: .3px; font-weight:600}
+    .sub{color:var(--muted); font-size:13px}
+
+    .wrap{
+      display:grid; grid-template-columns: 1.25fr 0.95fr; gap:18px; padding: 18px; align-items:start;
+    }
+
+    .panel{
+      background: var(--panel); border:1px solid var(--panel-border); border-radius:14px; padding:14px; box-shadow: 0 10px 24px rgba(16, 24, 40, .04);
+    }
+    .panel h2{margin:0 0 8px; font-size:16px; font-weight:600}
+
+    .controls{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .group{ background:var(--soft); border:1px solid var(--panel-border); border-radius:12px; padding:12px }
+    .group h3{ margin:0 0 8px; font-size:14px; color:var(--muted); font-weight:600 }
+    label{ display:block; font-size:13px; color:var(--muted); margin:6px 0 4px }
+    input[type="text"], input[type="number"], select{
+      width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:#fff; color:var(--text);
+    }
+    input[type="color"]{ width: 44px; height: 32px; border: none; background: transparent }
+    .row{ display:flex; gap:8px; align-items:center }
+    .row > *{ flex:1 }
+    .row .tight{ flex:0 0 auto }
+    .muted{ color:var(--muted) }
+    .buttons{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px }
+    button{
+      padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:#fff; color:var(--text); cursor:pointer;
+      transition:.15s transform ease, .15s background-color ease, .15s border-color ease;
+    }
+    button:hover{ transform: translateY(-1px); border-color:#cbd5e1; background:#f8fafc }
+    button.primary{ border-color:#bfdbfe; background:#eff6ff; color:#1e3a8a }
+    button.danger{ border-color:#fecaca; background:#fef2f2; color:#7f1d1d }
+
+    .legend{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px }
+    .chip{ display:flex; align-items:center; gap:8px; background:#ffffff; border:1px solid var(--panel-border); padding:6px 10px; border-radius:999px; font-size:12px }
+    .dot{ width:10px; height:10px; border-radius:50% }
+
+    .ringbox{ display:flex; justify-content:center; align-items:center; }
+
+    table{ width:100%; border-collapse: collapse; font-size:14px }
+    th, td{ padding:8px 6px; border-bottom:1px solid var(--panel-border); text-align:right }
+    th:first-child, td:first-child{ text-align:left }
+    tfoot td{ font-weight:600 }
+
+    .tooltip{
+      position:fixed; pointer-events:none; background:#111827; border:1px solid #374151; padding:8px 10px; font-size:12px; color:#f9fafb; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.15); transform: translate(-50%, calc(-100% - 10px));
+      display:none
+    }
+    .help{ font-size:12px; color:var(--muted); margin-top:6px }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dynamo-Style Consistent Hashing Ring <span class="sub">(Classic vs Virtual Nodes)</span></h1>
+  </header>
+
+  <div class="wrap">
+    <div class="panel">
+      <h2>Ring</h2>
+      <div class="ringbox">
+        <svg id="ring" width="700" height="700" viewBox="-360 -360 720 720" aria-label="Dynamo Hash Ring"></svg>
+      </div>
+      <div class="legend" id="legend"></div>
+      <p class="help">Hover an arc to see its owning node, hash interval, share of ring, and keys in that arc. Individual keys are shown as small dots on the ring.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Controls</h2>
+      <div class="controls">
+        <div class="group">
+          <h3>Mode</h3>
+          <div>
+            <label><input type="radio" name="mode" value="classic" checked> Classic (1 token/node)</label>
+            <label class="row" style="align-items:center">
+              <span style="display:flex; gap:6px; align-items:center">
+                <input type="radio" name="mode" value="vnodes"> Virtual Nodes
+              </span>
+              <span class="muted" style="margin-left:auto">V (tokens/node):</span>
+              <input id="vnodesInput" class="tight" type="number" min="1" max="256" value="32" disabled>
+            </label>
+            <div class="row" style="margin-top:6px">
+              <label class="row" style="gap:8px; align-items:center; margin:0"><input id="showTokenDots" type="checkbox" checked> <span>Show virtual token positions</span></label>
+              <button id="reseedBtn" class="tight" title="New random seed for token placement">Reseed</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="group">
+          <h3>Add / Remove Node</h3>
+          <label>New node ID</label>
+          <div class="row">
+            <input id="nodeIdInput" type="text" placeholder="e.g., A" />
+            <input id="nodeColorInput" type="color" class="tight" value="#4cc9f0" title="Node color" />
+          </div>
+          <div class="row">
+            <button id="addNodeBtn" class="primary">Add Next Node</button>
+            <button id="addABC" title="Quick add A,B,C">Add A/B/C</button>
+          </div>
+          <label>Remove node</label>
+          <div class="row">
+            <select id="removeNodeSelect"></select>
+            <button id="removeNodeBtn" class="danger">Remove</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <h3>Keys</h3>
+          <div class="row">
+            <label class="tight" style="min-width:120px">Add N keys</label>
+            <input id="numKeysInput" type="number" min="1" max="100000" value="500">
+          </div>
+          <div class="row">
+            <label><input type="radio" name="keymode" value="sequential" checked> Sequential</label>
+            <label><input type="radio" name="keymode" value="random"> Random</label>
+          </div>
+          <div class="buttons">
+            <button id="addKeysBtn" class="primary">Add N Keys</button>
+            <button id="clearKeysBtn">Clear Keys</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <h3>Stats</h3>
+          <table>
+            <thead>
+              <tr><th>Node</th><th>#Tokens</th><th>#Keys</th><th>%Keys</th><th>%Ring</th></tr>
+            </thead>
+            <tbody id="statsBody"></tbody>
+            <tfoot>
+              <tr><td>Total</td><td id="sumTokens" style="text-align:right">0</td><td id="sumKeys" style="text-align:right">0</td><td>100%</td><td>100%</td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script>
+  // ---------- Hash (FNV-1a 32-bit) ----------
+  function fnv1a32(str){
+    let h = 0x811c9dc5 >>> 0;
+    for(let i=0;i<str.length;i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h >>> 0, 0x01000193) >>> 0; // * prime
+    }
+    return h >>> 0;
+  }
+  const hashKeyId    = (keyId)=> fnv1a32(String(keyId));
+  // Seeded PRNG for vnode token placement (sfc32); deterministic per nodeId+seed, good distribution.
+  function sfc32(a, b, c, d) {
+    return function() {
+      a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0;
+      let t = (a + b) | 0;
+      a = b ^ (b >>> 9);
+      b = (c + (c << 3)) | 0;
+      c = (c << 21) | (c >>> 11);
+      d = (d + 1) | 0;
+      t = (t + d) | 0;
+      c = (c + t) | 0;
+      return (t >>> 0) / 4294967296;
+    };
+  }
+  function tokenRngForNode(nodeId){
+    const a = fnv1a32(`${state.seed}|${nodeId}|a`);
+    const b = fnv1a32(`${state.seed}|${nodeId}|b`);
+    const c = fnv1a32(`${state.seed}|${nodeId}|c`);
+    const d = fnv1a32(`${state.seed}|${nodeId}|d`);
+    return sfc32(a,b,c,d);
+  }
+
+  // ---------- Geometry helpers ----------
+  const TAU = Math.PI * 2;
+  const OUTER_R = 280; // matches CSS --ring/2
+  const INNER_R = 200; // matches CSS --inner/2
+
+  function hashToAngle(h){ return TAU * (h / 2**32); }
+  function polar(xr, ang){ return [ Math.cos(ang)*xr, Math.sin(ang)*xr ]; }
+
+  function arcPath(a0,a1){
+    // Build donut segment between angles a0->a1 (CW), handling wrap if a1 < a0
+    // Ensure a1 >= a0 by adding TAU if needed
+    if(a1 < a0) a1 += TAU;
+    const large = (a1 - a0) > Math.PI ? 1 : 0;
+    const [x0,y0] = polar(OUTER_R, a0);
+    const [x1,y1] = polar(OUTER_R, a1);
+    const [xi,yi] = polar(INNER_R, a1);
+    const [xj,yj] = polar(INNER_R, a0);
+    return [
+      `M ${x0.toFixed(2)} ${y0.toFixed(2)}`,
+      `A ${OUTER_R} ${OUTER_R} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`,
+      `L ${xi.toFixed(2)} ${yi.toFixed(2)}`,
+      `A ${INNER_R} ${INNER_R} 0 ${large} 0 ${xj.toFixed(2)} ${yj.toFixed(2)}`,
+      'Z'
+    ].join(' ');
+  }
+
+  function tickPath(angle,len=10){
+    const [x0,y0] = polar(OUTER_R+2, angle);
+    const [x1,y1] = polar(OUTER_R+2+len, angle);
+    return `M ${x0.toFixed(2)} ${y0.toFixed(2)} L ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+  }
+
+  // ---------- State ----------
+  const state = {
+    mode: 'classic',
+    nodes: [],
+    tokens: [],
+    keys: [],
+    nextKeyId: 0, // for sequential allocation
+    seed: (Math.floor(Math.random()*2**32) >>> 0) // random seed per page load for token placement
+  };
+
+  const palette = [
+    '#4cc9f0','#f72585','#b5179e','#7209b7','#560bad','#480ca8','#3a0ca3','#3f37c9','#4895ef','#4361ee',
+    '#2ec4b6','#e0fbfc','#ff9f1c','#ffbf69','#cbf3f0','#94f7c5','#ffd166','#06d6a0','#118ab2','#ef476f'
+  ];
+  function colorFor(id){
+    const h = fnv1a32(id) % palette.length; return palette[h];
+  }
+  function randomColor(){
+    // pleasant random HSL -> hex
+    const h = Math.floor(Math.random()*360);
+    const s = 70; // %
+    const l = 55; // %
+    return hslToHex(h, s, l);
+  }
+  function hslToHex(h,s,l){
+    s/=100; l/=100;
+    const k=n=> (n + h/30)%12;
+    const a = s*Math.min(l,1-l);
+    const f=n=> l - a*Math.max(-1, Math.min(k(n)-3, Math.min(9-k(n),1)));
+    const toHex=x=> Math.round(255*x).toString(16).padStart(2,'0');
+    return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+  }
+
+  // ---------- Token ops ----------
+  function rebuildTokens(){
+    const tokens = [];
+    const v = (state.mode === 'vnodes') ? Math.max(1, Math.min(256, parseInt(document.getElementById('vnodesInput').value,10) || 1)) : 1;
+    for(const n of state.nodes){
+      const V = (state.mode === 'vnodes') ? (n.vnodes || v) : 1;
+      const rng = tokenRngForNode(n.id);
+      for(let i=0;i<V;i++){
+        const pos = (rng()*2**32) >>> 0;
+        tokens.push({ pos, nodeId: n.id });
+      }
+    }
+    tokens.sort((a,b)=> a.pos - b.pos || (a.nodeId < b.nodeId ? -1 : 1));
+    state.tokens = tokens;
+  }
+
+  function findFirstTokenAtOrAfter(tokens, h){
+    let lo=0, hi=tokens.length;
+    while(lo < hi){
+      const mid = (lo+hi)>>>1;
+      if(tokens[mid].pos >= h) hi = mid; else lo = mid+1;
+    }
+    return (lo === tokens.length) ? 0 : lo;
+  }
+
+  // ---------- Keys ----------
+  function assignOwner(hash){
+    if(state.tokens.length === 0) return null;
+    const idx = findFirstTokenAtOrAfter(state.tokens, hash);
+    return state.tokens[idx].nodeId;
+  }
+
+  function reassignAllKeys(){
+    for(const k of state.keys){
+      k.ownerNodeId = assignOwner(k.hash);
+    }
+  }
+
+  function addKeys(N, kind){
+    if(state.tokens.length === 0){ alert('Add at least one node first.'); return; }
+    const keys = [];
+    if(kind === 'sequential'){
+      for(let i=0;i<N;i++){
+        const id = state.nextKeyId++;
+        const h = hashKeyId(id);
+        keys.push({ id: String(id), hash: h, ownerNodeId: assignOwner(h) });
+      }
+    } else {
+      for(let i=0;i<N;i++){
+        const r = Math.floor(Math.random() * 2**31);
+        const h = hashKeyId(r);
+        keys.push({ id: String(r), hash: h, ownerNodeId: assignOwner(h) });
+      }
+    }
+    state.keys.push(...keys);
+  }
+
+  // ---------- Stats ----------
+  function countsByNode(){
+    const c = Object.fromEntries(state.nodes.map(n=>[n.id,0]));
+    for(const k of state.keys){ if(k.ownerNodeId) c[k.ownerNodeId] = (c[k.ownerNodeId]||0)+1; }
+    return c;
+  }
+
+  function arcSharesAndTokenCounts(){
+    // Returns { ringShareByNode: {id: fraction}, keysByTokenIdx: Uint32[], keysByNode: {...} }
+    const m = state.tokens.length; const ringShareByNode = {}; const keysByTokenIdx = new Array(m).fill(0);
+    if(m === 0) return { ringShareByNode:{}, keysByTokenIdx, arcInfo: [] };
+
+    // Precompute arc spans and owners
+    const arcs = [];
+    for(let j=0;j<m;j++){
+      const prev = (j-1+m)%m;
+      const start = state.tokens[prev].pos;
+      const end   = state.tokens[j].pos;
+      const span  = (end >= start) ? (end - start) : ( (2**32 - start) + end );
+      const nodeId = state.tokens[j].nodeId;
+      arcs.push({ j, prev, start, end, span, nodeId });
+      ringShareByNode[nodeId] = (ringShareByNode[nodeId]||0) + span / 2**32;
+    }
+    // Count keys per token via owner mapping
+    const idxCache = new Map();
+    for(const k of state.keys){
+      if(!k.ownerNodeId) continue;
+      // We need the exact token index that owns this key
+      // Owner token is the first at/after hash; binary search returns its index
+      const key = k.hash >>> 0;
+      const cacheKey = key;
+      let idx = idxCache.get(cacheKey);
+      if(idx === undefined){ idx = findFirstTokenAtOrAfter(state.tokens, key); idxCache.set(cacheKey, idx); }
+      keysByTokenIdx[idx]++;
+    }
+    return { ringShareByNode, keysByTokenIdx, arcInfo: arcs };
+  }
+
+  // ---------- Render ----------
+  const $svg = document.getElementById('ring');
+  const $legend = document.getElementById('legend');
+  const $statsBody = document.getElementById('statsBody');
+  const $sumTokens = document.getElementById('sumTokens');
+  const $sumKeys = document.getElementById('sumKeys');
+  const $tooltip = document.getElementById('tooltip');
+
+  function fmtPct(x){ return (x*100).toFixed(1)+"%" }
+  function hex32(u){ return '0x' + (u>>>0).toString(16).padStart(8,'0'); }
+
+  function renderLegend(){
+    $legend.innerHTML = '';
+    for(const n of state.nodes){
+      const chip = document.createElement('div'); chip.className='chip';
+      const dot = document.createElement('div'); dot.className='dot'; dot.style.background = n.color || colorFor(n.id);
+      const t = document.createElement('span'); t.textContent = n.id;
+      chip.appendChild(dot); chip.appendChild(t);
+      $legend.appendChild(chip);
+    }
+  }
+
+  function renderRing(){
+    $svg.innerHTML = '';
+    // Base circle
+    const base = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    base.setAttribute('r', OUTER_R+18);
+    base.setAttribute('fill','none');
+    base.setAttribute('stroke','#e5e7eb');
+    base.setAttribute('stroke-width','1');
+    $svg.appendChild(base);
+
+    const { ringShareByNode, keysByTokenIdx, arcInfo } = arcSharesAndTokenCounts();
+
+    // Draw arcs and hover captures
+    for(let a of arcInfo){
+      const a0 = hashToAngle(a.start);
+      const a1 = hashToAngle(a.end);
+      const pathD = arcPath(a0, a1);
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      const owner = state.nodes.find(n=>n.id===a.nodeId);
+      const color = owner ? (owner.color || colorFor(owner.id)) : '#888';
+      path.setAttribute('d', pathD);
+      path.setAttribute('fill', color);
+      path.setAttribute('opacity', '0.18');
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-opacity','0.35');
+      path.setAttribute('stroke-width','1');
+      path.addEventListener('mousemove', (ev)=>{
+        const share = (a.span/2**32);
+        const keysInArc = keysByTokenIdx[a.j] || 0;
+        showTip(ev.pageX, ev.pageY, `
+          <div><strong>Owner:</strong> ${a.nodeId}</div>
+          <div><strong>Range:</strong> (${hex32(a.start)}, ${hex32(a.end)}]</div>
+          <div><strong>Share:</strong> ${fmtPct(share)}</div>
+          <div><strong>Keys in arc:</strong> ${keysInArc}</div>
+        `);
+      });
+      path.addEventListener('mouseleave', hideTip);
+      $svg.appendChild(path);
+
+      // Token tick at end (owner token)
+      const tick = document.createElementNS('http://www.w3.org/2000/svg','path');
+      tick.setAttribute('d', tickPath(a1));
+      tick.setAttribute('stroke', color);
+      tick.setAttribute('stroke-width','2');
+      $svg.appendChild(tick);
+    }
+
+    // --- Token dots (visualize vnode scattering) ---
+    if(document.getElementById('showTokenDots')?.checked){
+      const tokensG = document.createElementNS('http://www.w3.org/2000/svg','g');
+      tokensG.setAttribute('id','tokenDots');
+      tokensG.setAttribute('opacity','0.95');
+      state.tokens.forEach((t, idx) => {
+        const ang = hashToAngle(t.pos);
+        const [x,y] = polar(OUTER_R + 8, ang);
+        const node = state.nodes.find(n=>n.id===t.nodeId);
+        const color = node ? (node.color || colorFor(node.id)) : '#000';
+        const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        c.setAttribute('cx', x.toFixed(2));
+        c.setAttribute('cy', y.toFixed(2));
+        c.setAttribute('r', 3);
+        c.setAttribute('fill', color);
+        c.setAttribute('stroke', '#00000020');
+        c.setAttribute('stroke-width', '1');
+        c.addEventListener('mousemove', (ev)=>{
+          showTip(ev.pageX, ev.pageY, `
+            <div><strong>Token:</strong> #${idx}</div>
+            <div><strong>Owner:</strong> ${t.nodeId}</div>
+            <div><strong>Hash:</strong> ${hex32(t.pos)}</div>
+          `);
+        });
+        c.addEventListener('mouseleave', hideTip);
+        tokensG.appendChild(c);
+      });
+      $svg.appendChild(tokensG);
+    }
+
+    // --- Key dots ---
+    const MAX_DOTS = 8000; // draw at most this many for perf
+    const step = Math.max(1, Math.ceil(state.keys.length / MAX_DOTS));
+    const keysG = document.createElementNS('http://www.w3.org/2000/svg','g');
+    keysG.setAttribute('opacity','0.9');
+    const KEY_BASE_R = (INNER_R + OUTER_R) / 2;
+    const KEY_SPREAD = 18; // radial jitter to reduce overlap
+    for(let i=0;i<state.keys.length;i+=step){
+      const k = state.keys[i];
+      const ang = hashToAngle(k.hash);
+      const jitter = (((k.hash >>> 8) % KEY_SPREAD) - KEY_SPREAD/2);
+      const [x,y] = polar(KEY_BASE_R + jitter, ang);
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx', x.toFixed(2));
+      c.setAttribute('cy', y.toFixed(2));
+      c.setAttribute('r', 2);
+      const owner = state.nodes.find(n=>n.id===k.ownerNodeId);
+      const color = owner ? (owner.color || colorFor(owner.id)) : '#9ca3af';
+      c.setAttribute('fill', color);
+      c.setAttribute('fill-opacity','0.75');
+      keysG.appendChild(c);
+    }
+    $svg.appendChild(keysG);
+
+    // Center label
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x','0'); label.setAttribute('y','6'); label.setAttribute('text-anchor','middle');
+    label.setAttribute('fill', '#9fb3d1'); label.setAttribute('font-size','14'); label.textContent = `${state.tokens.length} tokens`;
+    $svg.appendChild(label);
+  }
+
+  function renderStats(){
+    const counts = countsByNode();
+    const { ringShareByNode } = arcSharesAndTokenCounts();
+    $statsBody.innerHTML = '';
+    let totalTokens = state.tokens.length;
+    let totalKeys = state.keys.length;
+
+    for(const n of state.nodes){
+      const tr = document.createElement('tr');
+      const td0 = document.createElement('td'); td0.style.textAlign='left'; td0.innerHTML = `<span style="display:inline-flex; align-items:center; gap:8px"><span class="dot" style="background:${n.color || colorFor(n.id)}"></span>${n.id}</span>`;
+      const td1 = document.createElement('td'); td1.textContent = (state.mode==='vnodes' ? (n.vnodes||parseInt(document.getElementById('vnodesInput').value,10)||1) : 1);
+      const td2 = document.createElement('td'); td2.textContent = counts[n.id] || 0;
+      const td3 = document.createElement('td'); td3.textContent = totalKeys ? ((counts[n.id]||0)*100/totalKeys).toFixed(1)+'%' : '0.0%';
+      const td4 = document.createElement('td'); td4.textContent = fmtPct(ringShareByNode[n.id] || 0);
+      tr.append(td0,td1,td2,td3,td4); $statsBody.appendChild(tr);
+    }
+
+    $sumTokens.textContent = String(totalTokens);
+    $sumKeys.textContent = String(totalKeys);
+
+    // Remove-node dropdown
+    const sel = document.getElementById('removeNodeSelect');
+    sel.innerHTML = state.nodes.map(n=>`<option value="${n.id}">${n.id}</option>`).join('');
+  }
+
+  function showTip(x,y,html){
+    $tooltip.style.display='block';
+    $tooltip.style.left = x+ 'px';
+    $tooltip.style.top  = y+ 'px';
+    $tooltip.innerHTML = html;
+  }
+  function hideTip(){ $tooltip.style.display='none'; }
+
+  function render(){
+    renderLegend();
+    renderRing();
+    renderStats();
+  }
+
+  // ---------- Node ops ----------
+  function nextAutoNodeId(){
+    // Choose first unused letter A..Z
+    const used = new Set(state.nodes.map(n=>n.id));
+    for(let c=65;c<=90;c++){
+      const id = String.fromCharCode(c);
+      if(!used.has(id)) return id;
+    }
+    return null; // all 26 used
+  }
+  function addAutoNode(){
+    const id = nextAutoNodeId();
+    if(!id){ alert('All 26 node letters (A–Z) are already in use.'); return; }
+    const color = randomColor();
+    addNode(id, color);
+  }
+  function addNode(id, color){
+    if(!id){ alert('Node ID required'); return; }
+    if(state.nodes.some(n=>n.id===id)){ alert('Node ID already exists'); return; }
+    const v = (state.mode==='vnodes') ? Math.max(1, Math.min(256, parseInt(document.getElementById('vnodesInput').value,10) || 32)) : 1;
+    state.nodes.push({ id, color: color || colorFor(id), vnodes: v });
+    rebuildTokens();
+    reassignAllKeys();
+    render();
+  }
+  function removeNode(id){
+    const idx = state.nodes.findIndex(n=>n.id===id);
+    if(idx<0) return;
+    state.nodes.splice(idx,1);
+    rebuildTokens();
+    reassignAllKeys();
+    render();
+  }
+
+  // ---------- Wire up UI ----------
+  const modeRadios = document.querySelectorAll('input[name="mode"]');
+  modeRadios.forEach(r=> r.addEventListener('change', ()=>{
+    const nextMode = document.querySelector('input[name="mode"]:checked').value;
+    const prevMode = state.mode;
+    state.mode = nextMode;
+    document.getElementById('vnodesInput').disabled = (state.mode !== 'vnodes');
+
+    // If switching into virtual nodes mode, reset nodes and re-add them with vnode settings
+    if (prevMode !== 'vnodes' && state.mode === 'vnodes') {
+      const v = Math.max(1, Math.min(256, parseInt(document.getElementById('vnodesInput').value,10) || 32));
+      const prevNodes = state.nodes.map(n => ({ id: n.id, color: n.color }));
+      state.nodes = [];
+      for (const n of prevNodes) {
+        state.nodes.push({ id: n.id, color: n.color || colorFor(n.id), vnodes: v });
+      }
+      rebuildTokens();
+      reassignAllKeys();
+      render();
+      return;
+    }
+
+    // Default behavior for other transitions
+    rebuildTokens();
+    reassignAllKeys();
+    render();
+  }));
+
+  document.getElementById('vnodesInput').addEventListener('change', ()=>{
+    if(state.mode !== 'vnodes') return;
+    // Update each node's vnodes to new value for simplicity
+    const v = Math.max(1, Math.min(256, parseInt(document.getElementById('vnodesInput').value,10) || 32));
+    for(const n of state.nodes) n.vnodes = v;
+    rebuildTokens();
+    reassignAllKeys();
+    render();
+  });
+
+  document.getElementById('reseedBtn').addEventListener('click', ()=>{
+    state.seed = (Math.floor(Math.random()*2**32) >>> 0);
+    rebuildTokens();
+    reassignAllKeys();
+    render();
+  });
+  document.getElementById('addNodeBtn').addEventListener('click', ()=>{
+    addAutoNode();
+  });
+
+  document.getElementById('addABC').addEventListener('click', ()=>{
+    const ids = ['A','B','C'];
+    for(const id of ids){ if(!state.nodes.some(n=>n.id===id)) addNode(id, colorFor(id)); }
+  });
+
+  document.getElementById('removeNodeBtn').addEventListener('click', ()=>{
+    const sel = document.getElementById('removeNodeSelect');
+    removeNode(sel.value);
+  });
+
+  document.getElementById('addKeysBtn').addEventListener('click', ()=>{
+    const N = Math.max(1, Math.min(100000, parseInt(document.getElementById('numKeysInput').value,10)||0));
+    const kind = document.querySelector('input[name="keymode"]:checked').value;
+    addKeys(N, kind);
+    render();
+  });
+
+  document.getElementById('clearKeysBtn').addEventListener('click', ()=>{
+    state.keys = []; state.nextKeyId = 0; render();
+  });
+
+  // ---------- Init ----------
+  (function init(){
+    // Disable manual inputs for auto-add mode
+    const idInput = document.getElementById('nodeIdInput');
+    const colorInput = document.getElementById('nodeColorInput');
+    if(idInput){ idInput.disabled = true; idInput.placeholder = 'auto (A–Z)'; }
+    if(colorInput){ colorInput.disabled = true; colorInput.title = 'auto random color'; }
+
+    // Start with A,B,C in classic mode
+    addNode('A', colorFor('A'));
+    addNode('B', colorFor('B'));
+    addNode('C', colorFor('C'));
+    render();
+  })();
+  </script>
+</body>
+</html>
