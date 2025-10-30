@@ -17,6 +17,7 @@ illustrate some concepts in the class. Here's a list:
 - [WAL simulator](/wal-simulator.html)
 - [Strict 2PL simulator](/strict-2pl-simulator.html)
 - [Dynamo Key Partitioning](/dynamo-partitioning.html)
+- [DuckDB instructions](/duckdb.html)
 
 ## Spring
 
