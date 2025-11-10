@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SafeLink Decoder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --gap: 14px;
+      --border: 1px solid #d0d7de;
+      --radius: 8px;
+      --bg: #0b0c0f;
+      --panel: #0f1115;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --accent: #2f81f7;
+      --accent-2: #1f6feb;
+      --btn-bg: #1b1f24;
+      --btn-bg-hover: #22272e;
+    }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    header {
+      padding: 20px;
+      border-bottom: var(--border);
+      background: #0c0f14;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .container {
+      padding: 16px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      row-gap: var(--gap);
+      height: calc(100% - 64px);
+      box-sizing: border-box;
+    }
+    .controls {
+      border: var(--border);
+      background: var(--panel);
+      padding: 12px;
+      border-radius: var(--radius);
+    }
+    .controls h2 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .param-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #0d1117;
+      color: var(--text);
+      font-size: 12px;
+    }
+    .btn, button {
+      border: var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .btn:hover, button:hover {
+      background: var(--btn-bg-hover);
+    }
+    .checkboxes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      max-height: 120px;
+      overflow: auto;
+      padding: 6px 2px 2px;
+    }
+    .checkboxes label {
+      border: var(--border);
+      background: #0d1117;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      height: 100%;
+      min-height: 320px;
+    }
+    .panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border: var(--border);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 10px;
+      min-height: 0;
+    }
+    .panel h3 {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    textarea {
+      width: 100%;
+      height: 100%;
+      resize: none;
+      background: #0d1117;
+      color: var(--text);
+      border: var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      box-sizing: border-box;
+    }
+    .right-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .hidden {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Outlook SafeLink Decoder</h1>
+  </header>
+
+  <div class="container">
+    <section class="controls">
+      <h2>Query parameters to include in output</h2>
+      <div class="param-actions">
+        <button id="selectAll" type="button" title="Include all parameters">Select all</button>
+        <button id="clearAll" type="button" title="Exclude all parameters">Clear all</button>
+        <span id="paramCount" class="chip small">0 parameters discovered</span>
+        <span id="hint" class="small">Paste text with Safe Links into the left box. Detected parameters appear here.</span>
+      </div>
+      <div id="paramCheckboxes" class="checkboxes" aria-live="polite"></div>
+    </section>
+
+    <section class="split">
+      <div class="panel">
+        <h3>Input (paste text containing Safe Links)</h3>
+        <textarea id="input" placeholder="Paste any text containing Outlook Safe Links (e.g. https://...safelinks.protection.outlook.com/...&amp;url=https%3A%2F%2Fexample.com%2Fpage%3Fa%3D1%26b%3D2)"></textarea>
+      </div>
+      <div class="panel">
+        <div class="right-actions">
+          <h3>Output (decoded, filtered)</h3>
+          <div>
+            <button id="copyBtn" type="button">Copy output</button>
+            <span id="copyStatus" class="small hidden">Copied!</span>
+          </div>
+        </div>
+        <textarea id="output" readonly placeholder="Decoded links will appear here..."></textarea>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Regex to detect typical Outlook/Defender Safe Links (used to locate candidates inside arbitrary text)
+    const SAFE_LINK_RE = /https?:\/\/(?:[a-zA-Z0-9.-]*\b(?:safelinks\.protection\.outlook\.com)|outlook\.office\.com\/safelink\.html)[^\s"'>)\]]*?(?:\?|&|&amp;)url=([^&\s"'>)\]]+)[^\s"'>)\]]*/ig;
+    const SAFE_LINK_RE_ONCE = new RegExp(SAFE_LINK_RE.source, "i"); // non-global for nested detection
+
+    function multiDecode(value, maxRounds = 5) {
+      let prev = value;
+      for (let i = 0; i < maxRounds; i++) {
+        const toDecode = prev;
+        try {
+          const curr = decodeURIComponent(toDecode);
+          if (curr === prev) return prev;
+          prev = curr;
+        } catch (e) {
+          // If it can't decode further, stop
+          return prev;
+        }
+      }
+      return prev;
+    }
+
+    function extractOriginalUrlFromSafeLink(safeLink, depth = 0) {
+      if (depth > 5) return safeLink;
+      try {
+        const parsed = new URL(safeLink);
+        const encoded = parsed.searchParams.get("url");
+        if (!encoded) return safeLink;
+        const decoded = multiDecode(encoded.replace(/&amp;/gi, "&"));
+        if (SAFE_LINK_RE_ONCE.test(decoded)) {
+          return extractOriginalUrlFromSafeLink(decoded, depth + 1);
+        }
+        return decoded;
+      } catch (_e) {
+        return safeLink;
+      }
+    }
+
+    function filterUrlQuery(urlStr, omitSet) {
+      try {
+        const url = new URL(urlStr);
+        if (omitSet && omitSet.size) {
+          for (const key of omitSet) {
+            url.searchParams.delete(key); // removes all repeats of this key
+          }
+        }
+        return url.toString();
+      } catch (_e) {
+        // If URL parsing fails, return original
+        return urlStr;
+      }
+    }
+
+    function collectParamsFromUrl(urlStr, collector) {
+      if (!collector) return;
+      try {
+        const url = new URL(urlStr);
+        for (const [key] of url.searchParams.entries()) {
+          collector.add(key);
+        }
+      } catch (_e) {
+        // ignore malformed URLs
+      }
+    }
+
+    function rewriteSafeLinksInText(text, omitSet, paramCollector) {
+      return text.replace(SAFE_LINK_RE, (fullMatch) => {
+        collectParamsFromUrl(fullMatch, paramCollector); // capture Safe Link wrapper params
+        const original = extractOriginalUrlFromSafeLink(fullMatch);
+        collectParamsFromUrl(original, paramCollector);
+        return filterUrlQuery(original, omitSet);
+      });
+    }
+
+    // UI state
+    const inputEl = document.getElementById("input");
+    const outputEl = document.getElementById("output");
+    const paramBox = document.getElementById("paramCheckboxes");
+    const paramCount = document.getElementById("paramCount");
+    const selectAllBtn = document.getElementById("selectAll");
+    const clearAllBtn = document.getElementById("clearAll");
+    const copyBtn = document.getElementById("copyBtn");
+    const copyStatus = document.getElementById("copyStatus");
+
+    // Track persistent checkbox states by name
+    const checkboxState = new Map(); // name -> boolean (checked)
+
+    function renderParamCheckboxes(paramSet) {
+      // Preserve previous states when possible; default new params to checked
+      for (const name of paramSet) {
+        if (!checkboxState.has(name)) {
+          checkboxState.set(name, true);
+        }
+      }
+      // Remove states for params no longer present
+      for (const name of Array.from(checkboxState.keys())) {
+        if (!paramSet.has(name)) {
+          checkboxState.delete(name);
+        }
+      }
+
+      // Update count chip
+      const count = paramSet.size;
+      paramCount.textContent = count === 1 ? "1 parameter discovered" : `${count} parameters discovered`;
+
+      // Render checkboxes
+      paramBox.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+      Array.from(paramSet).sort((a, b) => a.localeCompare(b)).forEach((name) => {
+        const id = `param_${name.replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+        const label = document.createElement("label");
+        label.setAttribute("for", id);
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.id = id;
+        input.value = name;
+        input.checked = !!checkboxState.get(name);
+        input.addEventListener("change", () => {
+          checkboxState.set(name, input.checked);
+          process(false); // re-generate output only
+        });
+
+        const span = document.createElement("span");
+        span.textContent = name;
+
+        label.appendChild(input);
+        label.appendChild(span);
+        fragment.appendChild(label);
+      });
+      paramBox.appendChild(fragment);
+    }
+
+    function getOmitSet() {
+      const omit = new Set();
+      for (const [name, checked] of checkboxState.entries()) {
+        if (!checked) omit.add(name);
+      }
+      return omit;
+    }
+
+    function process(updateCheckboxes = true) {
+      const text = inputEl.value || "";
+      const omitSet = getOmitSet();
+      const paramCollector = updateCheckboxes ? new Set() : null;
+      const out = rewriteSafeLinksInText(text, omitSet, paramCollector);
+      if (paramCollector) {
+        renderParamCheckboxes(paramCollector);
+      }
+      outputEl.value = out;
+      copyStatus.classList.add("hidden");
+    }
+
+    // Debounce input to avoid excessive work on large pastes
+    let debounceTimer = null;
+    function scheduleProcess() {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => process(true), 120);
+    }
+
+    inputEl.addEventListener("input", scheduleProcess);
+    inputEl.addEventListener("paste", () => {
+      // Let the paste complete, then process
+      setTimeout(() => process(true), 0);
+    });
+
+    selectAllBtn.addEventListener("click", () => {
+      for (const k of checkboxState.keys()) checkboxState.set(k, true);
+      // Re-check all in DOM
+      paramBox.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = true; });
+      process(false);
+    });
+
+    clearAllBtn.addEventListener("click", () => {
+      for (const k of checkboxState.keys()) checkboxState.set(k, false);
+      paramBox.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+      process(false);
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(outputEl.value || "");
+        copyStatus.textContent = "Copied!";
+        copyStatus.classList.remove("hidden");
+        setTimeout(() => copyStatus.classList.add("hidden"), 1000);
+      } catch (_e) {
+        copyStatus.textContent = "Copy failed";
+        copyStatus.classList.remove("hidden");
+        setTimeout(() => copyStatus.classList.add("hidden"), 1500);
+      }
+    });
+
+    // Initial render
+    process(true);
+  </script>
+</body>
+</html>
