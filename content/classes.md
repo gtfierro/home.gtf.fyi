@@ -11,14 +11,15 @@ date: 2021-06-12T12:13:19-07:00
 
 I used generative AI to make a series of interactive demos to
 illustrate some concepts in the class. Here's a list:
-- [Hash Join](/hash-join.html)
-- [Sort Merge Join](/sort-merge-join.html)
-- [Volcano iterators vs Data-centric query compilation](/iterator-vs-compiled.html)
-- [WAL simulator](/wal-simulator.html)
-- [Strict 2PL simulator](/strict-2pl-simulator.html)
-- [Dynamo Key Partitioning](/dynamo-partitioning.html)
-- [DuckDB instructions](/duckdb.html)
-- [Sentence Transformers](/sentence-transformers.html)
+- [Hash Join](/advdb/hash-join.html)
+- [Sort Merge Join](/advdb/sort-merge-join.html)
+- [Volcano iterators vs Data-centric query compilation](/advdb/iterator-vs-compiled.html)
+- [WAL simulator](/advdb/wal-simulator.html)
+- [Strict 2PL simulator](/advdb/strict-2pl-simulator.html)
+- [Dynamo Key Partitioning](/advdb/dynamo-partitioning.html)
+- [DuckDB instructions](/advdb/duckdb.html)
+- [Sentence Transformers](/advdb/sentence-transformers.html)
+    - also see [vector.sql](/advdb/vector.sql) for how to load some wiki abstract embeddings into a DuckDB table
 
 ## Spring
 
