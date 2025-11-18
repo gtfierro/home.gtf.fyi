@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Browser Sentence Transformer → DuckDB VSS</title>
+    <style>
+      :root {
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+        line-height: 1.5;
+        color: #0f172a;
+        background: #f8fafc;
+      }
+
+      body {
+        margin: 0;
+        padding: 2rem clamp(1rem, 4vw, 3rem);
+        display: flex;
+        justify-content: center;
+      }
+
+      main {
+        max-width: 900px;
+        width: 100%;
+        background: #fff;
+        border-radius: 1rem;
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+        box-shadow: 0 20px 55px rgba(15, 23, 42, 0.1);
+      }
+
+      h1 {
+        margin-top: 0;
+        font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+      }
+
+      textarea,
+      button,
+      pre,
+      output,
+      .literal-preview {
+        width: 100%;
+        font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono",
+          Menlo, monospace;
+      }
+
+      textarea {
+        min-height: 6.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #cbd5f5;
+        padding: 1rem;
+        font-size: 1rem;
+        resize: vertical;
+        transition: border 0.15s ease;
+      }
+
+      textarea:focus-visible {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+      }
+
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 0.85rem 1.25rem;
+        border: none;
+        border-radius: 999px;
+        background: #2563eb;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.15s ease;
+      }
+
+      button[disabled] {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin: 1rem 0 1.5rem;
+        align-items: center;
+      }
+
+      .status {
+        flex: 1;
+        font-size: 0.95rem;
+        color: #475569;
+      }
+
+      pre {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        max-height: 300px;
+        overflow: auto;
+        margin: 0;
+      }
+
+      .literal-preview {
+        margin-top: 1rem;
+        border-radius: 0.75rem;
+        border: 1px solid #cbd5f5;
+        padding: 0.75rem;
+        min-height: 4rem;
+        resize: none;
+      }
+
+      .copy-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 1rem;
+      }
+
+      .note {
+        font-size: 0.9rem;
+        color: #475569;
+        margin-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Sentence Transformers in your Browser</h1>
+      <p>
+        Paste any text, click <strong>Go</strong>, and the page will download
+        <code>Xenova/all-MiniLM-L6-v2</code>, compute its normalized
+        384-dimensional embedding, and format that vector for DuckDB's VSS
+        extension.
+      </p>
+
+      <label for="text-input"><strong>Text to embed</strong></label>
+      <textarea
+        id="text-input"
+        placeholder="Paste or type a sentence..."
+      >DuckDB's VSS extension expects FLOAT[384] literals. Let's make one directly in the browser.</textarea>
+
+      <div class="controls">
+        <button id="go-button" type="button">Go</button>
+        <div class="status" id="status">Model not loaded yet.</div>
+      </div>
+
+      <section>
+        <h2>Embedding preview</h2>
+        <pre id="embedding-output">→ Embedding values will appear here once ready.</pre>
+        <div class="note">
+          Values are grouped for readability; the copy button below emits a single
+          comma-separated line.
+        </div>
+      </section>
+
+      <section class="copy-row">
+        <button id="copy-button" type="button" disabled>Copy for DuckDB</button>
+        <span class="status" id="copy-status">Waiting for an embedding.</span>
+      </section>
+      <textarea
+        id="duckdb-literal"
+        class="literal-preview"
+        readonly
+        placeholder="[...your vector appears here...]::FLOAT[384]"
+      ></textarea>
+
+      <p class="note">
+        DuckDB's VSS functions such as <code>array_distance</code> expect a
+        literal like <code>[1, 2, 3]::FLOAT[3]</code>; this page emits the same
+        format but with 384 floats so you can paste it straight into
+        <code>ORDER BY array_distance(vec, ...)</code> queries.
+      </p>
+    </main>
+
+    <script type="module">
+      import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6";
+
+      const goButton = document.getElementById("go-button");
+      const copyButton = document.getElementById("copy-button");
+      const textInput = document.getElementById("text-input");
+      const statusEl = document.getElementById("status");
+      const copyStatus = document.getElementById("copy-status");
+      const embeddingOutput = document.getElementById("embedding-output");
+      const duckdbLiteral = document.getElementById("duckdb-literal");
+
+      let extractor;
+
+      function setStatus(message) {
+        statusEl.textContent = message;
+      }
+
+      function chunk(values, size) {
+        const result = [];
+        for (let i = 0; i < values.length; i += size) {
+          result.push(values.slice(i, i + size));
+        }
+        return result;
+      }
+
+      function formatForDisplay(values) {
+        return chunk(values, 8)
+          .map((row) => row.map((v) => v.toFixed(4)).join(", "))
+          .join("\n");
+      }
+
+      function formatForDuckDB(values) {
+        return `[${values.map((v) => Number(v.toFixed(6))).join(", ")}]::FLOAT[384]`;
+      }
+
+      async function ensureExtractor() {
+        if (extractor) {
+          return extractor;
+        }
+        setStatus("Downloading model…");
+        goButton.disabled = true;
+        extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+        goButton.disabled = false;
+        setStatus("Model ready. Paste text and click Go.");
+        return extractor;
+      }
+
+      async function runEmbedding() {
+        const text = textInput.value.trim();
+        if (!text) {
+          setStatus("Please enter some text first.");
+          return;
+        }
+        const pipe = await ensureExtractor();
+        goButton.disabled = true;
+        setStatus("Embedding… this may take a few seconds.");
+        try {
+          const tensor = await pipe(text, { pooling: "mean", normalize: true });
+          const data = Array.from(tensor.data);
+          embeddingOutput.textContent = formatForDisplay(data);
+          duckdbLiteral.value = formatForDuckDB(data);
+          copyButton.disabled = false;
+          copyStatus.textContent = `Ready: dims ${tensor.dims.join("×")}`;
+          setStatus("Done!");
+        } catch (error) {
+          console.error(error);
+          setStatus("Something went wrong. See console for details.");
+          copyButton.disabled = true;
+          copyStatus.textContent = "No embedding available.";
+        } finally {
+          goButton.disabled = false;
+        }
+      }
+
+      async function copyEmbedding() {
+        if (!duckdbLiteral.value) {
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(duckdbLiteral.value);
+          copyStatus.textContent = "Copied literal to clipboard.";
+        } catch (err) {
+          // Fallback for older browsers.
+          duckdbLiteral.select();
+          document.execCommand("copy");
+          copyStatus.textContent = "Copied via selection fallback.";
+        }
+      }
+
+      goButton.addEventListener("click", runEmbedding);
+      copyButton.addEventListener("click", copyEmbedding);
+    </script>
+  </body>
+</html>
