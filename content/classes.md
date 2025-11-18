@@ -18,6 +18,7 @@ illustrate some concepts in the class. Here's a list:
 - [Strict 2PL simulator](/strict-2pl-simulator.html)
 - [Dynamo Key Partitioning](/dynamo-partitioning.html)
 - [DuckDB instructions](/duckdb.html)
+- [Sentence Transformers](/sentence-transformers.html)
 
 ## Spring
 
