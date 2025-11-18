@@ -20,6 +20,7 @@ illustrate some concepts in the class. Here's a list:
 - [DuckDB instructions](/advdb/duckdb.html)
 - [Sentence Transformers](/advdb/sentence-transformers.html)
     - also see [vector.sql](/advdb/vector.sql) for how to load some wiki abstract embeddings into a DuckDB table
+    - [DuckDB VSS docs](https://duckdb.org/docs/stable/core_extensions/vss#index-options)
 
 ## Spring
 
