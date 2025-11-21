@@ -46,6 +46,7 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 
 ## News
 
+* *[November 2025]* Congrats to Ozan, Mete, and Avia on their **Best Paper Runner-Up Award** at [BuildSys'25](https://buildsys.acm.org/2025/)!
 * *[June 2025]* IEA's Annex 81 was finally closed. It was a joy to work with a brilliant team of internatioanl researchers on our data-driven smart buildings topic. Final reports and all deliverables are [on the IEA website](https://annex81.iea-ebc.org).
 * *[May 2025]* Congrats to Ozan Baris (CMU) and the rest of our team who won the **Best Paper Award** at [FMSys 2025](https://fmsys-org.github.io/2025/index.html) for our paper ["Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs"](https://gtf.fyi/papers/mulayim2025towards.pdf)
 * *[May 2025]* I am happy to announce that I am the Vice General Chair and Industrial Relations Chair for [BuildSys 2025](https://buildsys.acm.org/2025) which will be held in Golden, Colorado from November 19-21, 2025.
