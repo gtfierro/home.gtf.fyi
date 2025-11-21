@@ -29,6 +29,54 @@ date: 2021-06-12T16:51:38-07:00
 
 ### 2025
 
+<div class="pub pub-conference">
+
+**I Can’t Read All That! Improving the Usability of Semantic Models Using Concise, Ontology-Agnostic, Building-Specific Schemas**
+**[[pdf]](/papers/bschema2025paul)[[link]](https://doi.org/10.1145/3736425.3770107)**
+
+Lazlo Paul, Ozan Baris Mulayim, Umut Mete Saka, Anand Krishnan Prakash, Gabe Fierro, Marco Pritoni
+
+*Proceedings of the 12th ACM International Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)*.  Golden, CO, USA, November, 2025.
+
+</div>
+
+
+<div class="pub pub-conference">
+
+**BuildingQA: A Benchmark for Natural Language Question Answering over Building Knowledge Graphs**
+**[[pdf]](/papers/buildingqa2025mulayim.pdf)[[link]](https://doi.org/10.1145/3736425.3770097)<i style="color:red">  Best Paper Award Runner-Up</i>**
+
+Ozan Baris Mulayim, Avia Anwar, Umut Mete Saka, Lazlo Paul, Anand Krishnan Prakash, Gabe Fierro, Marco Pritoni, Mario Bergés
+
+*Proceedings of the 12th ACM International Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)*.  Golden, CO, USA, November, 2025.
+
+</div>
+
+
+<div class="pub pub-demoposter">
+
+**Acquirium: A Data-Metadata Management Framework for Water Treatment Systems**
+**[[pdf]](/papers/acquirium2025saka.pdf)[[link]](https://doi.org/10.1145/3736425.3772123)**
+
+Umut Mete Saka, Lazlo Paul, Fletcher Chapin, Scott Struck, Avia Anwar, Gabe Fierro
+
+*Proceedings of the 12th ACM International Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)*.  Golden, CO, USA, November, 2025.
+
+</div>
+
+
+<div class="pub pub-demoposter">
+
+**Economic Feasibility of IoT-Based Controls in Low-Income Residential Buildings**
+**[[pdf]](/papers/economic2025anwar.pdf)[[link]](https://doi.org/10.1145/3736425.3772119)**
+
+Avia Anwar, Umut Mete Saka, Sowndarya Krishnan Navaneetha Kannan, Daniel Safronov, Patrick Salter, Karlyle Munz, Gabe Fierro, Paulo Cesar Tabares Velasco, Qiuhua Huang
+
+*Proceedings of the 12th ACM International Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)*.  Golden, CO, USA, November, 2025.
+
+</div>
+
+
 <div class="pub pub-misc">
 
 **Systematic Evaluation of Knowledge Graph Repair with Large Language Models**

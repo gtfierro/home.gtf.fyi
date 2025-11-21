@@ -667,3 +667,58 @@
   title: Systematic Evaluation of Knowledge Graph Repair with Large Language Models
   type: misc
   year: 2025
+- authors: Lazlo Paul, Ozan Baris Mulayim, Umut Mete Saka, Anand Krishnan Prakash,
+    Gabe Fierro, Marco Pritoni
+  award: null
+  conference: Proceedings of the 12th ACM International Conference on Systems for
+    Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)
+  link: https://doi.org/10.1145/3736425.3770107
+  location: Golden, CO, USA
+  month: November
+  pdf: bschema2025paul
+  slides: null
+  title: "I Can\u2019t Read All That! Improving the Usability of Semantic Models Using\
+    \ Concise, Ontology-Agnostic, Building-Specific Schemas"
+  type: conference
+  year: 2025
+- authors: "Ozan Baris Mulayim, Avia Anwar, Umut Mete Saka, Lazlo Paul, Anand Krishnan\
+    \ Prakash, Gabe Fierro, Marco Pritoni, Mario Berg\xE9s"
+  award: Best Paper Award Runner-Up
+  conference: Proceedings of the 12th ACM International Conference on Systems for
+    Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)
+  link: https://doi.org/10.1145/3736425.3770097
+  location: Golden, CO, USA
+  month: November
+  pdf: buildingqa2025mulayim.pdf
+  slides: null
+  title: 'BuildingQA: A Benchmark for Natural Language Question Answering over Building
+    Knowledge Graphs'
+  type: conference
+  year: 2025
+- authors: Umut Mete Saka, Lazlo Paul, Fletcher Chapin, Scott Struck, Avia Anwar,
+    Gabe Fierro
+  award: null
+  conference: Proceedings of the 12th ACM International Conference on Systems for
+    Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)
+  link: https://doi.org/10.1145/3736425.3772123
+  location: Golden, CO, USA
+  month: November
+  pdf: acquirium2025saka.pdf
+  slides: null
+  title: 'Acquirium: A Data-Metadata Management Framework for Water Treatment Systems'
+  type: demoposter
+  year: 2025
+- authors: Avia Anwar, Umut Mete Saka, Sowndarya Krishnan Navaneetha Kannan, Daniel
+    Safronov, Patrick Salter, Karlyle Munz, Gabe Fierro, Paulo Cesar Tabares Velasco,
+    Qiuhua Huang
+  award: null
+  conference: Proceedings of the 12th ACM International Conference on Systems for
+    Energy-Efficient Buildings, Cities, and Transportation (BuildSys 25)
+  link: https://doi.org/10.1145/3736425.3772119
+  location: Golden, CO, USA
+  month: November
+  pdf: economic2025anwar.pdf
+  slides: null
+  title: Economic Feasibility of IoT-Based Controls in Low-Income Residential Buildings
+  type: demoposter
+  year: 2025
