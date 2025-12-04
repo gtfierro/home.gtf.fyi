@@ -8,7 +8,7 @@ enableRobotsTXT = true
 
 [params]
   author = "Gabe Fierro"
-  description = "Assistant Professor at Colorado School of Mines // Researcher at NREL"
+  description = "Assistant Professor at Colorado School of Mines // Joint Appointment at National Lab of the Rockies"
   [params.footer]
   text = "Based on 'hugo-researcher' theme"
   url = "https://github.com/ojroques/hugo-researcher"
