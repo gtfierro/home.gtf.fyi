@@ -5,52 +5,6 @@ categories: ['Brick', 'SHACL', 'BuildingMOTIF']
 type: post
 ---
 
-We will use the Brick model from the previous post:
-
-<details>
-<summary>Expand for Brick Model</summary>
-
-```ttl
-@prefix brick: <https://brickschema.org/schema/Brick#> .
-@prefix rec: <http://w3id.org/rec/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix unit: <http://qudt.org/vocab/unit/> .
-@prefix : <urn:tutorial/> .
-
-<urn:tutorial> a owl:Ontology ;
-    owl:imports <https://brickschema.org/schema/1.4/Brick> ;
-    owl:imports <http://qudt.org/2.1/vocab/unit> .
-
-:building1 a rec:Building ;
-    rdfs:label "Building 1" .
-
-:floor1 a rec:Floor ;
-    rdfs:label "Floor 1" .
-
-:room1 a rec:Room ;
-    rdfs:label "Room 1" ;
-    rec:isPartOf :floor1 ;
-    rec:isLocationOf :thermostat1 .
-
-:thermostat1 a brick:Thermostat ;
-    rdfs:label "Room 1 Thermostat" ;
-    brick:hasPoint :room1-sp, :sensor1, :room1-occ .
-
-:room1-sp a brick:Air_Temperature_Setpoint ;
-    rdfs:label "Room 1 Setpoint" ;
-    brick:hasUnit unit:DEG_F .
-
-:sensor1 a brick:Air_Temperature_Sensor ;
-    rdfs:label "Room 1 Temperature" ;
-    brick:hasUnit unit:DEG_F .
-
-:room1-occ a brick:Occupancy_Sensor ;
-    rdfs:label "Room 1 Occupancy" .
-```
-</details>
-
 I recommend installing [uv](https://docs.astral.sh/uv/) to handle Python dependencies and versions.
 
 Here's the new and improved script for doing 223P validation+inference in Python.
