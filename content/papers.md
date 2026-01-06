@@ -154,7 +154,7 @@ Marco Pritoni, Michael Wetter, Lazlo Paul, Anand Prakash, Weiping Huang, Steven 
 <div class="pub pub-conference">
 
 **Early Adoption of Generative Artificial Intelligence in Computing Education: Emergent Student Use Cases and Perspectives in 2023**
-****
+**[[pdf]](/papers/smith2024early.pdf)[[link]](https://dl.acm.org/doi/10.1145/3649217.3653575)**
 
 C. Estelle Smith, Kylee Shiekh, Hayden Cooreman, Sharfi Rahman, Yifei Zhu, Md Kamrul Siam, Michael Ivanitskiy, Ahmed M. Ahmed, Michael Hallinan, Alexander Grisak, and Gabe Fierro
 

@@ -567,10 +567,10 @@
   award: null
   conference: 29th ACM conference on Innovation and Technology in Computer Science
     Education (ITiCSE 2024)
-  link: null
+  link: https://dl.acm.org/doi/10.1145/3649217.3653575
   location: Milan, Italy
   month: July
-  pdf: null
+  pdf: smith2024early.pdf
   slides: null
   title: 'Early Adoption of Generative Artificial Intelligence in Computing Education:
     Emergent Student Use Cases and Perspectives in 2023'
