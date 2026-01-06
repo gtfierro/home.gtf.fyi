@@ -1,6 +1,6 @@
 .PHONY: all clean discogs
 
-all: papers clean
+all: papers discogs clean
 	./deploy.sh
 	
 papers: clean
