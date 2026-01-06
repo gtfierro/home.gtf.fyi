@@ -104,7 +104,7 @@ Jesan Ahammed Ovi, Gabe Fierro, C. Estelle Smith
 <div class="pub pub-workshop">
 
 **Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs**
-**[[pdf]](/papers/mulayim2025towards.pdf)<i style="color:red">  Best Paper Award</i>**
+**[[pdf]](/papers/mulayim2025towards.pdf)[[link]](https://dl.acm.org/doi/10.1145/3722565.3727197)<i style="color:red">  Best Paper Award</i>**
 
 Ozan Baris Mulayim, Gabe Fierro, Mario Bergés, Marco Pritoni
 
@@ -166,7 +166,7 @@ C. Estelle Smith, Kylee Shiekh, Hayden Cooreman, Sharfi Rahman, Yifei Zhu, Md Ka
 <div class="pub pub-conference">
 
 **Playground: A Safe Building Operating System**
-**[[pdf]](/papers/playground2024fu.pdf)<i style="color:red">  Best Paper Runner-Up</i>**
+**[[pdf]](/papers/playground2024fu.pdf)[[link]](https://ieeexplore.ieee.org/abstract/document/10571633)<i style="color:red">  Best Paper Runner-Up</i>**
 
 Xiaohan Fu, Yihao Liu, Jason Koh, Dezhi Hong, Rajesh Gupta, Gabe Fierro
 
@@ -252,7 +252,7 @@ Therese Peffer, Gabe Fierro, Paul Raftery, Carlos Duarte Roa, Marco Pritoni, Mic
 <div class="pub pub-conference">
 
 **Application-Driven Creation of Building Metadata Models with Semantic Sufficiency**
-**[[pdf]](/papers/fierro2022application.pdf)**
+**[[pdf]](/papers/fierro2022application.pdf)[[link]](https://dl.acm.org/doi/10.1145/3563357.3564083)**
 
 Gabe Fierro, Avijit Saha, Tobias Shapinsky, Matthew Steen, Hannah Eslinger
 
@@ -264,7 +264,7 @@ Gabe Fierro, Avijit Saha, Tobias Shapinsky, Matthew Steen, Hannah Eslinger
 <div class="pub pub-conference">
 
 **Notes Paper: Enabling Building Application Development with Simulated Digital Twins**
-**[[pdf]](/papers/fierro2022simulated.pdf)**
+**[[pdf]](/papers/fierro2022simulated.pdf)[[link]](https://dl.acm.org/doi/abs/10.1145/3563357.3564060)**
 
 Gabe Fierro, Anand Prakash, David Blum, Joel Bender, Erik Paulson, Michael Wetter
 
@@ -398,7 +398,7 @@ Gabe Fierro, Keith Moffat, Jasper Pakshong, Alexandra von Meier
 <div class="pub pub-conference">
 
 **Shepherding Metadata Through the Building Lifecycle**
-**[[pdf]](/papers/shepherding2020fierro.pdf)**
+**[[pdf]](/papers/shepherding2020fierro.pdf)[[link]](https://dl.acm.org/doi/10.1145/3408308.3427627)**
 
 Gabe Fierro, Anand Krishnan Prakash, Cory Mosiman, Marco Pritoni, Paul Raftery, Michael Wetter, David E. Culler
 
@@ -434,7 +434,7 @@ Gabe Fierro, Jason Koh, Shreyas Nagare, Xiaolin Zang, Yuvraj Agarwal, Rajesh K. 
 <div class="pub pub-conference">
 
 **Semantic Interoperability to Enable Smart, Grid-Interactive Efficient Buildings**
-**[[pdf]](/papers/semantic_interop.pdf)**
+**[[pdf]](/papers/semantic_interop.pdf)[[link]](https://escholarship.org/uc/item/1325d5j3)**
 
 Harry Bergmann, Cory Mosiman, Avijit Saha, Selam Haile, William Livingood, Steven Bushby, Gabe Fierro, Joel Bender, Michael Poplawski, Jessica Granderson, Marco Pritoni
 
@@ -483,7 +483,7 @@ Gabe Fierro, Marco Pritoni, Moustafa AbdelBaky, Paul Raftery, Therese Peffer, Gr
 <div class="pub pub-conference">
 
 **Beyond a House of Sticks: Formalizing Metadata Tags with Brick**
-**[[pdf]](/papers/house2019fierro.pdf)**
+**[[pdf]](/papers/house2019fierro.pdf)[[link]](https://dl.acm.org/doi/10.1145/3360322.3360862)**
 
 Gabe Fierro, Jason Koh, Yuvraj Agarwal, Rajesh K. Gupta, David E. Culler
 
@@ -532,7 +532,7 @@ Michael P Andersen, Sam Kumar, Moustafa AbdelBaky, Gabe Fierro, John Kolb, Hyung
 <div class="pub pub-conference">
 
 **Mortar: An Open Testbed for Portable Building Analytics**
-**[[pdf]](/papers/mortar2018fierro.pdf)<i style="color:red">  Audience Choice Award</i>**
+**[[pdf]](/papers/mortar2018fierro.pdf)[[link]](https://dl.acm.org/doi/10.1145/3366375)<i style="color:red">  Audience Choice Award</i>**
 
 Gabe Fierro, Marco Pritoni, Moustafa AbdelBaky, Paul Raftery, Therese Peffer, Greg Thomson, David E. Culler
 
@@ -581,7 +581,7 @@ Michael P Andersen, John Kolb, Kaifei Chen, Gabriel Fierro, David E. Culler and 
 <div class="pub pub-conference">
 
 **Design and Analysis of a Query Processor for Brick**
-**[[pdf]](/papers/hoddb2017fierro.pdf)**
+**[[pdf]](/papers/hoddb2017fierro.pdf)[[link]](https://dl.acm.org/doi/10.1145/3137133.3137155)**
 
 Gabe Fierro, David E. Culler
 
