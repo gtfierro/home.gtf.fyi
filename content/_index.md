@@ -12,7 +12,7 @@ My research interests include (1) the design and implementation of high-performa
 * <u>Pronouns</u>: he/him
 * <u>Github</u>: [@gtfierro](https://github.com/gtfierro/)
 * <u>Bluesky</u>: [@gtf.fyi](https://bsky.app/profile/gtf.fyi)
-* <u>Office</u>: 214E CTLM ; 3-4pm Monday, 10:30-11:30am Thursday, or by appointment
+* <u>Office</u>: 214E CTLM ; 2-3pm Monday, 1-2pm Tuesday (or by appointment)
 * <u>ORCID</u>: [0000-0002-2081-4525](https://orcid.org/0000-0002-2081-4525)
 * [Google Scholar](https://scholar.google.com/citations?user=9wj4L7MAAAAJ&hl=en)
 * [CV (last updated 2023)](/fierro-cv.pdf)
