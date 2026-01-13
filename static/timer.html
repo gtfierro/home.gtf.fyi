@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Full Screen Timer</title>
+  <style>
+    :root {
+      --bg: #101318;
+      --fg: #e9eef6;
+      --accent: #f6c445;
+      --muted: #8b93a7;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: radial-gradient(1200px 800px at 20% 20%, #1b2230 0%, var(--bg) 60%);
+      color: var(--fg);
+      font-family: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+    }
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 4vmin;
+    }
+    .timer {
+      display: grid;
+      gap: 4vmin;
+      text-align: center;
+    }
+    .time {
+      font-size: clamp(64px, 18vw, 220px);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    .label {
+      font-size: clamp(14px, 2vw, 20px);
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .controls {
+      display: flex;
+      gap: 2vmin;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .input {
+      display: grid;
+      gap: 0.5vmin;
+      font-size: clamp(12px, 1.8vw, 16px);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .input input {
+      width: 7ch;
+      padding: 0.35em 0.6em;
+      font-size: clamp(16px, 2.4vw, 24px);
+      border-radius: 10px;
+      border: 1px solid #2a3142;
+      background: #11161f;
+      color: var(--fg);
+      text-align: center;
+    }
+    button {
+      appearance: none;
+      border: 1px solid #2a3142;
+      background: #161b24;
+      color: var(--fg);
+      font-size: clamp(14px, 2.2vw, 22px);
+      padding: 0.7em 1.4em;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.08s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    button:hover { border-color: var(--accent); }
+    button:active { transform: translateY(1px); }
+    .primary { background: var(--accent); color: #1b1b1b; border-color: transparent; }
+    .hint { color: var(--muted); font-size: clamp(12px, 1.6vw, 16px); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="timer">
+      <div class="label">Minutes : Seconds</div>
+      <div class="time" id="time">05:00</div>
+      <div class="controls">
+        <label class="input">
+          <span>Minutes</span>
+          <input id="minutes" type="number" min="0" max="999" value="5" />
+        </label>
+        <label class="input">
+          <span>Seconds</span>
+          <input id="seconds" type="number" min="0" max="59" value="0" />
+        </label>
+      </div>
+      <div class="controls">
+        <label class="input">
+          <span>Add Seconds</span>
+          <input id="add-seconds" type="number" min="1" max="3600" value="30" />
+        </label>
+        <button id="add-custom">Add</button>
+      </div>
+      <div class="controls">
+        <button class="primary" id="start">Start</button>
+        <button id="add-minute">+1 min</button>
+        <button id="reset">Reset</button>
+        <button id="fullscreen">Fullscreen</button>
+      </div>
+      <div class="hint">Space = Start/Pause · R = Reset · F = Fullscreen</div>
+    </div>
+  </div>
+
+  <script>
+    const timeEl = document.getElementById("time");
+    const startBtn = document.getElementById("start");
+    const addMinuteBtn = document.getElementById("add-minute");
+    const addCustomBtn = document.getElementById("add-custom");
+    const resetBtn = document.getElementById("reset");
+    const fsBtn = document.getElementById("fullscreen");
+    const minutesInput = document.getElementById("minutes");
+    const secondsInput = document.getElementById("seconds");
+    const addSecondsInput = document.getElementById("add-seconds");
+
+    let running = false;
+    let endTime = 0;
+    let remainingMs = 5 * 60 * 1000;
+    const MAX_MS = (999 * 60 + 59) * 1000;
+    let raf = null;
+
+    function fmt(ms) {
+      const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const mm = String(minutes).padStart(2, "0");
+      const ss = String(seconds).padStart(2, "0");
+      return `${mm}:${ss}`;
+    }
+
+    function readInputs() {
+      const mins = Math.max(0, Math.min(999, Number(minutesInput.value || 0)));
+      const secs = Math.max(0, Math.min(59, Number(secondsInput.value || 0)));
+      return (mins * 60 + secs) * 1000;
+    }
+
+    function updateDisplay() {
+      timeEl.textContent = fmt(remainingMs);
+    }
+
+    function writeInputsFromRemaining() {
+      const totalSeconds = Math.max(0, Math.ceil(remainingMs / 1000));
+      const mins = Math.min(999, Math.floor(totalSeconds / 60));
+      const secs = Math.min(59, totalSeconds % 60);
+      minutesInput.value = String(mins);
+      secondsInput.value = String(secs);
+    }
+
+    function tick() {
+      const now = performance.now();
+      remainingMs = Math.max(0, endTime - now);
+      updateDisplay();
+      if (remainingMs <= 0) {
+        pause();
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (running) return;
+      if (remainingMs <= 0) {
+        remainingMs = readInputs();
+        updateDisplay();
+      }
+      if (remainingMs <= 0) return;
+      running = true;
+      endTime = performance.now() + remainingMs;
+      startBtn.textContent = "Pause";
+      raf = requestAnimationFrame(tick);
+    }
+
+    function pause() {
+      running = false;
+      startBtn.textContent = "Start";
+      if (raf) cancelAnimationFrame(raf);
+      raf = null;
+    }
+
+    function toggle() {
+      running ? pause() : start();
+    }
+
+    function reset() {
+      pause();
+      remainingMs = readInputs();
+      updateDisplay();
+    }
+
+    function addMinute() {
+      const delta = 60 * 1000;
+      remainingMs = Math.min(MAX_MS, remainingMs + delta);
+      if (running) {
+        endTime = performance.now() + remainingMs;
+      }
+      updateDisplay();
+      writeInputsFromRemaining();
+    }
+
+    function addCustom() {
+      const secs = Math.max(0, Math.min(3600, Number(addSecondsInput.value || 0)));
+      if (secs <= 0) return;
+      remainingMs = Math.min(MAX_MS, remainingMs + secs * 1000);
+      if (running) {
+        endTime = performance.now() + remainingMs;
+      }
+      updateDisplay();
+      writeInputsFromRemaining();
+    }
+
+    async function goFullscreen() {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    }
+
+    function syncFromInputs() {
+      if (running) return;
+      remainingMs = readInputs();
+      updateDisplay();
+    }
+
+    minutesInput.addEventListener("change", syncFromInputs);
+    secondsInput.addEventListener("change", syncFromInputs);
+    startBtn.addEventListener("click", toggle);
+    addMinuteBtn.addEventListener("click", addMinute);
+    addCustomBtn.addEventListener("click", addCustom);
+    resetBtn.addEventListener("click", reset);
+    fsBtn.addEventListener("click", goFullscreen);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space") { e.preventDefault(); toggle(); }
+      if (e.key.toLowerCase() === "r") reset();
+      if (e.key.toLowerCase() === "f") goFullscreen();
+    });
+
+    updateDisplay();
+  </script>
+</body>
+</html>
