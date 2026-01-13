@@ -10,7 +10,7 @@ papers: clean
 
 discogs:
 	cd discogs && uv run generate_html.py
-	cp discogs/index.html content/discogs/index.html
+	cp discogs/index.html static/discogs
 
 discogs/records.json: 
 	cd discogs && uv run generate_json.py
