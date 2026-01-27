@@ -719,40 +719,6 @@ async function loadStreamSaver() {
   return streamSaver;
 }
 
-async function createCsvWriter(filename, useGzip = false) {
-  const ss = await loadStreamSaver();
-  const encoder = new TextEncoder();
-
-  if (useGzip && typeof CompressionStream !== "undefined") {
-    const fileStream = ss.createWriteStream(filename);
-    const compressor = new CompressionStream("gzip");
-    const pipePromise = compressor.readable.pipeTo(fileStream);
-    const writer = compressor.writable.getWriter();
-    return {
-      writer,
-      encoder,
-      close: async () => {
-        await writer.close();
-        await pipePromise;
-      },
-    };
-  }
-
-  if (useGzip) {
-    setStatus("Gzip not supported in this browser; downloading uncompressed CSV");
-  }
-
-  const fileStream = ss.createWriteStream(filename);
-  const writer = fileStream.getWriter();
-  return {
-    writer,
-    encoder,
-    close: async () => {
-      await writer.close();
-    },
-  };
-}
-
 async function downloadFullCSV() {
   if (!conn) return;
 
@@ -776,7 +742,10 @@ async function downloadFullCSV() {
     const where = buildWhereSql(filter);
     const sql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
 
-    const { writer, encoder, close } = await createCsvWriter('spotify_full.csv.gz', true);
+    const ss = await loadStreamSaver();
+    const fileStream = ss.createWriteStream('spotify_full.csv');
+    const writer = fileStream.getWriter();
+    const encoder = new TextEncoder();
 
     // Write header
     await writer.write(encoder.encode(columns.join(',') + '\n'));
@@ -791,7 +760,7 @@ async function downloadFullCSV() {
       setStatus(`Downloading... ${rowCount.toLocaleString()} rows`);
     }
 
-    await close();
+    await writer.close();
     setStatus(`Download complete: ${rowCount.toLocaleString()} rows`);
   } catch (e) {
     setStatus(`Download error: ${e.message}`);
@@ -844,7 +813,10 @@ async function downloadSampleCSV() {
     const sampleClause = `USING SAMPLE ${pct}% (system, ${seed})`;
     const sql = `SELECT * FROM (${baseSql}) t ${sampleClause} LIMIT ${k}`;
 
-    const { writer, encoder, close } = await createCsvWriter(`spotify_sample_k${k}_seed${seed}.csv.gz`, true);
+    const ss = await loadStreamSaver();
+    const fileStream = ss.createWriteStream(`spotify_sample_k${k}_seed${seed}.csv`);
+    const writer = fileStream.getWriter();
+    const encoder = new TextEncoder();
 
     // Write header
     await writer.write(encoder.encode(columns.join(',') + '\n'));
@@ -859,7 +831,7 @@ async function downloadSampleCSV() {
       setStatus(`Downloading sample... ${rowCount.toLocaleString()} rows`);
     }
 
-    await close();
+    await writer.close();
     setStatus(`Sample download complete: ${rowCount.toLocaleString()} rows (seed: ${seed})`);
   } catch (e) {
     setStatus(`Download error: ${e.message}`);
@@ -956,9 +928,7 @@ function createFilterRow(initial = {}) {
 function initFilters() {
   const container = el("filters");
   container.innerHTML = "";
-  container.appendChild(
-    createFilterRow({ col: "popularity", op: ">", val: 0 })
-  );
+  container.appendChild(createFilterRow());
 }
 
 function clearFilters() {
