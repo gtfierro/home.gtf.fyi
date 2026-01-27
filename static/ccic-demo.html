@@ -444,6 +444,7 @@ let estimateTimer = null;
 let pendingRequests = 0;
 let db = null;
 let conn = null;
+let lastEstimatedCount = null;
 
 // ============================================================================
 // DOM Helpers
@@ -633,7 +634,7 @@ async function getEstimate() {
     }
 
     const where = buildWhereSql(filter);
-    const sampleClause = `USING SAMPLE ${EST_SAMPLE_PCT} PERCENT (SYSTEM, ${EST_SAMPLE_SEED})`;
+    const sampleClause = `USING SAMPLE ${EST_SAMPLE_PCT}% (system, ${EST_SAMPLE_SEED})`;
     const baseSql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
     const sampleSql = `SELECT * FROM (${baseSql}) s ${sampleClause}`;
     const sample = await conn.query(sampleSql);
@@ -658,6 +659,7 @@ async function getEstimate() {
     setText("count", String(estimatedCount));
     el("fullEstimate").textContent = `${fmtBytes(estimatedFullBytes)} (est.)`;
     el("sampleEstimate").textContent = k > 0 ? `${fmtBytes(estimatedSampleBytes)} (est.)` : "—";
+    lastEstimatedCount = estimatedCount;
   } catch (e) {
     console.error("Estimate error:", e);
     setStatus(`Estimate error: ${e.message}`);
@@ -764,9 +766,16 @@ async function downloadSampleCSV() {
     const where = buildWhereSql(filter);
     const seed = Math.floor(Math.random() * 1000000);
 
-    // Sample after filters are applied, using DuckDB reservoir sampling.
+    const pctFromEstimate =
+      lastEstimatedCount && lastEstimatedCount > 0
+        ? (k / lastEstimatedCount) * 100
+        : EST_SAMPLE_PCT;
+    const pct = Math.max(0.01, Math.min(100, pctFromEstimate));
+
+    // Approximate percent sampling after filters are applied.
     const baseSql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
-    const sql = `SELECT * FROM (${baseSql}) t USING SAMPLE reservoir(${k} ROWS) REPEATABLE(${seed})`;
+    const sampleClause = `USING SAMPLE ${pct}% (system, ${seed})`;
+    const sql = `SELECT * FROM (${baseSql}) t ${sampleClause} LIMIT ${k}`;
 
     const ss = await loadStreamSaver();
     const fileStream = ss.createWriteStream(`spotify_sample_k${k}_seed${seed}.csv`);
