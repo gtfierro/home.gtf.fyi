@@ -758,7 +758,8 @@ async function downloadFullCSV() {
     }
 
     const where = buildWhereSql(filter);
-    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
+    // USING SAMPLE 100% works around a DuckDB WASM range request bug
+    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} USING SAMPLE 100%`;
 
     const ss = await loadStreamSaver();
     const fileStream = ss.createWriteStream('spotify_full.csv');
