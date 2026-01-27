@@ -648,17 +648,10 @@ async function initDuckDB() {
   conn = await db.connect();
 
   setInitStatus("Configuring S3 access...");
-  // Configure for anonymous access to public bucket using CREATE SECRET
-  // See: https://duckdb.org/docs/stable/core_extensions/httpfs/s3api
-  await conn.query(`
-    CREATE SECRET (
-      TYPE S3,
-      REGION '${S3_REGION}',
-      ENDPOINT 's3.${S3_REGION}.amazonaws.com',
-      URL_STYLE 'vhost',
-      USE_SSL true
-    )
-  `);
+  // Configure for anonymous access to public bucket
+  await conn.query(`SET s3_region='${S3_REGION}'`);
+  await conn.query(`SET s3_access_key_id=''`);
+  await conn.query(`SET s3_secret_access_key=''`);
 
   setInitStatus("Registering partitioned parquet dataset...");
   // Use glob pattern with hive_partitioning for partitioned datasets
