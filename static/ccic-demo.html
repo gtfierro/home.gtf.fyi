@@ -801,16 +801,36 @@ async function downloadSampleCSV() {
     const where = buildWhereSql(filter);
     const seed = Math.floor(Math.random() * 1000000);
 
-    const pctFromEstimate =
+    // Adaptive oversampling: start with estimate-based pct, ramp up if needed
+    const initialPct =
       lastEstimatedCount && lastEstimatedCount > 0
-        ? (k / lastEstimatedCount) * 100
-        : EST_SAMPLE_PCT;
-    const pct = Math.max(0.01, Math.min(100, pctFromEstimate));
+        ? Math.min(100, (k / lastEstimatedCount) * 100 * 1.5) // 1.5x buffer
+        : 10;
 
-    // Approximate percent sampling after filters are applied.
-    const baseSql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
-    const sampleClause = `USING SAMPLE ${pct}% (system, ${seed})`;
-    const sql = `SELECT * FROM (${baseSql}) t ${sampleClause} LIMIT ${k}`;
+    let pct = Math.max(1, initialPct);
+    let batches = [];
+    let totalRows = 0;
+
+    // Ramp up sampling until we have k rows or hit 100%
+    while (totalRows < k && pct <= 100) {
+      setStatus(`Sampling at ${pct.toFixed(1)}%...`);
+      // TABLESAMPLE before WHERE allows row-group level skipping
+      const sql = `SELECT ${columns.join(', ')} FROM tracks TABLESAMPLE ${pct}% (system, ${seed}) ${where} LIMIT ${k}`;
+
+      batches = [];
+      totalRows = 0;
+      for await (const batch of await conn.send(sql)) {
+        batches.push(batch);
+        totalRows += batch.numRows;
+        if (totalRows >= k) break;
+      }
+
+      if (totalRows < k && pct < 100) {
+        pct = Math.min(100, pct * 2); // double and retry
+      } else {
+        break;
+      }
+    }
 
     const ss = await loadStreamSaver();
     const fileStream = ss.createWriteStream(`spotify_sample_k${k}_seed${seed}.csv`);
@@ -820,14 +840,27 @@ async function downloadSampleCSV() {
     // Write header
     await writer.write(encoder.encode(columns.join(',') + '\n'));
 
-    setStatus("Downloading sample...");
+    setStatus("Writing CSV...");
 
-    // Stream results
+    // Write collected batches (up to k rows)
     let rowCount = 0;
-    for await (const batch of await conn.send(sql)) {
-      await writeCSVBatch(writer, batch, encoder);
-      rowCount += batch.numRows;
-      setStatus(`Downloading sample... ${rowCount.toLocaleString()} rows`);
+    for (const batch of batches) {
+      const rowsToWrite = Math.min(batch.numRows, k - rowCount);
+      if (rowsToWrite <= 0) break;
+
+      // Write rows from this batch
+      const numCols = batch.numCols;
+      const lines = [];
+      for (let i = 0; i < rowsToWrite; i++) {
+        const row = [];
+        for (let j = 0; j < numCols; j++) {
+          row.push(csvEscape(batch.getChildAt(j).get(i)));
+        }
+        lines.push(row.join(','));
+      }
+      await writer.write(encoder.encode(lines.join('\n') + '\n'));
+      rowCount += rowsToWrite;
+      setStatus(`Writing CSV... ${rowCount.toLocaleString()} rows`);
     }
 
     await writer.close();
