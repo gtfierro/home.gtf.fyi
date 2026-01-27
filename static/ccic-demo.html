@@ -404,7 +404,7 @@ if (!PARQUET_URL) {
 // ============================================================================
 // Constants
 // ============================================================================
-const EST_SAMPLE_ROWS = 2000;
+const EST_SAMPLE_PCT = 1;
 const EST_SAMPLE_SEED = 42;
 
 const COLUMNS = [
@@ -444,8 +444,6 @@ let estimateTimer = null;
 let pendingRequests = 0;
 let db = null;
 let conn = null;
-let totalRows = null;
-let totalRowsPromise = null;
 
 // ============================================================================
 // DOM Helpers
@@ -620,25 +618,6 @@ async function initDuckDB() {
 // ============================================================================
 // Estimates
 // ============================================================================
-async function getTotalRows() {
-  if (totalRows != null) return totalRows;
-  if (totalRowsPromise) return totalRowsPromise;
-
-  totalRowsPromise = (async () => {
-    const sql = `SELECT SUM(num_rows) AS total_rows FROM parquet_metadata(${sqlEscapeString(PARQUET_URL)})`;
-    const result = await conn.query(sql);
-    const value = Number(result.getChildAt(0).get(0));
-    return Number.isFinite(value) ? value : 0;
-  })();
-
-  try {
-    totalRows = await totalRowsPromise;
-    return totalRows;
-  } finally {
-    totalRowsPromise = null;
-  }
-}
-
 async function getEstimate() {
   if (!conn) return;
   const seq = ++estimateSeq;
@@ -654,18 +633,14 @@ async function getEstimate() {
     }
 
     const where = buildWhereSql(filter);
-    const total = await getTotalRows();
-    if (seq !== estimateSeq) return;
-
-    const sampleN = Math.max(1, Math.min(EST_SAMPLE_ROWS, total || EST_SAMPLE_ROWS));
-    const baseSampleSql = `SELECT ${columns.join(', ')} FROM tracks USING SAMPLE reservoir(${sampleN} ROWS) REPEATABLE(${EST_SAMPLE_SEED})`;
-    const sampleSql = where ? `SELECT * FROM (${baseSampleSql}) s ${where}` : baseSampleSql;
+    const sampleClause = `USING SAMPLE ${EST_SAMPLE_PCT} PERCENT REPEATABLE(${EST_SAMPLE_SEED})`;
+    const sampleSql = `SELECT ${columns.join(', ')} FROM tracks ${sampleClause} ${where}`;
     const sample = await conn.query(sampleSql);
     if (seq !== estimateSeq) return;
 
     const sampleRows = sample.numRows;
-    const selectivity = sampleN > 0 ? sampleRows / sampleN : 0;
-    const estimatedCount = where ? Math.round(total * selectivity) : total;
+    const pct = EST_SAMPLE_PCT / 100;
+    const estimatedCount = pct > 0 ? Math.round(sampleRows / pct) : 0;
 
     const csvSample = arrowBatchToCSV(sample, true);
     const avgRowBytes = sampleRows > 0
