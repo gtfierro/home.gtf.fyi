@@ -445,6 +445,8 @@ let pendingRequests = 0;
 let db = null;
 let conn = null;
 let lastEstimatedCount = null;
+let isDownloading = false;
+let estimateDirty = false;
 
 // ============================================================================
 // DOM Helpers
@@ -667,6 +669,10 @@ async function getEstimate() {
 }
 
 function scheduleEstimate() {
+  if (isDownloading) {
+    estimateDirty = true;
+    return;
+  }
   estimateSeq += 1;
   setText("fullCount", "—");
   el("fullEstimate").textContent = "—";
@@ -696,6 +702,11 @@ async function loadStreamSaver() {
 
 async function downloadFullCSV() {
   if (!conn) return;
+
+  isDownloading = true;
+  estimateDirty = false;
+  estimateSeq += 1;
+  if (estimateTimer) clearTimeout(estimateTimer);
 
   beginWork();
   setStatus("Preparing download...");
@@ -738,6 +749,8 @@ async function downloadFullCSV() {
     console.error(e);
   } finally {
     endWork();
+    isDownloading = false;
+    if (estimateDirty) scheduleEstimate();
   }
 }
 
@@ -750,6 +763,11 @@ async function downloadSampleCSV() {
     setStatus("Sample k must be an integer >= 1");
     return;
   }
+
+  isDownloading = true;
+  estimateDirty = false;
+  estimateSeq += 1;
+  if (estimateTimer) clearTimeout(estimateTimer);
 
   beginWork();
   setStatus("Preparing sample download...");
@@ -803,6 +821,8 @@ async function downloadSampleCSV() {
     console.error(e);
   } finally {
     endWork();
+    isDownloading = false;
+    if (estimateDirty) scheduleEstimate();
   }
 }
 
