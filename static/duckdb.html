@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Parquet Browser (DuckDB WASM)</title>
+    <style>
+:root {
+  color-scheme: dark;
+  --bg: #0f0f10;
+  --panel: #151517;
+  --text: #e8e8ea;
+  --muted: #a6a6ad;
+  --border: #2a2a2e;
+  --btn: #1b1b1f;
+  --btn2: #16161a;
+  --primary: #2b6ff7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.header h1 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.loading-wrap {
+  height: 3px;
+  background: #101012;
+  border: 1px solid var(--border);
+  margin-top: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar {
+  position: absolute;
+  left: -30%;
+  width: 30%;
+  height: 100%;
+  background: var(--primary);
+  opacity: 0;
+}
+
+.loading-wrap.active .loading-bar {
+  opacity: 1;
+  animation: loading-slide 1s ease-in-out infinite;
+}
+
+@keyframes loading-slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#status.status-loading {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #6b5a00;
+  background: #3a3000;
+  color: #f5d66d;
+  font-weight: 600;
+}
+
+.controls,
+.pager,
+.table-wrap {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 12px 0 8px 0;
+}
+
+.details {
+  border: 1px solid var(--border);
+  background: #101012;
+  padding: 8px 10px;
+}
+
+.details + .section-title {
+  margin-top: 14px;
+}
+
+.details-summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.details-body {
+  margin-top: 10px;
+}
+
+.filters {
+  display: grid;
+  gap: 8px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px 10px;
+}
+
+.colcheck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.colcheck input {
+  margin: 0;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 160px 90px 1fr 36px;
+  gap: 8px;
+  align-items: center;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  background: #101012;
+  color: var(--text);
+  outline: none;
+}
+
+.input-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  background: var(--btn);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: var(--btn2);
+}
+
+.btn-primary {
+  border-color: rgba(43, 111, 247, 0.55);
+  background: rgba(43, 111, 247, 0.18);
+}
+
+.btn-icon {
+  width: 36px;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pageinfo {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.downloads {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .downloads {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  border: 1px solid var(--border);
+  background: #101012;
+  padding: 10px;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.deprecated {
+  display: none;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+}
+
+.init-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.init-overlay.hidden {
+  display: none;
+}
+
+.init-box {
+  text-align: center;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.init-box h2 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.init-box .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 16px auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+    </style>
+  </head>
+  <body>
+    <div id="initOverlay" class="init-overlay">
+      <div class="init-box">
+        <h2>Initializing DuckDB WASM</h2>
+        <div class="spinner"></div>
+        <div id="initStatus" class="muted">Loading DuckDB...</div>
+      </div>
+    </div>
+
+    <main class="wrap">
+      <header class="header">
+        <h1>Parquet Browser (DuckDB WASM)</h1>
+        <div class="muted">100-row pages · AND-only filters · CSV export · Client-side processing</div>
+      </header>
+      <div id="loadingWrap" class="loading-wrap" aria-hidden="true">
+        <div class="loading-bar"></div>
+      </div>
+
+      <section class="controls">
+        <details class="details" id="columnsDetails">
+          <summary class="details-summary">Select Columns</summary>
+          <div class="details-body">
+            <div id="columns" class="columns"></div>
+            <div class="row">
+              <button id="colsDefault" class="btn btn-secondary">Default</button>
+              <button id="colsAll" class="btn btn-secondary">All</button>
+              <button id="colsNone" class="btn btn-secondary">None</button>
+            </div>
+          </div>
+        </details>
+
+        <div class="section-title">Filters</div>
+        <div id="filters" class="filters"></div>
+        <div class="row">
+          <button id="addFilter" class="btn btn-secondary">Add filter</button>
+          <button id="apply" class="btn">Apply</button>
+          <button id="clear" class="btn btn-secondary">Clear</button>
+        </div>
+
+        <div class="downloads">
+          <div class="card">
+            <div class="card-title">Full download</div>
+            <div class="muted">All rows matching filters</div>
+            <div class="row">
+              <button id="download" class="btn btn-primary">Download CSV</button>
+            </div>
+            <div class="muted">Estimated size: <span id="fullEstimate">—</span></div>
+            <div class="muted">
+              Rows: <span id="fullCount">—</span><span id="count" class="deprecated">—</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Sample download</div>
+            <div class="muted">Sample of rows matching filters</div>
+            <div class="row">
+              <label class="muted" for="sampleK">k</label>
+              <input id="sampleK" class="input input-mono" type="number" min="10000" step="10000" value="100000" />
+              <button id="downloadSample" class="btn btn-primary">Download sample CSV</button>
+            </div>
+            <div class="muted">Estimated size: <span id="sampleEstimate">—</span></div>
+            <div class="muted">seed is random (included in filename)</div>
+          </div>
+        </div>
+
+        <div class="meta">
+          <div class="muted" id="status"></div>
+        </div>
+      </section>
+
+      <section class="pager">
+        <button id="prev" class="btn btn-secondary">Prev</button>
+        <div class="pageinfo">
+          Page <span id="page">0</span>
+        </div>
+        <button id="next" class="btn btn-secondary">Next</button>
+      </section>
+
+      <section class="table-wrap">
+        <table id="table" class="table"></table>
+      </section>
+    </main>
+
+    <script type="module">
+// ============================================================================
+// Configuration - Read parquet URL from query parameter
+// ============================================================================
+const params = new URLSearchParams(window.location.search);
+const PARQUET_URL = params.get('url');
+
+if (!PARQUET_URL) {
+  document.getElementById('initStatus').textContent = 'Missing ?url= parameter';
+  document.getElementById('initOverlay').querySelector('.spinner').style.display = 'none';
+  throw new Error('Usage: duckdb.html?url=https://example.com/file.parquet');
+}
+
+// ============================================================================
+// Constants
+// ============================================================================
+const PAGE_SIZE = 100;
+
+const COLUMNS = [
+  { name: "artist", type: "string" },
+  { name: "genre", type: "string" },
+  { name: "album", type: "string" },
+  { name: "track", type: "string" },
+  { name: "popularity", type: "int" },
+  { name: "release_year", type: "int" },
+  { name: "null_response", type: "int" },
+  { name: "duration_ms", type: "int" },
+  { name: "time_signature", type: "int" },
+  { name: "tempo", type: "float" },
+  { name: "key", type: "int" },
+  { name: "mode", type: "int" },
+  { name: "danceability", type: "float" },
+  { name: "energy", type: "float" },
+  { name: "loudness", type: "float" },
+  { name: "speechiness", type: "float" },
+  { name: "acousticness", type: "float" },
+  { name: "instrumentalness", type: "float" },
+  { name: "liveness", type: "float" },
+  { name: "valence", type: "float" },
+];
+
+const DEFAULT_DESELECT = new Set(["time_signature", "null_response"]);
+const OPS_NUM = ["=", ">", "<", ">=", "<="];
+const OPS_STR = ["="];
+
+// ============================================================================
+// State
+// ============================================================================
+let page = 0;
+let filter = "";
+let selectedColumns = new Set();
+let estimateTimer = null;
+let pendingRequests = 0;
+let db = null;
+let conn = null;
+
+// ============================================================================
+// DOM Helpers
+// ============================================================================
+const el = (id) => document.getElementById(id);
+const setText = (id, value) => {
+  const node = el(id);
+  if (node) node.textContent = value;
+};
+
+function setLoading(isLoading) {
+  const node = el("loadingWrap");
+  if (!node) return;
+  node.classList.toggle("active", isLoading);
+}
+
+function beginWork() {
+  pendingRequests += 1;
+  setLoading(pendingRequests > 0);
+}
+
+function endWork() {
+  pendingRequests = Math.max(0, pendingRequests - 1);
+  setLoading(pendingRequests > 0);
+}
+
+function setStatus(msg) {
+  const node = el("status");
+  node.textContent = msg || "";
+  node.classList.toggle("status-loading", Boolean(msg && msg.startsWith("Loading")));
+}
+
+function setInitStatus(msg) {
+  const node = el("initStatus");
+  if (node) node.textContent = msg;
+}
+
+function hideInitOverlay() {
+  const overlay = el("initOverlay");
+  if (overlay) overlay.classList.add("hidden");
+}
+
+function fmtBytes(bytes) {
+  if (bytes == null) return "—";
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  let n = Number(bytes);
+  let i = 0;
+  while (n >= 1024 && i < units.length - 1) {
+    n /= 1024;
+    i++;
+  }
+  return `${n.toFixed(i === 0 ? 0 : 2)} ${units[i]}`;
+}
+
+// ============================================================================
+// SQL Helpers
+// ============================================================================
+function sqlEscapeString(s) {
+  return `'${String(s).replaceAll("'", "''")}'`;
+}
+
+function isEmptyValue(v) {
+  return v == null || String(v).trim() === "";
+}
+
+function buildFilterFromUI() {
+  const rows = Array.from(document.querySelectorAll(".filter-row"));
+  const parts = [];
+  for (const row of rows) {
+    const col = row.querySelector('[data-role="col"]').value;
+    const op = row.querySelector('[data-role="op"]').value;
+    const valEl = row.querySelector('[data-role="val"]');
+    const val = valEl.value;
+
+    if (isEmptyValue(val)) continue;
+
+    const colMeta = COLUMNS.find((c) => c.name === col);
+    if (!colMeta) continue;
+
+    if (colMeta.type === "string") {
+      parts.push(`${col} ${op} ${sqlEscapeString(val)}`);
+    } else if (colMeta.type === "int") {
+      const n = Number(val);
+      if (!Number.isFinite(n) || !Number.isInteger(n)) continue;
+      parts.push(`${col} ${op} ${n}`);
+    } else {
+      const x = Number(val);
+      if (!Number.isFinite(x)) continue;
+      parts.push(`${col} ${op} ${x}`);
+    }
+  }
+  return parts.join(" AND ");
+}
+
+function buildWhereSql(filterStr) {
+  if (!filterStr || filterStr.trim() === "") return "";
+  return `WHERE ${filterStr}`;
+}
+
+function buildColumnsParamFromUI() {
+  const cols = COLUMNS.map((c) => c.name).filter((n) => selectedColumns.has(n));
+  return cols;
+}
+
+function updateRawFilter() {
+  filter = buildFilterFromUI();
+}
+
+// ============================================================================
+// CSV Helpers
+// ============================================================================
+function csvEscape(val) {
+  if (val === null || val === undefined) return "";
+  const s = String(val);
+  if (s.includes(",") || s.includes('"') || s.includes("\n") || s.includes("\r")) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
+
+function arrowTableToRows(table) {
+  const rows = [];
+  const numRows = table.numRows;
+  const numCols = table.numCols;
+  for (let i = 0; i < numRows; i++) {
+    const row = [];
+    for (let j = 0; j < numCols; j++) {
+      row.push(table.getChildAt(j).get(i));
+    }
+    rows.push(row);
+  }
+  return rows;
+}
+
+function arrowBatchToCSV(batch, includeHeader = false) {
+  const lines = [];
+  if (includeHeader) {
+    lines.push(batch.schema.fields.map(f => csvEscape(f.name)).join(','));
+  }
+  const numRows = batch.numRows;
+  const numCols = batch.numCols;
+  for (let i = 0; i < numRows; i++) {
+    const row = [];
+    for (let j = 0; j < numCols; j++) {
+      row.push(csvEscape(batch.getChildAt(j).get(i)));
+    }
+    lines.push(row.join(','));
+  }
+  return lines.join('\n') + (lines.length > 0 ? '\n' : '');
+}
+
+// ============================================================================
+// DuckDB Initialization
+// ============================================================================
+async function initDuckDB() {
+  setInitStatus("Loading DuckDB WASM...");
+
+  const duckdb = await import('https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/+esm');
+
+  setInitStatus("Selecting optimal bundle...");
+  const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
+  const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
+
+  setInitStatus("Creating worker...");
+  const worker = new Worker(bundle.mainWorker);
+  const logger = new duckdb.ConsoleLogger();
+  db = new duckdb.AsyncDuckDB(logger, worker);
+
+  setInitStatus("Instantiating DuckDB...");
+  await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+
+  setInitStatus("Connecting to database...");
+  conn = await db.connect();
+
+  setInitStatus("Registering parquet file...");
+  // DuckDB handles HTTP range requests automatically for remote parquet files
+  await conn.query(`CREATE VIEW tracks AS SELECT * FROM '${PARQUET_URL}'`);
+
+  setInitStatus("Ready!");
+}
+
+// ============================================================================
+// Data Loading
+// ============================================================================
+async function loadPage() {
+  if (!conn) return;
+
+  setStatus("Loading...");
+  beginWork();
+
+  try {
+    updateRawFilter();
+    const columns = buildColumnsParamFromUI();
+    if (columns.length === 0) {
+      setStatus("Select at least one column");
+      endWork();
+      return;
+    }
+
+    const where = buildWhereSql(filter);
+    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT ${PAGE_SIZE} OFFSET ${page * PAGE_SIZE}`;
+
+    const result = await conn.query(sql);
+    const rows = arrowTableToRows(result);
+
+    renderTable(columns, rows);
+    el("page").textContent = String(page);
+    setStatus("");
+  } catch (e) {
+    setStatus(`Query error: ${e.message}`);
+    console.error(e);
+  } finally {
+    endWork();
+  }
+}
+
+async function getEstimate() {
+  if (!conn) return;
+
+  try {
+    updateRawFilter();
+    const columns = buildColumnsParamFromUI();
+    if (columns.length === 0) {
+      setText("fullCount", "—");
+      el("fullEstimate").textContent = "—";
+      el("sampleEstimate").textContent = "—";
+      return;
+    }
+
+    const where = buildWhereSql(filter);
+
+    // Get count
+    const countResult = await conn.query(`SELECT COUNT(*) as cnt FROM tracks ${where}`);
+    const count = Number(countResult.getChildAt(0).get(0));
+
+    // Sample for average row size
+    const sampleSql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT 1000`;
+    const sample = await conn.query(sampleSql);
+    const csvSample = arrowBatchToCSV(sample, true);
+    const sampleRows = sample.numRows;
+    const avgRowBytes = sampleRows > 0 ? (csvSample.length - columns.join(',').length - 1) / sampleRows : 0;
+
+    const estimatedFullBytes = Math.round(count * avgRowBytes + columns.join(',').length + 1);
+
+    const k = Number(el("sampleK")?.value || "0");
+    const actualSampleK = Math.min(k, count);
+    const estimatedSampleBytes = Math.round(actualSampleK * avgRowBytes + columns.join(',').length + 1);
+
+    setText("fullCount", String(count));
+    setText("count", String(count));
+    el("fullEstimate").textContent = `${fmtBytes(estimatedFullBytes)} (est.)`;
+    el("sampleEstimate").textContent = k > 0 ? `${fmtBytes(estimatedSampleBytes)} (est.)` : "—";
+  } catch (e) {
+    console.error("Estimate error:", e);
+    setStatus(`Estimate error: ${e.message}`);
+  }
+}
+
+function scheduleEstimate() {
+  if (estimateTimer) clearTimeout(estimateTimer);
+  estimateTimer = setTimeout(() => {
+    getEstimate();
+  }, 250);
+}
+
+// ============================================================================
+// CSV Downloads with StreamSaver
+// ============================================================================
+let streamSaver = null;
+
+async function loadStreamSaver() {
+  if (streamSaver) return streamSaver;
+
+  const mod = await import('https://cdn.jsdelivr.net/npm/streamsaver@2.0.6/+esm');
+  streamSaver = mod.default;
+
+  // Configure StreamSaver to use our service worker
+  streamSaver.mitm = '/sw.js';
+
+  return streamSaver;
+}
+
+async function downloadFullCSV() {
+  if (!conn) return;
+
+  beginWork();
+  setStatus("Preparing download...");
+
+  try {
+    updateRawFilter();
+    const columns = buildColumnsParamFromUI();
+    if (columns.length === 0) {
+      setStatus("Select at least one column");
+      endWork();
+      return;
+    }
+
+    const where = buildWhereSql(filter);
+    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
+
+    const ss = await loadStreamSaver();
+    const fileStream = ss.createWriteStream('spotify_full.csv');
+    const writer = fileStream.getWriter();
+    const encoder = new TextEncoder();
+
+    // Write header
+    await writer.write(encoder.encode(columns.join(',') + '\n'));
+
+    setStatus("Downloading...");
+
+    // Stream results
+    let rowCount = 0;
+    for await (const batch of await conn.send(sql)) {
+      const csvChunk = arrowBatchToCSV(batch, false);
+      await writer.write(encoder.encode(csvChunk));
+      rowCount += batch.numRows;
+      setStatus(`Downloading... ${rowCount.toLocaleString()} rows`);
+    }
+
+    await writer.close();
+    setStatus(`Download complete: ${rowCount.toLocaleString()} rows`);
+  } catch (e) {
+    setStatus(`Download error: ${e.message}`);
+    console.error(e);
+  } finally {
+    endWork();
+  }
+}
+
+async function downloadSampleCSV() {
+  if (!conn) return;
+
+  const kRaw = el("sampleK").value;
+  const k = Number(kRaw);
+  if (!Number.isFinite(k) || !Number.isInteger(k) || k < 1) {
+    setStatus("Sample k must be an integer >= 1");
+    return;
+  }
+
+  beginWork();
+  setStatus("Preparing sample download...");
+
+  try {
+    updateRawFilter();
+    const columns = buildColumnsParamFromUI();
+    if (columns.length === 0) {
+      setStatus("Select at least one column");
+      endWork();
+      return;
+    }
+
+    const where = buildWhereSql(filter);
+    const seed = Math.floor(Math.random() * 1000000);
+
+    // DuckDB's USING SAMPLE with reservoir sampling
+    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} USING SAMPLE reservoir(${k} ROWS) REPEATABLE(${seed})`;
+
+    const ss = await loadStreamSaver();
+    const fileStream = ss.createWriteStream(`spotify_sample_k${k}_seed${seed}.csv`);
+    const writer = fileStream.getWriter();
+    const encoder = new TextEncoder();
+
+    // Write header
+    await writer.write(encoder.encode(columns.join(',') + '\n'));
+
+    setStatus("Downloading sample...");
+
+    // Stream results
+    let rowCount = 0;
+    for await (const batch of await conn.send(sql)) {
+      const csvChunk = arrowBatchToCSV(batch, false);
+      await writer.write(encoder.encode(csvChunk));
+      rowCount += batch.numRows;
+      setStatus(`Downloading sample... ${rowCount.toLocaleString()} rows`);
+    }
+
+    await writer.close();
+    setStatus(`Sample download complete: ${rowCount.toLocaleString()} rows (seed: ${seed})`);
+  } catch (e) {
+    setStatus(`Download error: ${e.message}`);
+    console.error(e);
+  } finally {
+    endWork();
+  }
+}
+
+// ============================================================================
+// UI Rendering
+// ============================================================================
+function renderTable(columns, rows) {
+  const table = el("table");
+  table.innerHTML = "";
+
+  const thead = document.createElement("thead");
+  const trh = document.createElement("tr");
+  for (const c of columns) {
+    const th = document.createElement("th");
+    th.textContent = c;
+    trh.appendChild(th);
+  }
+  thead.appendChild(trh);
+  table.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+  for (const r of rows) {
+    const tr = document.createElement("tr");
+    for (const v of r) {
+      const td = document.createElement("td");
+      td.textContent = v === null ? "" : String(v);
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+}
+
+function createFilterRow(initial = {}) {
+  const row = document.createElement("div");
+  row.className = "filter-row";
+
+  const colSel = document.createElement("select");
+  colSel.className = "select";
+  colSel.setAttribute("data-role", "col");
+  for (const c of COLUMNS) {
+    const opt = document.createElement("option");
+    opt.value = c.name;
+    opt.textContent = c.name;
+    colSel.appendChild(opt);
+  }
+
+  const opSel = document.createElement("select");
+  opSel.className = "select";
+  opSel.setAttribute("data-role", "op");
+
+  const valInput = document.createElement("input");
+  valInput.className = "input";
+  valInput.setAttribute("data-role", "val");
+  valInput.spellcheck = false;
+
+  const delBtn = document.createElement("button");
+  delBtn.className = "btn btn-secondary btn-icon";
+  delBtn.type = "button";
+  delBtn.textContent = "×";
+
+  function refreshForColumn() {
+    const meta = COLUMNS.find((c) => c.name === colSel.value);
+    const ops = meta && meta.type === "string" ? OPS_STR : OPS_NUM;
+
+    opSel.innerHTML = "";
+    for (const o of ops) {
+      const opt = document.createElement("option");
+      opt.value = o;
+      opt.textContent = o;
+      opSel.appendChild(opt);
+    }
+
+    if (meta && meta.type === "int") {
+      valInput.type = "number";
+      valInput.step = "1";
+      valInput.placeholder = "123";
+    } else if (meta && meta.type === "float") {
+      valInput.type = "number";
+      valInput.step = "any";
+      valInput.placeholder = "0.123";
+    } else {
+      valInput.type = "text";
+      valInput.placeholder = "text";
+    }
+
+    scheduleEstimate();
+  }
+
+  colSel.addEventListener("change", refreshForColumn);
+  opSel.addEventListener("change", scheduleEstimate);
+  valInput.addEventListener("input", scheduleEstimate);
+
+  delBtn.addEventListener("click", () => {
+    row.remove();
+    scheduleEstimate();
+  });
+
+  row.appendChild(colSel);
+  row.appendChild(opSel);
+  row.appendChild(valInput);
+  row.appendChild(delBtn);
+
+  // Apply initial values.
+  if (initial.col) colSel.value = initial.col;
+  refreshForColumn();
+  if (initial.op) opSel.value = initial.op;
+  if (initial.val != null) valInput.value = String(initial.val);
+
+  return row;
+}
+
+function initFilters() {
+  const container = el("filters");
+  container.innerHTML = "";
+  container.appendChild(
+    createFilterRow({ col: "popularity", op: ">", val: 0 })
+  );
+}
+
+function applyFilter() {
+  page = 0;
+  updateRawFilter();
+  scheduleEstimate();
+  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
+}
+
+function clearFilters() {
+  initFilters();
+  applyFilter();
+}
+
+function renderColumnSelector() {
+  const container = el("columns");
+  container.innerHTML = "";
+  for (const c of COLUMNS) {
+    const label = document.createElement("label");
+    label.className = "colcheck";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = selectedColumns.has(c.name);
+    cb.setAttribute("data-col", c.name);
+    cb.addEventListener("change", () => {
+      if (cb.checked) selectedColumns.add(c.name);
+      else selectedColumns.delete(c.name);
+      page = 0;
+      scheduleEstimate();
+      loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
+    });
+    const span = document.createElement("span");
+    span.textContent = c.name;
+    label.appendChild(cb);
+    label.appendChild(span);
+    container.appendChild(label);
+  }
+}
+
+function setColumnsDefault() {
+  selectedColumns = new Set(
+    COLUMNS.map((c) => c.name).filter((n) => !DEFAULT_DESELECT.has(n))
+  );
+  renderColumnSelector();
+  page = 0;
+  scheduleEstimate();
+  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
+}
+
+function setColumnsAll() {
+  selectedColumns = new Set(COLUMNS.map((c) => c.name));
+  renderColumnSelector();
+  page = 0;
+  scheduleEstimate();
+  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
+}
+
+function setColumnsNone() {
+  selectedColumns = new Set();
+  renderColumnSelector();
+  scheduleEstimate();
+  // Do not reload page; empty selection will show error.
+}
+
+// ============================================================================
+// Event Listeners
+// ============================================================================
+el("addFilter").addEventListener("click", () => {
+  el("filters").appendChild(createFilterRow());
+  scheduleEstimate();
+});
+el("apply").addEventListener("click", applyFilter);
+el("clear").addEventListener("click", clearFilters);
+el("download").addEventListener("click", downloadFullCSV);
+el("downloadSample").addEventListener("click", downloadSampleCSV);
+el("sampleK").addEventListener("input", scheduleEstimate);
+
+el("colsDefault").addEventListener("click", setColumnsDefault);
+el("colsAll").addEventListener("click", setColumnsAll);
+el("colsNone").addEventListener("click", setColumnsNone);
+
+el("prev").addEventListener("click", () => {
+  page = Math.max(0, page - 1);
+  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
+});
+el("next").addEventListener("click", () => {
+  page += 1;
+  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
+});
+
+// ============================================================================
+// Initialization
+// ============================================================================
+async function init() {
+  try {
+    await initDuckDB();
+    hideInitOverlay();
+
+    initFilters();
+    setColumnsDefault();
+    updateRawFilter();
+    scheduleEstimate();
+    // setColumnsDefault already triggers loadPage
+  } catch (e) {
+    setInitStatus(`Error: ${e.message}`);
+    console.error("Initialization error:", e);
+  }
+}
+
+init();
+    </script>
+  </body>
+</html>
