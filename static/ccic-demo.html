@@ -819,29 +819,66 @@ async function downloadSampleCSV() {
     }
 
     const where = buildWhereSql(filter);
-    // Parquet is pre-shuffled, so LIMIT k gives a random sample
-    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT ${k}`;
+    const seed = Math.floor(Math.random() * 1000000);
+
+    // Calculate sample percentage: 3x buffer, minimum 20%, max 100%
+    const pct = lastEstimatedCount && lastEstimatedCount > 0
+      ? Math.min(100, Math.max(20, (k / lastEstimatedCount) * 100 * 3))
+      : 30;
+
+    // Try TABLESAMPLE first, fall back to full scan if not enough rows
+    let batches = [];
+    let totalRows = 0;
+
+    for (const tryPct of [pct, 100]) {
+      if (totalRows >= k) break;
+
+      setStatus(`Sampling at ${tryPct.toFixed(0)}%...`);
+      const sql = `SELECT ${columns.join(', ')} FROM tracks TABLESAMPLE ${tryPct}% (system, ${seed}) ${where} LIMIT ${k}`;
+
+      batches = [];
+      totalRows = 0;
+      for await (const batch of await conn.send(sql)) {
+        batches.push(batch);
+        totalRows += batch.numRows;
+        if (totalRows >= k) break;
+      }
+
+      if (totalRows >= k || tryPct >= 100) break;
+    }
 
     const ss = await loadStreamSaver();
-    const fileStream = ss.createWriteStream(`spotify_sample_k${k}.csv`);
+    const fileStream = ss.createWriteStream(`spotify_sample_k${k}_seed${seed}.csv`);
     const writer = fileStream.getWriter();
     const encoder = new TextEncoder();
 
     // Write header
     await writer.write(encoder.encode(columns.join(',') + '\n'));
 
-    setStatus("Downloading sample...");
+    setStatus("Writing CSV...");
 
-    // Stream results directly
+    // Write collected batches (up to k rows)
     let rowCount = 0;
-    for await (const batch of await conn.send(sql)) {
-      await writeCSVBatch(writer, batch, encoder);
-      rowCount += batch.numRows;
-      setStatus(`Downloading sample... ${rowCount.toLocaleString()} rows`);
+    for (const batch of batches) {
+      const rowsToWrite = Math.min(batch.numRows, k - rowCount);
+      if (rowsToWrite <= 0) break;
+
+      const numCols = batch.numCols;
+      const lines = [];
+      for (let i = 0; i < rowsToWrite; i++) {
+        const row = [];
+        for (let j = 0; j < numCols; j++) {
+          row.push(csvEscape(batch.getChildAt(j).get(i)));
+        }
+        lines.push(row.join(','));
+      }
+      await writer.write(encoder.encode(lines.join('\n') + '\n'));
+      rowCount += rowsToWrite;
+      setStatus(`Writing CSV... ${rowCount.toLocaleString()} rows`);
     }
 
     await writer.close();
-    setStatus(`Sample download complete: ${rowCount.toLocaleString()} rows`);
+    setStatus(`Sample download complete: ${rowCount.toLocaleString()} rows (seed: ${seed})`);
   } catch (e) {
     setStatus(`Download error: ${e.message}`);
     console.error(e);
