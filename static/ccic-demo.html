@@ -655,25 +655,33 @@ async function getEstimate() {
     }
 
     const where = buildWhereSql(filter);
-    // TABLESAMPLE before WHERE allows row-group level skipping
-    const sampleSql = `SELECT ${columns.join(', ')} FROM tracks TABLESAMPLE ${EST_SAMPLE_PCT}% (system, ${EST_SAMPLE_SEED}) ${where} LIMIT 10000`;
-    const sample = await conn.query(sampleSql);
+    const pct = EST_SAMPLE_PCT / 100;
+
+    // COUNT query (no LIMIT) for accurate row estimate
+    const countSql = `SELECT COUNT(*) as cnt FROM tracks TABLESAMPLE ${EST_SAMPLE_PCT}% (system, ${EST_SAMPLE_SEED}) ${where}`;
+    const countResult = await conn.query(countSql);
     if (seq !== estimateSeq) return;
 
-    const sampleRows = sample.numRows;
-    const pct = EST_SAMPLE_PCT / 100;
-    const estimatedCount = pct > 0 ? Math.round(sampleRows / pct) : 0;
+    const sampleCount = Number(countResult.getChildAt(0).get(0));
+    const estimatedCount = pct > 0 ? Math.round(sampleCount / pct) : 0;
 
-    const csvSample = arrowBatchToCSV(sample, true);
-    const avgRowBytes = sampleRows > 0
-      ? (csvSample.length - columns.join(',').length - 1) / sampleRows
+    // Small sample (with LIMIT) just for avg row size calculation
+    const sizeSampleSql = `SELECT ${columns.join(', ')} FROM tracks TABLESAMPLE ${EST_SAMPLE_PCT}% (system, ${EST_SAMPLE_SEED}) ${where} LIMIT 1000`;
+    const sizeSample = await conn.query(sizeSampleSql);
+    if (seq !== estimateSeq) return;
+
+    const sizeSampleRows = sizeSample.numRows;
+    const csvSample = arrowBatchToCSV(sizeSample, true);
+    const headerLen = columns.join(',').length + 1;
+    const avgRowBytes = sizeSampleRows > 0
+      ? (csvSample.length - headerLen) / sizeSampleRows
       : 0;
 
-    const estimatedFullBytes = Math.round(estimatedCount * avgRowBytes + columns.join(',').length + 1);
+    const estimatedFullBytes = Math.round(estimatedCount * avgRowBytes + headerLen);
 
     const k = Number(el("sampleK")?.value || "0");
     const actualSampleK = Math.min(k, estimatedCount);
-    const estimatedSampleBytes = Math.round(actualSampleK * avgRowBytes + columns.join(',').length + 1);
+    const estimatedSampleBytes = Math.round(actualSampleK * avgRowBytes + headerLen);
 
     setText("fullCount", String(estimatedCount));
     setText("count", String(estimatedCount));
