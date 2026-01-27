@@ -655,9 +655,8 @@ async function getEstimate() {
     }
 
     const where = buildWhereSql(filter);
-    const sampleClause = `USING SAMPLE ${EST_SAMPLE_PCT}% (system, ${EST_SAMPLE_SEED})`;
-    const baseSql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
-    const sampleSql = `SELECT * FROM (${baseSql}) s ${sampleClause}`;
+    // TABLESAMPLE before WHERE allows row-group level skipping
+    const sampleSql = `SELECT ${columns.join(', ')} FROM tracks TABLESAMPLE ${EST_SAMPLE_PCT}% (system, ${EST_SAMPLE_SEED}) ${where} LIMIT 10000`;
     const sample = await conn.query(sampleSql);
     if (seq !== estimateSeq) return;
 
