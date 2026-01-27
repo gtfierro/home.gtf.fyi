@@ -821,8 +821,9 @@ async function downloadSampleCSV() {
 
     const where = buildWhereSql(filter);
     const seed = Math.floor(Math.random() * 1000000);
+    // Subquery ensures WHERE is applied before sampling
     // Reservoir sampling: O(n) single pass, guarantees exactly k rows, uniform random
-    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} USING SAMPLE ${k} ROWS (reservoir, ${seed})`;
+    const sql = `SELECT * FROM (SELECT ${columns.join(', ')} FROM tracks ${where}) sub USING SAMPLE ${k} ROWS (reservoir, ${seed})`;
 
     const ss = await loadStreamSaver();
     const fileStream = ss.createWriteStream(`spotify_sample_k${k}_seed${seed}.csv`);
