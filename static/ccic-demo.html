@@ -448,14 +448,25 @@ let conn = null;
 let lastEstimatedCount = null;
 let isDownloading = false;
 let estimateDirty = false;
+let currentIterator = null;
 
-function cancelPendingQueries() {
+async function cancelPendingQueries() {
+  // Cancel the DuckDB query
   if (conn) {
     try {
       conn.cancelSent();
     } catch (e) {
       // Ignore cancellation errors
     }
+  }
+  // Close the iterator to release resources
+  if (currentIterator) {
+    try {
+      if (currentIterator.return) await currentIterator.return();
+    } catch (e) {
+      // Ignore iterator cleanup errors
+    }
+    currentIterator = null;
   }
 }
 
@@ -743,7 +754,7 @@ async function downloadFullCSV() {
   estimateDirty = false;
   estimateSeq += 1;
   if (estimateTimer) clearTimeout(estimateTimer);
-  cancelPendingQueries();
+  await cancelPendingQueries();
 
   beginWork();
   setStatus("Preparing download...");
@@ -771,12 +782,17 @@ async function downloadFullCSV() {
 
     setStatus("Downloading...");
 
-    // Stream results
+    // Stream results with iterator tracking for cancellation
     let rowCount = 0;
-    for await (const batch of await conn.send(sql)) {
-      await writeCSVBatch(writer, batch, encoder);
-      rowCount += batch.numRows;
-      setStatus(`Downloading... ${rowCount.toLocaleString()} rows`);
+    currentIterator = await conn.send(sql);
+    try {
+      for await (const batch of currentIterator) {
+        await writeCSVBatch(writer, batch, encoder);
+        rowCount += batch.numRows;
+        setStatus(`Downloading... ${rowCount.toLocaleString()} rows`);
+      }
+    } finally {
+      currentIterator = null;
     }
 
     await writer.close();
@@ -785,6 +801,7 @@ async function downloadFullCSV() {
     setStatus(`Download error: ${e.message}`);
     console.error(e);
   } finally {
+    currentIterator = null;
     endWork();
     isDownloading = false;
     if (estimateDirty) scheduleEstimate();
@@ -805,7 +822,7 @@ async function downloadSampleCSV() {
   estimateDirty = false;
   estimateSeq += 1;
   if (estimateTimer) clearTimeout(estimateTimer);
-  cancelPendingQueries();
+  await cancelPendingQueries();
 
   beginWork();
   setStatus("Preparing sample download...");
@@ -835,12 +852,17 @@ async function downloadSampleCSV() {
 
     setStatus("Sampling...");
 
-    // Stream results
+    // Stream results with iterator tracking for cancellation
     let rowCount = 0;
-    for await (const batch of await conn.send(sql)) {
-      await writeCSVBatch(writer, batch, encoder);
-      rowCount += batch.numRows;
-      setStatus(`Downloading sample... ${rowCount.toLocaleString()} rows`);
+    currentIterator = await conn.send(sql);
+    try {
+      for await (const batch of currentIterator) {
+        await writeCSVBatch(writer, batch, encoder);
+        rowCount += batch.numRows;
+        setStatus(`Downloading sample... ${rowCount.toLocaleString()} rows`);
+      }
+    } finally {
+      currentIterator = null;
     }
 
     await writer.close();
@@ -849,6 +871,7 @@ async function downloadSampleCSV() {
     setStatus(`Download error: ${e.message}`);
     console.error(e);
   } finally {
+    currentIterator = null;
     endWork();
     isDownloading = false;
     if (estimateDirty) scheduleEstimate();
