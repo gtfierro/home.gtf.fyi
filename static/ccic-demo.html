@@ -330,7 +330,7 @@ th {
     <main class="wrap">
       <header class="header">
         <h1>Parquet Browser (DuckDB WASM)</h1>
-        <div class="muted">100-row pages · AND-only filters · CSV export · Client-side processing</div>
+        <div class="muted">Approx. counts · AND-only filters · CSV export · Client-side processing</div>
       </header>
       <div id="loadingWrap" class="loading-wrap" aria-hidden="true">
         <div class="loading-bar"></div>
@@ -365,7 +365,7 @@ th {
             </div>
             <div class="muted">Estimated size: <span id="fullEstimate">—</span></div>
             <div class="muted">
-              Rows: <span id="fullCount">—</span><span id="count" class="deprecated">—</span>
+              Rows (est.): <span id="fullCount">—</span><span id="count" class="deprecated">—</span>
             </div>
           </div>
           <div class="card">
@@ -386,18 +386,6 @@ th {
         </div>
       </section>
 
-      <section class="pager">
-        <button id="prev" class="btn btn-secondary">Prev</button>
-        <div class="pageinfo">
-          Page <span id="page">0</span>
-        </div>
-        <button id="next" class="btn btn-secondary">Next</button>
-        <button id="apply" class="btn btn-primary">Refresh preview with new filter</button>
-      </section>
-
-      <section class="table-wrap">
-        <table id="table" class="table"></table>
-      </section>
     </main>
 
     <script type="module">
@@ -416,7 +404,8 @@ if (!PARQUET_URL) {
 // ============================================================================
 // Constants
 // ============================================================================
-const PAGE_SIZE = 100;
+const EST_SAMPLE_ROWS = 2000;
+const EST_SAMPLE_SEED = 42;
 
 const COLUMNS = [
   { name: "artist", type: "string" },
@@ -448,13 +437,15 @@ const OPS_STR = ["="];
 // ============================================================================
 // State
 // ============================================================================
-let page = 0;
 let filter = "";
 let selectedColumns = new Set();
 let estimateSeq = 0;
+let estimateTimer = null;
 let pendingRequests = 0;
 let db = null;
 let conn = null;
+let totalRows = null;
+let totalRowsPromise = null;
 
 // ============================================================================
 // DOM Helpers
@@ -575,20 +566,6 @@ function csvEscape(val) {
   return s;
 }
 
-function arrowTableToRows(table) {
-  const rows = [];
-  const numRows = table.numRows;
-  const numCols = table.numCols;
-  for (let i = 0; i < numRows; i++) {
-    const row = [];
-    for (let j = 0; j < numCols; j++) {
-      row.push(table.getChildAt(j).get(i));
-    }
-    rows.push(row);
-  }
-  return rows;
-}
-
 function arrowBatchToCSV(batch, includeHeader = false) {
   const lines = [];
   if (includeHeader) {
@@ -641,37 +618,24 @@ async function initDuckDB() {
 }
 
 // ============================================================================
-// Data Loading
+// Estimates
 // ============================================================================
-async function loadPage() {
-  if (!conn) return;
+async function getTotalRows() {
+  if (totalRows != null) return totalRows;
+  if (totalRowsPromise) return totalRowsPromise;
 
-  setStatus("Loading...");
-  beginWork();
+  totalRowsPromise = (async () => {
+    const sql = `SELECT SUM(num_rows) AS total_rows FROM parquet_metadata(${sqlEscapeString(PARQUET_URL)})`;
+    const result = await conn.query(sql);
+    const value = Number(result.getChildAt(0).get(0));
+    return Number.isFinite(value) ? value : 0;
+  })();
 
   try {
-    updateRawFilter();
-    const columns = buildColumnsParamFromUI();
-    if (columns.length === 0) {
-      setStatus("Select at least one column");
-      endWork();
-      return;
-    }
-
-    const where = buildWhereSql(filter);
-    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT ${PAGE_SIZE} OFFSET ${page * PAGE_SIZE}`;
-
-    const result = await conn.query(sql);
-    const rows = arrowTableToRows(result);
-
-    renderTable(columns, rows);
-    el("page").textContent = String(page);
-    setStatus("");
-  } catch (e) {
-    setStatus(`Query error: ${e.message}`);
-    console.error(e);
+    totalRows = await totalRowsPromise;
+    return totalRows;
   } finally {
-    endWork();
+    totalRowsPromise = null;
   }
 }
 
@@ -690,28 +654,32 @@ async function getEstimate() {
     }
 
     const where = buildWhereSql(filter);
-
-    // Get count
-    const countResult = await conn.query(`SELECT COUNT(*) as cnt FROM tracks ${where}`);
+    const total = await getTotalRows();
     if (seq !== estimateSeq) return;
-    const count = Number(countResult.getChildAt(0).get(0));
 
-    // Sample for average row size
-    const sampleSql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT 1000`;
+    const sampleN = Math.max(1, Math.min(EST_SAMPLE_ROWS, total || EST_SAMPLE_ROWS));
+    const baseSampleSql = `SELECT ${columns.join(', ')} FROM tracks USING SAMPLE reservoir(${sampleN} ROWS) REPEATABLE(${EST_SAMPLE_SEED})`;
+    const sampleSql = where ? `SELECT * FROM (${baseSampleSql}) s ${where}` : baseSampleSql;
     const sample = await conn.query(sampleSql);
     if (seq !== estimateSeq) return;
-    const csvSample = arrowBatchToCSV(sample, true);
-    const sampleRows = sample.numRows;
-    const avgRowBytes = sampleRows > 0 ? (csvSample.length - columns.join(',').length - 1) / sampleRows : 0;
 
-    const estimatedFullBytes = Math.round(count * avgRowBytes + columns.join(',').length + 1);
+    const sampleRows = sample.numRows;
+    const selectivity = sampleN > 0 ? sampleRows / sampleN : 0;
+    const estimatedCount = where ? Math.round(total * selectivity) : total;
+
+    const csvSample = arrowBatchToCSV(sample, true);
+    const avgRowBytes = sampleRows > 0
+      ? (csvSample.length - columns.join(',').length - 1) / sampleRows
+      : 0;
+
+    const estimatedFullBytes = Math.round(estimatedCount * avgRowBytes + columns.join(',').length + 1);
 
     const k = Number(el("sampleK")?.value || "0");
-    const actualSampleK = Math.min(k, count);
+    const actualSampleK = Math.min(k, estimatedCount);
     const estimatedSampleBytes = Math.round(actualSampleK * avgRowBytes + columns.join(',').length + 1);
 
-    setText("fullCount", String(count));
-    setText("count", String(count));
+    setText("fullCount", String(estimatedCount));
+    setText("count", String(estimatedCount));
     el("fullEstimate").textContent = `${fmtBytes(estimatedFullBytes)} (est.)`;
     el("sampleEstimate").textContent = k > 0 ? `${fmtBytes(estimatedSampleBytes)} (est.)` : "—";
   } catch (e) {
@@ -725,6 +693,10 @@ function scheduleEstimate() {
   setText("fullCount", "—");
   el("fullEstimate").textContent = "—";
   el("sampleEstimate").textContent = "—";
+  if (estimateTimer) clearTimeout(estimateTimer);
+  estimateTimer = setTimeout(() => {
+    getEstimate();
+  }, 250);
 }
 
 // ============================================================================
@@ -852,33 +824,6 @@ async function downloadSampleCSV() {
 // ============================================================================
 // UI Rendering
 // ============================================================================
-function renderTable(columns, rows) {
-  const table = el("table");
-  table.innerHTML = "";
-
-  const thead = document.createElement("thead");
-  const trh = document.createElement("tr");
-  for (const c of columns) {
-    const th = document.createElement("th");
-    th.textContent = c;
-    trh.appendChild(th);
-  }
-  thead.appendChild(trh);
-  table.appendChild(thead);
-
-  const tbody = document.createElement("tbody");
-  for (const r of rows) {
-    const tr = document.createElement("tr");
-    for (const v of r) {
-      const td = document.createElement("td");
-      td.textContent = v === null ? "" : String(v);
-      tr.appendChild(td);
-    }
-    tbody.appendChild(tr);
-  }
-  table.appendChild(tbody);
-}
-
 function createFilterRow(initial = {}) {
   const row = document.createElement("div");
   row.className = "filter-row";
@@ -966,18 +911,9 @@ function initFilters() {
   );
 }
 
-function applyFilter() {
-  page = 0;
-  updateRawFilter();
-  scheduleEstimate();
-  loadPage()
-    .then(() => getEstimate())
-    .catch((e) => setStatus(`Page error: ${e.message}`));
-}
-
 function clearFilters() {
   initFilters();
-  applyFilter();
+  scheduleEstimate();
 }
 
 function renderColumnSelector() {
@@ -993,9 +929,7 @@ function renderColumnSelector() {
     cb.addEventListener("change", () => {
       if (cb.checked) selectedColumns.add(c.name);
       else selectedColumns.delete(c.name);
-      page = 0;
       scheduleEstimate();
-      loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
     });
     const span = document.createElement("span");
     span.textContent = c.name;
@@ -1010,24 +944,19 @@ function setColumnsDefault() {
     COLUMNS.map((c) => c.name).filter((n) => !DEFAULT_DESELECT.has(n))
   );
   renderColumnSelector();
-  page = 0;
   scheduleEstimate();
-  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
 }
 
 function setColumnsAll() {
   selectedColumns = new Set(COLUMNS.map((c) => c.name));
   renderColumnSelector();
-  page = 0;
   scheduleEstimate();
-  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
 }
 
 function setColumnsNone() {
   selectedColumns = new Set();
   renderColumnSelector();
   scheduleEstimate();
-  // Do not reload page; empty selection will show error.
 }
 
 // ============================================================================
@@ -1037,7 +966,6 @@ el("addFilter").addEventListener("click", () => {
   el("filters").appendChild(createFilterRow());
   scheduleEstimate();
 });
-el("apply").addEventListener("click", applyFilter);
 el("clear").addEventListener("click", clearFilters);
 el("download").addEventListener("click", downloadFullCSV);
 el("downloadSample").addEventListener("click", downloadSampleCSV);
@@ -1046,15 +974,6 @@ el("sampleK").addEventListener("input", scheduleEstimate);
 el("colsDefault").addEventListener("click", setColumnsDefault);
 el("colsAll").addEventListener("click", setColumnsAll);
 el("colsNone").addEventListener("click", setColumnsNone);
-
-el("prev").addEventListener("click", () => {
-  page = Math.max(0, page - 1);
-  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
-});
-el("next").addEventListener("click", () => {
-  page += 1;
-  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
-});
 
 // ============================================================================
 // Initialization
@@ -1067,8 +986,7 @@ async function init() {
     initFilters();
     setColumnsDefault();
     updateRawFilter();
-    getEstimate();
-    // setColumnsDefault already triggers loadPage
+    scheduleEstimate();
   } catch (e) {
     setInitStatus(`Error: ${e.message}`);
     console.error("Initialization error:", e);
