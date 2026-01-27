@@ -633,7 +633,7 @@ async function getEstimate() {
     }
 
     const where = buildWhereSql(filter);
-    const sampleClause = `USING SAMPLE ${EST_SAMPLE_PCT} PERCENT REPEATABLE(${EST_SAMPLE_SEED})`;
+    const sampleClause = `USING SAMPLE ${EST_SAMPLE_PCT} PERCENT (system, ${EST_SAMPLE_SEED})`;
     const sampleSql = `SELECT ${columns.join(', ')} FROM tracks ${sampleClause} ${where}`;
     const sample = await conn.query(sampleSql);
     if (seq !== estimateSeq) return;
