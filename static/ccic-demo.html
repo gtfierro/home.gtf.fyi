@@ -451,7 +451,7 @@ const OPS_STR = ["="];
 let page = 0;
 let filter = "";
 let selectedColumns = new Set();
-let estimateTimer = null;
+let estimateSeq = 0;
 let pendingRequests = 0;
 let db = null;
 let conn = null;
@@ -677,6 +677,7 @@ async function loadPage() {
 
 async function getEstimate() {
   if (!conn) return;
+  const seq = ++estimateSeq;
 
   try {
     updateRawFilter();
@@ -692,11 +693,13 @@ async function getEstimate() {
 
     // Get count
     const countResult = await conn.query(`SELECT COUNT(*) as cnt FROM tracks ${where}`);
+    if (seq !== estimateSeq) return;
     const count = Number(countResult.getChildAt(0).get(0));
 
     // Sample for average row size
     const sampleSql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT 1000`;
     const sample = await conn.query(sampleSql);
+    if (seq !== estimateSeq) return;
     const csvSample = arrowBatchToCSV(sample, true);
     const sampleRows = sample.numRows;
     const avgRowBytes = sampleRows > 0 ? (csvSample.length - columns.join(',').length - 1) / sampleRows : 0;
@@ -718,10 +721,10 @@ async function getEstimate() {
 }
 
 function scheduleEstimate() {
-  if (estimateTimer) clearTimeout(estimateTimer);
-  estimateTimer = setTimeout(() => {
-    getEstimate();
-  }, 250);
+  estimateSeq += 1;
+  setText("fullCount", "—");
+  el("fullEstimate").textContent = "—";
+  el("sampleEstimate").textContent = "—";
 }
 
 // ============================================================================
@@ -813,8 +816,9 @@ async function downloadSampleCSV() {
     const where = buildWhereSql(filter);
     const seed = Math.floor(Math.random() * 1000000);
 
-    // DuckDB's USING SAMPLE with reservoir sampling
-    const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} USING SAMPLE reservoir(${k} ROWS) REPEATABLE(${seed})`;
+    // Sample after filters are applied, using DuckDB reservoir sampling.
+    const baseSql = `SELECT ${columns.join(', ')} FROM tracks ${where}`;
+    const sql = `SELECT * FROM (${baseSql}) t USING SAMPLE reservoir(${k} ROWS) REPEATABLE(${seed})`;
 
     const ss = await loadStreamSaver();
     const fileStream = ss.createWriteStream(`spotify_sample_k${k}_seed${seed}.csv`);
@@ -966,7 +970,9 @@ function applyFilter() {
   page = 0;
   updateRawFilter();
   scheduleEstimate();
-  loadPage().catch((e) => setStatus(`Page error: ${e.message}`));
+  loadPage()
+    .then(() => getEstimate())
+    .catch((e) => setStatus(`Page error: ${e.message}`));
 }
 
 function clearFilters() {
@@ -1061,7 +1067,7 @@ async function init() {
     initFilters();
     setColumnsDefault();
     updateRawFilter();
-    scheduleEstimate();
+    getEstimate();
     // setColumnsDefault already triggers loadPage
   } catch (e) {
     setInitStatus(`Error: ${e.message}`);
