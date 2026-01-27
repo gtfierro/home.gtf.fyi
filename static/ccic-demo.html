@@ -402,20 +402,21 @@ th {
 
     <script type="module">
 // ============================================================================
-// Configuration - Read parquet URL from query parameter
+// Configuration - Read S3 URI from query parameter
 // ============================================================================
 const params = new URLSearchParams(window.location.search);
-const PARQUET_URL = params.get('url');
+const S3_URI = params.get('url');
+const S3_REGION = params.get('region') || 'us-east-2';
 
-if (!PARQUET_URL) {
+if (!S3_URI) {
   document.getElementById('initStatus').textContent = 'Missing ?url= parameter';
   document.getElementById('initOverlay').querySelector('.spinner').style.display = 'none';
-  throw new Error('Usage: duckdb.html?url=https://bucket.s3.region.amazonaws.com/folder/');
+  throw new Error('Usage: duckdb.html?url=s3://bucket/path/&region=us-east-2');
 }
 
-// Ensure URL ends with / and build glob pattern for partitioned dataset
-const baseUrl = PARQUET_URL.endsWith('/') ? PARQUET_URL : PARQUET_URL + '/';
-const PARQUET_GLOB = baseUrl + '**/*.parquet';
+// Build glob pattern for partitioned dataset
+const baseUri = S3_URI.endsWith('/') ? S3_URI : S3_URI + '/';
+const PARQUET_GLOB = baseUri + '**/*.parquet';
 
 // ============================================================================
 // Constants
@@ -645,6 +646,12 @@ async function initDuckDB() {
 
   setInitStatus("Connecting to database...");
   conn = await db.connect();
+
+  setInitStatus("Configuring S3 access...");
+  // Configure for anonymous access to public bucket
+  await conn.query(`SET s3_region='${S3_REGION}'`);
+  await conn.query(`SET s3_access_key_id=''`);
+  await conn.query(`SET s3_secret_access_key=''`);
 
   setInitStatus("Registering partitioned parquet dataset...");
   // Use glob pattern with hive_partitioning for partitioned datasets
