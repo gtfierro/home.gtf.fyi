@@ -406,6 +406,7 @@ if (!PARQUET_URL) {
 // ============================================================================
 const EST_SAMPLE_PCT = 5;
 const EST_SAMPLE_SEED = 42;
+const CSV_CHUNK_ROWS = 1000;
 
 const COLUMNS = [
   { name: "artist", type: "string" },
@@ -584,6 +585,24 @@ function arrowBatchToCSV(batch, includeHeader = false) {
   return lines.join('\n') + (lines.length > 0 ? '\n' : '');
 }
 
+async function writeCSVBatch(writer, batch, encoder) {
+  const numRows = batch.numRows;
+  const numCols = batch.numCols;
+  for (let offset = 0; offset < numRows; offset += CSV_CHUNK_ROWS) {
+    const end = Math.min(numRows, offset + CSV_CHUNK_ROWS);
+    const lines = [];
+    for (let i = offset; i < end; i++) {
+      const row = [];
+      for (let j = 0; j < numCols; j++) {
+        row.push(csvEscape(batch.getChildAt(j).get(i)));
+      }
+      lines.push(row.join(','));
+    }
+    const chunk = lines.join('\n') + '\n';
+    await writer.write(encoder.encode(chunk));
+  }
+}
+
 // ============================================================================
 // DuckDB Initialization
 // ============================================================================
@@ -736,8 +755,7 @@ async function downloadFullCSV() {
     // Stream results
     let rowCount = 0;
     for await (const batch of await conn.send(sql)) {
-      const csvChunk = arrowBatchToCSV(batch, false);
-      await writer.write(encoder.encode(csvChunk));
+      await writeCSVBatch(writer, batch, encoder);
       rowCount += batch.numRows;
       setStatus(`Downloading... ${rowCount.toLocaleString()} rows`);
     }
@@ -808,8 +826,7 @@ async function downloadSampleCSV() {
     // Stream results
     let rowCount = 0;
     for await (const batch of await conn.send(sql)) {
-      const csvChunk = arrowBatchToCSV(batch, false);
-      await writer.write(encoder.encode(csvChunk));
+      await writeCSVBatch(writer, batch, encoder);
       rowCount += batch.numRows;
       setStatus(`Downloading sample... ${rowCount.toLocaleString()} rows`);
     }
