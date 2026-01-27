@@ -449,6 +449,16 @@ let lastEstimatedCount = null;
 let isDownloading = false;
 let estimateDirty = false;
 
+async function cancelPendingQueries() {
+  if (conn) {
+    try {
+      await conn.cancelSent();
+    } catch (e) {
+      // Ignore cancellation errors
+    }
+  }
+}
+
 // ============================================================================
 // DOM Helpers
 // ============================================================================
@@ -733,6 +743,7 @@ async function downloadFullCSV() {
   estimateDirty = false;
   estimateSeq += 1;
   if (estimateTimer) clearTimeout(estimateTimer);
+  await cancelPendingQueries();
 
   beginWork();
   setStatus("Preparing download...");
@@ -793,6 +804,7 @@ async function downloadSampleCSV() {
   estimateDirty = false;
   estimateSeq += 1;
   if (estimateTimer) clearTimeout(estimateTimer);
+  await cancelPendingQueries();
 
   beginWork();
   setStatus("Preparing sample download...");
