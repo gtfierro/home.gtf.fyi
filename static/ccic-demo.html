@@ -410,12 +410,8 @@ const PARQUET_URL = params.get('url');
 if (!PARQUET_URL) {
   document.getElementById('initStatus').textContent = 'Missing ?url= parameter';
   document.getElementById('initOverlay').querySelector('.spinner').style.display = 'none';
-  throw new Error('Usage: duckdb.html?url=https://bucket.s3.region.amazonaws.com/folder/');
+  throw new Error('Usage: duckdb.html?url=https://example.com/file.parquet');
 }
-
-// Ensure URL ends with / and build glob pattern for partitioned dataset
-const baseUrl = PARQUET_URL.endsWith('/') ? PARQUET_URL : PARQUET_URL + '/';
-const PARQUET_GLOB = baseUrl + '**/*.parquet';
 
 // ============================================================================
 // Constants
@@ -446,14 +442,6 @@ const COLUMNS = [
 ];
 
 const DEFAULT_DESELECT = new Set(["time_signature", "null_response"]);
-
-// Only these columns can be used in filters
-const FILTER_COLUMNS = [
-  { name: "popularity", type: "int" },
-  { name: "release_year", type: "int" },
-  { name: "genre", type: "string" },
-];
-
 const OPS_NUM = ["=", ">", "<", ">=", "<="];
 const OPS_STR = ["="];
 
@@ -467,7 +455,6 @@ let estimateTimer = null;
 let pendingRequests = 0;
 let db = null;
 let conn = null;
-let queryVersion = 0; // Increment to preempt in-flight queries
 
 // ============================================================================
 // DOM Helpers
@@ -544,7 +531,7 @@ function buildFilterFromUI() {
 
     if (isEmptyValue(val)) continue;
 
-    const colMeta = FILTER_COLUMNS.find((c) => c.name === col);
+    const colMeta = COLUMNS.find((c) => c.name === col);
     if (!colMeta) continue;
 
     if (colMeta.type === "string") {
@@ -646,9 +633,9 @@ async function initDuckDB() {
   setInitStatus("Connecting to database...");
   conn = await db.connect();
 
-  setInitStatus("Registering partitioned parquet dataset...");
-  // Use glob pattern with hive_partitioning for partitioned datasets
-  await conn.query(`CREATE VIEW tracks AS SELECT * FROM read_parquet('${PARQUET_GLOB}', hive_partitioning=true)`);
+  setInitStatus("Registering parquet file...");
+  // DuckDB handles HTTP range requests automatically for remote parquet files
+  await conn.query(`CREATE VIEW tracks AS SELECT * FROM '${PARQUET_URL}'`);
 
   setInitStatus("Ready!");
 }
@@ -658,9 +645,6 @@ async function initDuckDB() {
 // ============================================================================
 async function loadPage() {
   if (!conn) return;
-
-  queryVersion++;
-  const myVersion = queryVersion;
 
   setStatus("Loading...");
   beginWork();
@@ -678,21 +662,13 @@ async function loadPage() {
     const sql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT ${PAGE_SIZE} OFFSET ${page * PAGE_SIZE}`;
 
     const result = await conn.query(sql);
-
-    // Ignore result if a newer query was started
-    if (myVersion !== queryVersion) {
-      endWork();
-      return;
-    }
-
     const rows = arrowTableToRows(result);
+
     renderTable(columns, rows);
     el("page").textContent = String(page);
     setStatus("");
   } catch (e) {
-    if (myVersion === queryVersion) {
-      setStatus(`Query error: ${e.message}`);
-    }
+    setStatus(`Query error: ${e.message}`);
     console.error(e);
   } finally {
     endWork();
@@ -701,8 +677,6 @@ async function loadPage() {
 
 async function getEstimate() {
   if (!conn) return;
-
-  const myVersion = queryVersion;
 
   try {
     updateRawFilter();
@@ -718,14 +692,11 @@ async function getEstimate() {
 
     // Get count
     const countResult = await conn.query(`SELECT COUNT(*) as cnt FROM tracks ${where}`);
-    if (myVersion !== queryVersion) return; // Preempted
     const count = Number(countResult.getChildAt(0).get(0));
 
     // Sample for average row size
     const sampleSql = `SELECT ${columns.join(', ')} FROM tracks ${where} LIMIT 1000`;
     const sample = await conn.query(sampleSql);
-    if (myVersion !== queryVersion) return; // Preempted
-
     const csvSample = arrowBatchToCSV(sample, true);
     const sampleRows = sample.numRows;
     const avgRowBytes = sampleRows > 0 ? (csvSample.length - columns.join(',').length - 1) / sampleRows : 0;
@@ -741,10 +712,8 @@ async function getEstimate() {
     el("fullEstimate").textContent = `${fmtBytes(estimatedFullBytes)} (est.)`;
     el("sampleEstimate").textContent = k > 0 ? `${fmtBytes(estimatedSampleBytes)} (est.)` : "—";
   } catch (e) {
-    if (myVersion === queryVersion) {
-      console.error("Estimate error:", e);
-      setStatus(`Estimate error: ${e.message}`);
-    }
+    console.error("Estimate error:", e);
+    setStatus(`Estimate error: ${e.message}`);
   }
 }
 
@@ -913,7 +882,7 @@ function createFilterRow(initial = {}) {
   const colSel = document.createElement("select");
   colSel.className = "select";
   colSel.setAttribute("data-role", "col");
-  for (const c of FILTER_COLUMNS) {
+  for (const c of COLUMNS) {
     const opt = document.createElement("option");
     opt.value = c.name;
     opt.textContent = c.name;
@@ -935,7 +904,7 @@ function createFilterRow(initial = {}) {
   delBtn.textContent = "×";
 
   function refreshForColumn() {
-    const meta = FILTER_COLUMNS.find((c) => c.name === colSel.value);
+    const meta = COLUMNS.find((c) => c.name === colSel.value);
     const ops = meta && meta.type === "string" ? OPS_STR : OPS_NUM;
 
     opSel.innerHTML = "";
