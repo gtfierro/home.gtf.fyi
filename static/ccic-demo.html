@@ -434,6 +434,7 @@ const COLUMNS = [
 const DEFAULT_DESELECT = new Set(["time_signature", "null_response"]);
 const OPS_NUM = ["=", ">", "<", ">=", "<="];
 const OPS_STR = ["="];
+const FILTER_COLUMNS = new Set(["release_year", "genre"]);
 
 // ============================================================================
 // State
@@ -889,6 +890,7 @@ function createFilterRow(initial = {}) {
   colSel.className = "select";
   colSel.setAttribute("data-role", "col");
   for (const c of COLUMNS) {
+    if (!FILTER_COLUMNS.has(c.name)) continue;
     const opt = document.createElement("option");
     opt.value = c.name;
     opt.textContent = c.name;
