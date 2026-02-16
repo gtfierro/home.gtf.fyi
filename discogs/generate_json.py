@@ -7,7 +7,7 @@ import discogs_client
 import json
 import os
 import time
-from typing import Any, Sequence
+from typing import Any  # used in type hints
 
 
 class _Backoff:
@@ -25,30 +25,35 @@ class _Backoff:
         self.delay = self.base_delay
 
 
-def _get_release_images_with_retry(
-    release: Any,
+
+def _iter_collection_with_retry(
+    folder: Any,
     backoff: _Backoff,
     *,
     max_attempts: int = 5,
-) -> Sequence[dict]:
-    for attempt in range(1, max_attempts + 1):
-        try:
-            images = release.images
-        except Exception:
-            if attempt >= max_attempts:
-                return []
-            time.sleep(backoff.next_delay())
+) -> list:
+    """Iterate collection pages with retry on rate-limit errors."""
+    items = []
+    page_num = 1
+    while True:
+        for attempt in range(1, max_attempts + 1):
             try:
-                if hasattr(release, "refresh"):
-                    release.refresh()
-                elif hasattr(release, "fetch"):
-                    release.fetch()
+                page = folder.releases.page(page_num)
+                break
             except Exception:
-                pass
+                if attempt >= max_attempts:
+                    return items
+                delay = backoff.next_delay()
+                print(f"  Rate limited on page {page_num}, retrying in {delay:.1f}s...")
+                time.sleep(delay)
         else:
-            backoff.reset()
-            return images
-    return []
+            break
+        backoff.reset()
+        if not page:
+            break
+        items.extend(page)
+        page_num += 1
+    return items
 
 
 def main() -> None:
@@ -60,12 +65,19 @@ def main() -> None:
     me = client.identity()
     records = []
     backoff = _Backoff(base_delay=0.5, max_delay=8.0)
-    for item in me.collection_folders[0].releases:
-        names = [artist.name for artist in item.release.artists]
+    items = _iter_collection_with_retry(me.collection_folders[0], backoff)
+    for item in items:
+        # Access release.data directly to avoid triggering lazy API fetches.
+        # item.release is pre-populated from basic_information in the
+        # collection response, but accessing ListField attrs like .artists
+        # can trigger a full /releases/{id} call if the key lookup misses.
+        release = item.release
+        data = release.data
+        artists = data.get("artists", [])
+        names = [a["name"] if isinstance(a, dict) else a.name for a in artists]
         artist_name = ", ".join(names)
-        album_title = item.release.title
-        images = _get_release_images_with_retry(item.release, backoff)
-        image = images[0]["uri"] if images else "No image"
+        album_title = data.get("title", release.title)
+        image = data.get("thumb") or data.get("cover_image") or "No image"
         print(f"Found record: {artist_name} - {album_title}")
         records.append(
             {
