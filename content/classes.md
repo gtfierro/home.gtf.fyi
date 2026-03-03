@@ -3,9 +3,17 @@ title: "Classes"
 date: 2021-06-12T12:13:19-07:00
 ---
 
+## 2026
+
+### Spring
+
+- CSCI403: Introduction to Databases
+    - I made a utility for creating temporary postgres databases: https://git.sr.ht/~gabe/pg
+
+
 ## 2025
 
-## Fall
+### Fall
 
 - CSCI598: Advanced Databases
 
@@ -22,7 +30,7 @@ illustrate some concepts in the class. Here's a list:
     - also see [vector.sql](/advdb/vector.sql) for how to load some wiki abstract embeddings into a DuckDB table
     - [DuckDB VSS docs](https://duckdb.org/docs/stable/core_extensions/vss#index-options)
 
-## Spring
+### Spring
 
 - CSCI403: Introduction to Databases
 
