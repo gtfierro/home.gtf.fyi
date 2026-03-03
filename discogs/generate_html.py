@@ -103,8 +103,13 @@ TEMPLATE = """<!doctype html>
         const record = records[Math.floor(Math.random() * records.length)];
         title.textContent = record.title;
         artist.textContent = record.artist;
-        if (record.image && record.image !== 'No image') {
-          cover.src = record.image;
+        const imageUrl =
+          (record.image_high_res && record.image_high_res !== 'No image' && record.image_high_res) ||
+          (record.image && record.image !== 'No image' && record.image) ||
+          null;
+
+        if (imageUrl) {
+          cover.src = imageUrl;
           cover.alt = `${record.title} cover`;
           cover.style.display = '';
         } else {
