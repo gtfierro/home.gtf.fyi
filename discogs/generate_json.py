@@ -4,6 +4,7 @@
 # ]
 # ///
 import discogs_client
+import argparse
 import json
 import os
 import time
@@ -56,7 +57,37 @@ def _iter_collection_with_retry(
     return items
 
 
+def _extract_high_res_image_url(release: Any) -> str:
+    """Return the best available high-res image URL for a release."""
+    data = release.data
+    images = data.get("images")
+    if not images:
+        # Optional lazy fetch; this may trigger one extra API call per release.
+        try:
+            images = release.images
+        except Exception:
+            images = []
+
+    for image in images or []:
+        if isinstance(image, dict):
+            uri = image.get("uri")
+        else:
+            uri = getattr(image, "uri", None)
+        if uri:
+            return uri
+
+    return data.get("cover_image") or data.get("thumb") or "No image"
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Export Discogs collection to records.json")
+    parser.add_argument(
+        "--fetch-high-res-images",
+        action="store_true",
+        help="Also include a high-res image URL for each record as image_high_res.",
+    )
+    args = parser.parse_args()
+
     token = os.getenv("DISCOGS_USER_TOKEN")
     if not token:
         raise SystemExit("DISCOGS_USER_TOKEN is not set")
@@ -78,14 +109,18 @@ def main() -> None:
         artist_name = ", ".join(names)
         album_title = data.get("title", release.title)
         image = data.get("thumb") or data.get("cover_image") or "No image"
-        print(f"Found record: {artist_name} - {album_title}")
-        records.append(
-            {
-                "artist": artist_name,
-                "title": album_title,
-                "image": image,
-            }
+        high_res_image = (
+            _extract_high_res_image_url(release) if args.fetch_high_res_images else None
         )
+        print(f"Found record: {artist_name} - {album_title}")
+        record = {
+            "artist": artist_name,
+            "title": album_title,
+            "image": image,
+        }
+        if high_res_image is not None:
+            record["image_high_res"] = high_res_image
+        records.append(record)
 
     with open("records.json", "w", encoding="utf-8") as f:
         json.dump(records, f, ensure_ascii=False, indent=2)
