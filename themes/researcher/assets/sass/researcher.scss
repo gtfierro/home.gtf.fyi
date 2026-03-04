@@ -255,19 +255,22 @@ $y-medium: 1.0rem;
     }
     code {
         color: $black;
-        background-color: #f8f8f8;
+        background-color: #efefef;
         border: 1px solid #cccccc;
-        border-radius: 10%;
-        padding: 0px 4px;
+        border-radius: 3px;
+        padding: 1px 5px;
     }
     pre code {
         all: unset;
     }
     .highlight {
         margin: $y-medium auto;
+        background-color: #f4f4f4;
         border: 1px solid #cccccc;
+        border-left: 3px solid $blue;
+        border-radius: 3px;
         & > pre {
-            padding: 8px 8px;
+            padding: 12px 14px;
         }
     }
 }

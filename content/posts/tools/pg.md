@@ -13,7 +13,7 @@ Could I just put all this in a couple of scripts? Yes! And that's what I did. Bu
 
 Enter `pg`. It's about 300 lines of Python that provides some convenience around postgres Docker containers.
 
-```
+```bash
 pg -h
 usage: pg [-h] [-c COMMAND] [-s SCHEMA] [-d DATABASE] [--dir DIR] [--rc FILE] [--default-rc] [--image IMAGE]
           [--pg VERSION] [--nuke] [--stream-logs] [--conn-string]
@@ -45,14 +45,14 @@ Here are the main features:
 
 I can create a database as easily as:
 
-```
+```bash
 pg
 ```
 
 This creates the database and immediately drops me into the psql prompt.
 If I want to customize the image or postgres version, I can do that with flags:
 
-```
+```bash
 # for postgies
 pg --image postgis/postgis:16-3.4
 # for timescaledb
@@ -63,7 +63,7 @@ pg --version 15
 
 I can quickly load in SQL files that build tables or run example queries:
 
-```
+```bash
 pg schema.sql queries.sql
 ```
 
