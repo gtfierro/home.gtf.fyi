@@ -149,6 +149,26 @@ and now you've got an rdflib graph (`shapes`) that contains the 223P shapes and 
 2026-03-05: it is on my TODO list to integrate ontoenv with BuildingMOTIF. I hope to report this integration soon!
 {{< /announce >}}
 
+If you want to use another tool for managing dependencies (like BuildingMOTIF), you
+can also use `ontoenv` to explicitly list the dependencies of the 223P graph, and then add those dependencies to your tool of choice.
+
+```python
+from ontoenv import OntoEnv
+from buildingmotif import BuildingMOTIF
+from buildingmotif.dataclasses import Library
+
+bm = BuildingMOTIF("sqlite://")
+
+# doesn't scan local directories, won't save anything to disk
+env = OntoEnv(temporary=True)
+env.add("https://open223.info/223p.ttl")
+for dep in env.list_closure("http://data.ashrae.org/standard223/1.0/model/all"):
+    print(dep) # should print out the same list of ontologies as before
+    graph = env.get_graph(dep)
+    # add 'graph' to your tool of choice here, like BuildingMOTIF
+    Library.load(ontology_graph=graph)
+```
+
 ### Validating a model against the 223P shapes
 
 Now that you've got the shapes graph assembled with all the dependencies, you can use it to validate your model.
