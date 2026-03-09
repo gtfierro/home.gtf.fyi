@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heap Files & Indexes — Database Pedagogy Tool</title>
+<style>
+  :root {
+    --bg: #f5f5f5;
+    --surface: #ffffff;
+    --surface2: #f8f9fa;
+    --surface3: #e9ecef;
+    --border: #dee2e6;
+    --border2: #ced4da;
+    --text: #212529;
+    --text-dim: #495057;
+    --text-muted: #6c757d;
+    --accent: #0d6efd;
+    --accent-hover: #0b5ed7;
+    --green: #198754;
+    --green-light: #d1e7dd;
+    --green-text: #0f5132;
+    --yellow: #ffc107;
+    --yellow-light: #fff3cd;
+    --yellow-text: #664d03;
+    --red: #dc3545;
+    --purple: #6f42c1;
+    --purple-light: #e8d9f7;
+    --purple-text: #3d1a7a;
+    --cyan: #0dcaf0;
+    --scan-color: #ffc107;
+    --navbar-bg: #343a40;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* NAVBAR */
+  header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #23272b;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--navbar-bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-icon {
+    font-size: 18px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .logo-text span { color: #adb5bd; font-weight: 400; font-size: 13px; }
+
+  .mode-tabs {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .mode-tab {
+    padding: 5px 14px;
+    border-radius: 4px;
+    border: 1px solid #6c757d;
+    background: transparent;
+    color: #adb5bd;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mode-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .mode-tab:hover:not(.active) {
+    background: #495057;
+    color: #fff;
+  }
+
+  /* LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    min-height: calc(100vh - 53px);
+    transition: grid-template-columns 0.3s ease;
+  }
+
+  .main.sidebar-collapsed {
+    grid-template-columns: 0px 1fr;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 16px 16px 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--surface);
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100vh - 53px);
+    min-height: 0;
+    width: 300px;
+    transition: transform 0.3s ease, opacity 0.25s ease;
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  /* Prevent panels from being squished — let the sidebar scroll instead */
+  .sidebar > .panel {
+    flex-shrink: 0;
+  }
+
+  .main.sidebar-collapsed .sidebar {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* TOGGLE BUTTON */
+  .sidebar-toggle {
+    position: fixed;
+    left: 300px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 200;
+    width: 18px;
+    height: 52px;
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: left 0.3s ease, background 0.15s;
+    user-select: none;
+  }
+
+  .sidebar-toggle:hover { background: var(--border2); color: var(--text); }
+
+  .main.sidebar-collapsed .sidebar-toggle {
+    left: 0px;
+    border-left: 1px solid var(--border2);
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .sidebar-toggle-arrow {
+    transition: transform 0.3s ease;
+    display: block;
+    line-height: 1;
+  }
+
+  .main.sidebar-collapsed .sidebar-toggle-arrow { transform: rotate(180deg); }
+
+  /* CARD / PANEL */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .panel-body { padding: 12px; }
+
+  /* FORM ELEMENTS */
+  .drop-zone {
+    border: 2px dashed var(--border2);
+    border-radius: 4px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--surface2);
+  }
+
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--accent);
+    background: #e8f0fe;
+  }
+
+  .drop-zone p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .drop-zone .icon { font-size: 22px; margin-bottom: 2px; }
+
+  textarea {
+    width: 100%;
+    height: 110px;
+    background: #fff;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    padding: 8px;
+    resize: vertical;
+    outline: none;
+  }
+
+  textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(13,110,253,0.15); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+
+  .btn-primary { background: #0d6efd; border-color: #0d6efd; color: #fff; }
+  .btn-primary:hover { background: #0b5ed7; border-color: #0a58ca; }
+
+  .btn-secondary { background: #6c757d; border-color: #6c757d; color: #fff; }
+  .btn-secondary:hover { background: #5c636a; border-color: #565e64; }
+
+  .btn-success, .btn-green { background: #198754; border-color: #198754; color: #fff; }
+  .btn-success:hover, .btn-green:hover { background: #157347; border-color: #146c43; }
+
+  .btn-warning, .btn-yellow { background: #ffc107; border-color: #ffc107; color: #000; }
+  .btn-warning:hover, .btn-yellow:hover { background: #ffca2c; border-color: #ffc720; }
+
+  .btn-outline { background: #fff; border-color: var(--border2); color: var(--text-dim); }
+  .btn-outline:hover { background: var(--surface2); }
+
+  .btn-sm { padding: 3px 8px; font-size: 12px; }
+  .btn-xs { padding: 2px 6px; font-size: 11px; }
+
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  input[type="text"] {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: "Courier New", Courier, monospace;
+    font-size: 12px;
+    padding: 5px 8px;
+    outline: none;
+  }
+
+  input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(13,110,253,0.15); }
+
+  label {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .form-group { margin-bottom: 10px; }
+
+  select {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--text);
+    font-size: 13px;
+    padding: 5px 8px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .btn-row { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  /* STATS */
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--text-dim); }
+  .stat-val { font-family: "Courier New", monospace; font-weight: 700; color: var(--accent); }
+  .stat-val.green { color: var(--green); }
+  .stat-val.yellow { color: #856404; }
+
+  /* MAIN CONTENT */
+  .content {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 53px);
+    background: var(--bg);
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* HEAP VISUALIZATION */
+  .heap-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    min-height: 60px;
+  }
+
+  .heap-page {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    min-width: 130px;
+    flex: 0 0 auto;
+    transition: outline 0.15s;
+  }
+
+  .heap-page-label {
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    text-align: center;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .record {
+    padding: 4px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 10px;
+    cursor: default;
+    transition: all 0.2s;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  .record.scanning {
+    border-color: #ffc107;
+    background: var(--yellow-light);
+    color: var(--yellow-text);
+    font-weight: 600;
+    transform: scale(1.02);
+  }
+
+  .record.match {
+    border-color: #198754;
+    background: var(--green-light);
+    color: var(--green-text);
+    font-weight: 600;
+  }
+
+  .record.miss {
+    border-color: var(--border);
+    background: var(--surface3);
+    color: #adb5bd;
+    opacity: 0.6;
+  }
+
+  .record.not-scanned {
+    border-color: var(--border);
+    background: #fff;
+    color: var(--text-dim);
+  }
+
+  .record.btree-fetch {
+    border-color: var(--purple);
+    background: var(--purple-light);
+    color: var(--purple-text);
+    font-weight: 600;
+    transform: scale(1.02);
+  }
+
+  /* BTREE */
+  .btree-wrap {
+    position: relative;
+  }
+
+  .btree-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 20px 8px 60px;
+    overflow-x: auto;
+  }
+
+  .btree-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .btree-arrow {
+    stroke: #adb5bd;
+    stroke-width: 1.5;
+    fill: none;
+    marker-end: url(#arrowhead);
+  }
+
+  .btree-arrow.active-arrow {
+    stroke: #0d6efd;
+    stroke-width: 2.5;
+  }
+
+  .btree-level {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .btree-level-label {
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .btree-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .btree-node-box {
+    display: flex;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface2);
+    transition: all 0.2s;
+  }
+
+  .btree-node-box.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.2);
+  }
+
+  .btree-node-box.found {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(25,135,84,0.2);
+  }
+
+  .btree-key {
+    padding: 5px 10px;
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    border-right: 1px solid var(--border2);
+    min-width: 46px;
+    text-align: center;
+    transition: all 0.2s;
+    background: #fff;
+  }
+
+  .btree-key:last-child { border-right: none; }
+  .btree-key.active { background: #cfe2ff; color: #084298; }
+  .btree-key.found { background: var(--green-light); color: var(--green-text); }
+
+  .btree-ptr {
+    padding: 5px 5px;
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    border-right: 1px solid var(--border);
+    background: var(--surface2);
+    min-width: 24px;
+    text-align: center;
+  }
+
+  .btree-ptr:last-child { border-right: none; }
+  .btree-ptr.active { color: var(--accent); }
+
+  .leaf-pointer {
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Leaf node cells: key on top, RID below */
+  .btree-leaf-cell {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border2);
+    min-width: 60px;
+    transition: all 0.2s;
+  }
+  .btree-leaf-cell:last-child { border-right: none; }
+
+  .btree-leaf-key {
+    padding: 4px 8px;
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    background: #fff;
+    border-bottom: 1px dashed var(--border2);
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .btree-leaf-rid {
+    padding: 3px 8px;
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    background: #f8f9fa;
+    text-align: center;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btree-leaf-cell.key-active .btree-leaf-key  { background: #cfe2ff; color: #084298; }
+  .btree-leaf-cell.key-found  .btree-leaf-key  { background: var(--green-light); color: var(--green-text); }
+  .btree-leaf-cell.rid-active .btree-leaf-rid  { background: #fff3cd; }
+  .btree-leaf-cell.rid-found  .btree-leaf-rid  { background: #f0e8fd; }
+
+  /* Individual RID pointer chips */
+  .btree-rid-chip {
+    display: inline-block;
+    padding: 1px 4px;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    background: #fff;
+    font-family: "Courier New", monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    cursor: default;
+    white-space: nowrap;
+  }
+
+  /* Currently being followed — amber highlight */
+  .btree-rid-chip.rid-chip-active {
+    background: #ffc107;
+    border-color: #e0a800;
+    color: #000;
+    font-weight: 700;
+    box-shadow: 0 0 0 2px rgba(255,193,7,0.4);
+    transform: scale(1.1);
+  }
+
+  /* Successfully fetched — green */
+  .btree-rid-chip.rid-chip-found {
+    background: var(--green-light);
+    border-color: #198754;
+    color: var(--green-text);
+    font-weight: 700;
+  }
+
+  /* Fetched but predicate failed — red/muted */
+  .btree-rid-chip.rid-chip-miss {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #842029;
+    font-weight: 700;
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+
+  /* STEP LOG */
+  .step-log {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    max-height: 170px;
+    overflow-y: auto;
+    line-height: 1.9;
+  }
+
+  .log-entry {
+    padding: 1px 0;
+    border-bottom: 1px solid #f1f3f5;
+    color: var(--text-dim);
+  }
+
+  .log-entry.current { color: var(--accent); font-weight: 700; }
+  .log-entry.match { color: var(--green); }
+  .log-entry.miss { color: #adb5bd; }
+  .log-entry.system { color: var(--purple); font-style: italic; }
+  .log-entry.btree { color: #0dcaf0; }
+
+  /* RESULTS TABLE */
+  .result-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  th {
+    background: var(--surface2);
+    padding: 7px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    border-bottom: 2px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    color: var(--text);
+    background: #fff;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8f9fa; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-blue { background: #cfe2ff; color: #084298; border: 1px solid #b6d4fe; }
+  .badge-green { background: var(--green-light); color: var(--green-text); border: 1px solid #badbcc; }
+  .badge-yellow { background: var(--yellow-light); color: var(--yellow-text); border: 1px solid #ffecb5; }
+  .badge-purple { background: var(--purple-light); color: var(--purple-text); border: 1px solid #d8c4f5; }
+
+  /* MISC */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    color: var(--text-muted);
+    text-align: center;
+    gap: 8px;
+  }
+
+  .empty-state .icon { font-size: 32px; opacity: 0.5; }
+  .empty-state p { font-size: 13px; max-width: 280px; line-height: 1.6; }
+
+  .controls-bar {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  input[type=range] { width: 80px; accent-color: var(--accent); }
+
+  .tag {
+    font-family: "Courier New", monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .tag:hover { border-color: var(--accent); color: var(--accent); background: #e8f0fe; }
+
+  .predicate-examples { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+
+  .index-list { display: flex; flex-direction: column; gap: 5px; margin-top: 6px; }
+
+  .index-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .index-item-label {
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .hidden { display: none !important; }
+
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab {
+    padding: 6px 14px;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid transparent;
+    border-bottom: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.12s;
+    margin-bottom: -1px;
+  }
+
+  .tab.active {
+    background: #fff;
+    border-color: var(--border);
+    border-bottom-color: #fff;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .cols-select { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+
+  .col-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    font-size: 11px;
+    font-family: "Courier New", monospace;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  .col-chip.selected {
+    background: #cfe2ff;
+    border-color: #84b6f4;
+    color: #084298;
+  }
+
+  .col-chip input { display: none; }
+
+  .alert {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .alert-blue { background: #cfe2ff; border-color: #b6d4fe; color: #084298; }
+  .alert-yellow { background: var(--yellow-light); border-color: #ffecb5; color: var(--yellow-text); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🗄</div>
+    <div class="logo-text">DB<span>Viz</span> — Heap Files & Indexes</div>
+  </div>
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('heap')" id="tab-heap">Heap Scan</button>
+    <button class="mode-tab" onclick="setMode('index')" id="tab-index">Index Scan</button>
+  </div>
+</header>
+
+<div class="main" id="mainLayout">
+  <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar">
+    <span class="sidebar-toggle-arrow">‹</span>
+  </button>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- DATA LOAD -->
+    <div class="panel">
+      <div class="panel-header">📂 Data Source</div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:10px;">
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="icon">📄</div>
+          <strong style="font-size:13px;">Drop CSV here</strong>
+          <p>or click to browse</p>
+        </div>
+        <input type="file" id="fileInput" accept=".csv" class="hidden" onchange="handleFile(event)">
+        <div style="font-size:11px;color:var(--text-muted);text-align:center;">— or paste CSV below —</div>
+        <textarea id="csvInput" placeholder="id,name,age,city&#10;1,Alice,28,Boston&#10;2,Bob,34,Chicago&#10;3,Carol,22,Denver&#10;..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="loadData()">Load Data</button>
+          <button class="btn btn-secondary" onclick="loadSample()">Sample</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREDICATE -->
+    <div class="panel">
+      <div class="panel-header">🔍 Query Predicate</div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:10px;">
+        <div class="form-group" style="margin-bottom:0">
+          <label>Filter expression (JavaScript-style)</label>
+          <input type="text" id="predicateInput" placeholder="e.g. age > 30 && city === 'Boston'">
+          <div class="predicate-examples" id="predicateExamples"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>Step delay (ms)</label>
+          <input type="range" id="speedSlider" min="100" max="2000" value="600" style="width:100%">
+          <div style="font-size:11px;color:var(--text-muted);text-align:right" id="speedLabel">600ms</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-green" id="btnRunScan" onclick="startScan()" disabled>▶ Run Scan</button>
+          <button class="btn btn-yellow" id="btnStep" onclick="stepScan()" disabled>Step →</button>
+          <button class="btn btn-secondary" id="btnReset" onclick="resetScan()" disabled>↺ Reset</button>
+        </div>
+        <div id="runAllBtn" class="btn-row">
+          <button class="btn btn-secondary btn-sm" id="btnRunAll" onclick="runAll()" disabled>⚡ Run All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INDEX PANEL (shown in index mode) -->
+    <div class="panel" id="indexPanel" style="display:none;">
+      <div class="panel-header">🌳 Index Management</div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:10px;">
+        <div class="form-group" style="margin-bottom:4px">
+          <label>Select column(s) to index</label>
+          <div class="cols-select" id="indexColsSelect"></div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="buildIndex()">Build B-Tree Index</button>
+        <div class="index-list" id="indexList"></div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel">
+      <div class="panel-header">📊 Scan Statistics</div>
+      <div class="panel-body">
+        <div class="stat-row"><span class="stat-label">Total records</span><span class="stat-val" id="statTotal">—</span></div>
+        <div class="stat-row"><span class="stat-label">Pages read</span><span class="stat-val yellow" id="statPages">—</span></div>
+        <div class="stat-row"><span class="stat-label">Records scanned</span><span class="stat-val yellow" id="statScanned">0</span></div>
+        <div class="stat-row"><span class="stat-label">Records matched</span><span class="stat-val green" id="statMatched">0</span></div>
+        <div class="stat-row"><span class="stat-label">B-Tree nodes visited</span><span class="stat-val" id="statBtree" style="color:var(--cyan)">—</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="mainContent">
+    <div class="empty-state" id="emptyState">
+      <div class="icon">🗄️</div>
+      <strong>Load a dataset to begin</strong>
+      <p>Paste CSV data or upload a file, then set a predicate to visualize heap scans and index lookups step by step.</p>
+    </div>
+
+    <div id="vizArea" class="hidden">
+      <!-- HEAP SECTION -->
+      <div id="heapSection">
+        <div class="section-title">🗃 Heap File <span class="badge badge-blue" style="margin-left:6px;font-size:10px;" id="heapMeta"></span></div>
+        <div class="heap-container" id="heapContainer"></div>
+        <div style="margin-top:12px;margin-bottom:14px;">
+          <div class="section-title">📋 Scan Log</div>
+          <div class="step-log" id="stepLog"><div class="log-entry system">Ready. Run a scan to begin.</div></div>
+        </div>
+        <div id="resultsSection" class="hidden">
+          <div class="section-title">✅ Query Results <span class="badge badge-green" style="margin-left:6px;" id="resultCount"></span></div>
+          <div class="result-table-wrap"><table id="resultsTable"></table></div>
+        </div>
+      </div>
+
+      <!-- INDEX SECTION -->
+      <div id="indexSection" class="hidden">
+        <div class="section-title">🌳 B-Tree Index <span class="badge badge-purple" style="margin-left:6px;" id="btreeMeta"></span></div>
+        <div class="btree-wrap" id="btreeWrap">
+          <svg class="btree-svg" id="btreeSvg">
+            <defs>
+              <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#adb5bd"/>
+              </marker>
+              <marker id="arrowhead-active" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                <polygon points="0 0, 8 3, 0 6" fill="#0d6efd"/>
+              </marker>
+            </defs>
+          </svg>
+          <div class="btree-container" id="btreeContainer">
+            <div class="empty-state" style="padding:30px">
+              <div class="icon">🌳</div>
+              <p>Build an index on a column to see the B-Tree visualization</p>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <div class="section-title">🗃 Heap File Access <span style="font-size:11px;color:var(--text-muted);font-weight:normal;text-transform:none;letter-spacing:0">(records fetched via index pointers)</span></div>
+          <div class="heap-container" id="heapContainer2"></div>
+        </div>
+        <div style="margin-top:12px;margin-bottom:14px;">
+          <div class="section-title">📋 Index Scan Log</div>
+          <div class="step-log" id="stepLog2"><div class="log-entry system">Build an index and run a scan to begin.</div></div>
+        </div>
+        <div id="resultsSection2" class="hidden">
+          <div class="section-title">✅ Query Results <span class="badge badge-green" style="margin-left:6px;" id="resultCount2"></span></div>
+          <div class="result-table-wrap"><table id="resultsTable2"></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ───────────────────────────────────────────────
+// STATE
+// ───────────────────────────────────────────────
+let records = [];
+let columns = [];
+let mode = 'heap';
+let scanning = false;
+let scanTimer = null;
+let scanIndex = 0;
+let matchedRecords = [];
+let RECORDS_PER_PAGE = 4;
+
+// Index state
+let indexes = {}; // colName -> sorted array of {key, rowIds}
+let selectedIndexCols = [];
+let activeIndexKey = null;
+
+// BTree scan state
+let btreeScanSteps = [];
+let btreeScanIdx = 0;
+
+// ───────────────────────────────────────────────
+// INIT
+// ───────────────────────────────────────────────
+document.getElementById('speedSlider').addEventListener('input', function() {
+  document.getElementById('speedLabel').textContent = this.value + 'ms';
+});
+
+// Drag/drop
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('dragover');
+  const f = e.dataTransfer.files[0];
+  if (f) readFile(f);
+});
+
+function handleFile(e) { readFile(e.target.files[0]); }
+function readFile(f) {
+  const r = new FileReader();
+  r.onload = ev => { document.getElementById('csvInput').value = ev.target.result; };
+  r.readAsText(f);
+}
+
+// ───────────────────────────────────────────────
+// CSV PARSE
+// ───────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim());
+  if (lines.length < 2) return null;
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const vals = smartSplit(lines[i]);
+    if (vals.length === 0) continue;
+    const obj = {};
+    headers.forEach((h, j) => {
+      let v = (vals[j] || '').trim().replace(/^"|"$/g,'');
+      obj[h] = isNaN(v) || v === '' ? v : Number(v);
+    });
+    obj.__id = i - 1;
+    rows.push(obj);
+  }
+  return { headers, rows };
+}
+
+function smartSplit(line) {
+  const res = []; let cur = ''; let inQ = false;
+  for (let c of line) {
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { res.push(cur); cur = ''; }
+    else cur += c;
+  }
+  res.push(cur);
+  return res;
+}
+
+function loadData() {
+  const csv = document.getElementById('csvInput').value.trim();
+  if (!csv) { alert('Please paste CSV data or upload a file.'); return; }
+  const parsed = parseCSV(csv);
+  if (!parsed) { alert('Could not parse CSV. Make sure it has a header row.'); return; }
+  records = parsed.rows;
+  columns = parsed.headers;
+  indexes = {};
+  selectedIndexCols = [];
+  resetScan();
+  renderAll();
+}
+
+function loadSample() {
+  const sample = `id,name,age,city,dept,salary
+1,Alice,28,Boston,Engineering,92000
+2,Bob,34,Chicago,Marketing,67000
+3,Carol,22,Denver,Engineering,71000
+4,Dave,45,Boston,Sales,84000
+5,Eve,31,Chicago,Engineering,105000
+6,Frank,27,Denver,HR,58000
+7,Grace,39,Boston,Marketing,73000
+8,Hector,52,Chicago,Engineering,110000
+9,Ivy,24,Denver,Sales,62000
+10,Jack,36,Boston,HR,65000
+11,Kara,29,Chicago,Engineering,98000
+12,Leo,41,Denver,Marketing,76000
+13,Mia,33,Boston,Sales,88000
+14,Noah,47,Chicago,HR,72000
+15,Olivia,26,Denver,Engineering,85000
+16,Pete,55,Boston,Marketing,91000`;
+  document.getElementById('csvInput').value = sample;
+  loadData();
+  document.getElementById('predicateInput').value = "city === 'Boston'";
+  updateExamples();
+}
+
+// ───────────────────────────────────────────────
+// MODE
+// ───────────────────────────────────────────────
+function setMode(m) {
+  mode = m;
+  document.getElementById('tab-heap').classList.toggle('active', m === 'heap');
+  document.getElementById('tab-index').classList.toggle('active', m === 'index');
+  document.getElementById('heapSection').classList.toggle('hidden', m !== 'heap');
+  document.getElementById('indexSection').classList.toggle('hidden', m !== 'index');
+  document.getElementById('indexPanel').style.display = m === 'index' ? 'block' : 'none';
+  resetScan();
+  if (m === 'index') {
+    renderIndexColPicker();
+    renderIndexList();
+    renderBTree();
+    syncHeapToIndex();
+  }
+}
+
+// ───────────────────────────────────────────────
+// RENDER
+// ───────────────────────────────────────────────
+function renderAll() {
+  if (records.length === 0) return;
+  document.getElementById('emptyState').classList.add('hidden');
+  document.getElementById('vizArea').classList.remove('hidden');
+
+  document.getElementById('statTotal').textContent = records.length;
+  document.getElementById('heapMeta').textContent = `${records.length} records · ${Math.ceil(records.length / RECORDS_PER_PAGE)} pages`;
+
+  renderHeap('heapContainer');
+  renderHeap('heapContainer2');
+  updateExamples();
+  renderIndexColPicker();
+
+  ['btnRunScan','btnStep','btnReset','btnRunAll'].forEach(id => {
+    document.getElementById(id).disabled = false;
+  });
+}
+
+function renderHeap(containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const pages = Math.ceil(records.length / RECORDS_PER_PAGE);
+  for (let p = 0; p < pages; p++) {
+    const pageDiv = document.createElement('div');
+    pageDiv.className = 'heap-page';
+    pageDiv.id = `page-${containerId}-${p}`;
+    const lbl = document.createElement('div');
+    lbl.className = 'heap-page-label';
+    lbl.textContent = `PAGE ${p}`;
+    pageDiv.appendChild(lbl);
+    for (let r = p * RECORDS_PER_PAGE; r < Math.min((p+1)*RECORDS_PER_PAGE, records.length); r++) {
+      const rec = records[r];
+      const el = document.createElement('div');
+      el.className = 'record not-scanned';
+      el.id = `rec-${containerId}-${r}`;
+      el.title = JSON.stringify(rec, null, 2).replace(/"__id":\s*\d+,?\s*/,'');
+      // Show first 2 meaningful cols
+      const preview = columns.slice(0,3).map(c => `${c}:${rec[c]}`).join(' ');
+      el.textContent = preview;
+      pageDiv.appendChild(el);
+    }
+    container.appendChild(pageDiv);
+  }
+}
+
+function updateExamples() {
+  const container = document.getElementById('predicateExamples');
+  container.innerHTML = '';
+  if (columns.length === 0) return;
+  const examples = [];
+  columns.forEach(c => {
+    const vals = records.map(r => r[c]).filter(v => v !== undefined && v !== '');
+    if (vals.length === 0) return;
+    if (typeof vals[0] === 'number') {
+      const mid = vals.sort((a,b)=>a-b)[Math.floor(vals.length/2)];
+      examples.push(`${c} > ${mid}`);
+    } else {
+      examples.push(`${c} === '${vals[0]}'`);
+    }
+  });
+  examples.slice(0,4).forEach(ex => {
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = ex;
+    tag.onclick = () => { document.getElementById('predicateInput').value = ex; };
+    container.appendChild(tag);
+  });
+}
+
+// ───────────────────────────────────────────────
+// HEAP SCAN
+// ───────────────────────────────────────────────
+function getPredicate() {
+  const raw = document.getElementById('predicateInput').value.trim();
+  if (!raw) return () => true;
+  try {
+    // Build a function using column names as variables
+    const fn = new Function(...columns, `return (${raw});`);
+    return (rec) => {
+      try { return fn(...columns.map(c => rec[c])); }
+      catch { return false; }
+    };
+  } catch(e) {
+    alert('Invalid predicate: ' + e.message);
+    return null;
+  }
+}
+
+function startScan() {
+  if (scanning) return;
+  resetScan(false);
+  const pred = getPredicate();
+  if (!pred) return;
+  scanning = true;
+  scanIndex = 0;
+  matchedRecords = [];
+  document.getElementById('btnRunScan').disabled = true;
+  document.getElementById('btnReset').disabled = false;
+  addLog('system', `Starting heap scan: WHERE ${document.getElementById('predicateInput').value || 'TRUE'}`);
+  scheduleStep(pred);
+}
+
+function scheduleStep(pred) {
+  if (!scanning) return;
+  const delay = parseInt(document.getElementById('speedSlider').value);
+  scanTimer = setTimeout(() => doHeapStep(pred), delay);
+}
+
+function stepScan() {
+  if (mode === 'index') { stepBTreeScan(); return; }
+  if (scanIndex >= records.length && !scanning) {
+    // Start fresh
+    resetScan(false);
+    const pred = getPredicate();
+    if (!pred) return;
+    scanning = true;
+    scanIndex = 0;
+    matchedRecords = [];
+    document.getElementById('btnRunScan').disabled = true;
+    document.getElementById('btnReset').disabled = false;
+    addLog('system', `Starting heap scan (step mode): WHERE ${document.getElementById('predicateInput').value || 'TRUE'}`);
+  }
+  const pred = getPredicate();
+  if (pred) doHeapStep(pred, true); // step mode — no schedule
+}
+
+function doHeapStep(pred, stepMode = false) {
+  if (scanIndex >= records.length) {
+    finishScan();
+    return;
+  }
+  const i = scanIndex;
+  const rec = records[i];
+  const page = Math.floor(i / RECORDS_PER_PAGE);
+  const el = document.getElementById(`rec-heapContainer-${i}`);
+  if (!el) { scanIndex++; if (!stepMode) scheduleStep(pred); return; }
+
+  // Mark all previous as done
+  if (i > 0) {
+    const prev = document.getElementById(`rec-heapContainer-${i-1}`);
+    if (prev && !prev.classList.contains('match')) prev.classList.add('miss');
+  }
+
+  el.classList.remove('not-scanned');
+  el.classList.add('scanning');
+
+  // Page highlight
+  const pageEl = document.getElementById(`page-heapContainer-${page}`);
+  if (pageEl) {
+    document.querySelectorAll('.heap-page').forEach(p => p.style.outline = '');
+    pageEl.style.outline = '2px solid var(--scan-color)';
+  }
+
+  const match = pred(rec);
+  if (match) {
+    el.classList.remove('scanning');
+    el.classList.add('match');
+    matchedRecords.push(rec);
+    addLog('match', `[${i}] Page ${page} → RID (${page},${i%RECORDS_PER_PAGE}): ✓ MATCH — ${previewRec(rec)}`);
+    updateStats(i+1, matchedRecords.length);
+  } else {
+    addLog('miss', `[${i}] Page ${page} → RID (${page},${i%RECORDS_PER_PAGE}): ✗ miss`);
+    updateStats(i+1, matchedRecords.length);
+  }
+
+  updateProgress(i+1, records.length);
+  scanIndex++;
+
+  if (scanIndex >= records.length) {
+    setTimeout(() => finishScan(), stepMode ? 0 : 200);
+    return;
+  }
+  if (!stepMode) scheduleStep(pred);
+}
+
+function finishScan() {
+  scanning = false;
+  // Mark remaining as miss
+  for (let i = scanIndex-1; i < records.length; i++) {
+    const el = document.getElementById(`rec-heapContainer-${i}`);
+    if (el && !el.classList.contains('match')) el.classList.add('miss');
+  }
+  document.querySelectorAll('.heap-page').forEach(p => p.style.outline = '');
+  addLog('system', `Scan complete. ${matchedRecords.length} of ${records.length} records matched.`);
+  document.getElementById('btnRunScan').disabled = false;
+  showResults(matchedRecords, 'resultsSection', 'resultsTable', 'resultCount');
+}
+
+function resetScan(full = true) {
+  scanning = false;
+  if (scanTimer) { clearTimeout(scanTimer); scanTimer = null; }
+  scanIndex = 0;
+  matchedRecords = [];
+  btreeScanSteps = [];
+  btreeScanIdx = 0;
+  document.querySelectorAll('.record').forEach(el => {
+    el.className = 'record not-scanned';
+  });
+  document.querySelectorAll('.heap-page').forEach(p => p.style.outline = '');
+  document.getElementById('stepLog').innerHTML = '<div class="log-entry system">Ready. Run a scan to begin.</div>';
+  document.getElementById('stepLog2').innerHTML = '<div class="log-entry system">Build an index and run a scan to begin.</div>';
+  document.getElementById('resultsSection').classList.add('hidden');
+  document.getElementById('resultsSection2').classList.add('hidden');
+  document.querySelectorAll('.btree-node-box').forEach(n => { n.classList.remove('active','found'); });
+  document.querySelectorAll('.btree-key').forEach(k => { k.classList.remove('active','found'); });
+  document.querySelectorAll('.btree-leaf-cell').forEach(c => { c.classList.remove('key-active','key-found','rid-active','rid-found'); });
+  document.querySelectorAll('.btree-rid-chip').forEach(c => { c.classList.remove('rid-chip-active','rid-chip-found','rid-chip-miss'); });
+  document.querySelectorAll('.heap-page').forEach(p => p.style.outline = '');
+  updateStats(0, 0);
+  updateProgress(0, records.length || 1);
+  document.getElementById('statBtree').textContent = '—';
+  if (full) {
+    document.getElementById('btnRunScan').disabled = records.length === 0;
+    document.getElementById('btnStep').disabled = records.length === 0;
+    document.getElementById('btnReset').disabled = records.length === 0;
+    document.getElementById('btnRunAll').disabled = records.length === 0;
+  }
+}
+
+function runAll() {
+  if (mode === 'index') { runAllIndex(); return; }
+  resetScan(false);
+  const pred = getPredicate();
+  if (!pred) return;
+  matchedRecords = [];
+  for (let i = 0; i < records.length; i++) {
+    const rec = records[i];
+    const el = document.getElementById(`rec-heapContainer-${i}`);
+    const match = pred(rec);
+    if (el) { el.className = 'record ' + (match ? 'match' : 'miss'); }
+    if (match) matchedRecords.push(rec);
+  }
+  updateStats(records.length, matchedRecords.length);
+  updateProgress(records.length, records.length);
+  addLog('system', `Full scan: ${matchedRecords.length}/${records.length} matched.`);
+  showResults(matchedRecords, 'resultsSection', 'resultsTable', 'resultCount');
+}
+
+// ───────────────────────────────────────────────
+// STATS / PROGRESS / LOG
+// ───────────────────────────────────────────────
+function updateStats(scanned, matched) {
+  document.getElementById('statScanned').textContent = scanned;
+  document.getElementById('statMatched').textContent = matched;
+  document.getElementById('statPages').textContent = Math.ceil(scanned / RECORDS_PER_PAGE) || 0;
+}
+
+function updateProgress(cur, total) {
+  document.getElementById('progressFill').style.width = (total ? (cur/total*100) : 0) + '%';
+}
+
+function addLog(type, msg) {
+  const logId = mode === 'index' ? 'stepLog2' : 'stepLog';
+  const log = document.getElementById(logId);
+  // Remove old current
+  log.querySelectorAll('.current').forEach(e => e.classList.remove('current'));
+  const entry = document.createElement('div');
+  entry.className = `log-entry ${type} current`;
+  entry.textContent = msg;
+  log.appendChild(entry);
+  log.scrollTop = log.scrollHeight;
+}
+
+function previewRec(rec) {
+  return columns.slice(0,3).map(c => `${c}=${rec[c]}`).join(', ');
+}
+
+// ───────────────────────────────────────────────
+// RESULTS TABLE
+// ───────────────────────────────────────────────
+function showResults(rows, sectionId, tableId, countId) {
+  document.getElementById(sectionId).classList.remove('hidden');
+  document.getElementById(countId).textContent = `${rows.length} row${rows.length !== 1 ? 's' : ''}`;
+  const table = document.getElementById(tableId);
+  const cols = columns.filter(c => c !== '__id');
+  table.innerHTML = '';
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  cols.forEach(c => { const th = document.createElement('th'); th.textContent = c; hr.appendChild(th); });
+  thead.appendChild(hr); table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    cols.forEach(c => { const td = document.createElement('td'); td.textContent = row[c] ?? ''; tr.appendChild(td); });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+}
+
+// ───────────────────────────────────────────────
+// INDEX / BTREE
+// ───────────────────────────────────────────────
+function renderIndexColPicker() {
+  const container = document.getElementById('indexColsSelect');
+  container.innerHTML = '';
+  columns.forEach(col => {
+    const chip = document.createElement('div');
+    chip.className = 'col-chip' + (selectedIndexCols.includes(col) ? ' selected' : '');
+    chip.textContent = col;
+    chip.onclick = () => {
+      if (selectedIndexCols.includes(col)) {
+        selectedIndexCols = selectedIndexCols.filter(c => c !== col);
+        chip.classList.remove('selected');
+      } else {
+        selectedIndexCols.push(col);
+        chip.classList.add('selected');
+      }
+    };
+    container.appendChild(chip);
+  });
+}
+
+function buildIndex() {
+  if (selectedIndexCols.length === 0) { alert('Select at least one column to index.'); return; }
+  const key = selectedIndexCols.join('+');
+  // Build sorted B-Tree-like structure
+  const entries = {};
+  records.forEach((rec, i) => {
+    const kval = selectedIndexCols.map(c => rec[c]).join('|');
+    if (!entries[kval]) entries[kval] = [];
+    entries[kval].push(i);
+  });
+  const sorted = Object.keys(entries).sort((a, b) => {
+    const an = Number(a), bn = Number(b);
+    if (!isNaN(an) && !isNaN(bn)) return an - bn;
+    return a < b ? -1 : a > b ? 1 : 0;
+  }).map(k => ({ key: k, rowIds: entries[k] }));
+
+  indexes[key] = { cols: [...selectedIndexCols], entries: sorted };
+  activeIndexKey = key;
+  renderIndexList();
+  renderBTree();
+  syncHeapToIndex();
+  addLog('system', `B-Tree index built on (${selectedIndexCols.join(', ')}) — ${sorted.length} unique keys`);
+}
+
+function renderIndexList() {
+  const container = document.getElementById('indexList');
+  container.innerHTML = '';
+  Object.keys(indexes).forEach(k => {
+    const idx = indexes[k];
+    const item = document.createElement('div');
+    item.className = 'index-item';
+    const lbl = document.createElement('span');
+    lbl.className = 'index-item-label';
+    lbl.textContent = `idx(${idx.cols.join(', ')})`;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-xs btn-secondary';
+    btn.textContent = 'Use';
+    btn.onclick = () => { activeIndexKey = k; renderBTree(); syncHeapToIndex(); };
+    item.appendChild(lbl);
+    item.appendChild(btn);
+    container.appendChild(item);
+  });
+}
+
+function renderBTree() {
+  const container = document.getElementById('btreeContainer');
+  if (!activeIndexKey || !indexes[activeIndexKey]) return;
+  const idx = indexes[activeIndexKey];
+  const entries = idx.entries;
+  container.innerHTML = '';
+  document.getElementById('btreeMeta').textContent = `${idx.cols.join('+')} · ${entries.length} keys`;
+
+  // Build a simple 3-level BTree visual
+  // Level 0: root
+  // Level 1: internal nodes
+  // Level 2: leaf nodes
+  const fanout = 4;
+  const leaves = chunkArray(entries, fanout);
+  const internals = leaves.length > 1 ? chunkArray(leaves, fanout) : null;
+  const hasRoot = (internals && internals.length > 1);
+
+  // Make an internal/root node (keys only, with pointer separators)
+  const makeInternalNode = (keys, nodeId) => {
+    const nodeDiv = document.createElement('div');
+    nodeDiv.className = 'btree-node';
+    const box = document.createElement('div');
+    box.className = 'btree-node-box';
+    box.id = `btnode-${nodeId}`;
+    keys.forEach((k, i) => {
+      if (i > 0) {
+        const ptr = document.createElement('div');
+        ptr.className = 'btree-ptr';
+        ptr.textContent = '▾';
+        box.appendChild(ptr);
+      }
+      const kd = document.createElement('div');
+      kd.className = 'btree-key';
+      kd.id = `btkey-${nodeId}-${i}`;
+      kd.textContent = String(k).substring(0, 12);
+      box.appendChild(kd);
+    });
+    nodeDiv.appendChild(box);
+    return nodeDiv;
+  };
+
+  // Make a leaf node: each entry shows  key  /  RID(page,slot)
+  const makeLeafNode = (entries, nodeId) => {
+    const nodeDiv = document.createElement('div');
+    nodeDiv.className = 'btree-node';
+    const box = document.createElement('div');
+    box.className = 'btree-node-box';
+    box.id = `btnode-${nodeId}`;
+
+    entries.forEach((entry, i) => {
+      // one cell per index entry: key on top, all its RIDs below
+      const cell = document.createElement('div');
+      cell.className = 'btree-leaf-cell';
+      cell.id = `btleaf-${nodeId}-${i}`;
+
+      const keyDiv = document.createElement('div');
+      keyDiv.className = 'btree-leaf-key';
+      keyDiv.id = `btkey-${nodeId}-${i}`;
+      keyDiv.textContent = String(entry.key).substring(0, 12);
+
+      const ridDiv = document.createElement('div');
+      ridDiv.className = 'btree-leaf-rid';
+      ridDiv.id = `btrid-${nodeId}-${i}`;
+      // Show each RID as its own individually-addressable span
+      entry.rowIds.forEach((rowId, ri) => {
+        const span = document.createElement('span');
+        span.className = 'btree-rid-chip';
+        span.id = `btrid-${nodeId}-${i}-${ri}`;
+        span.textContent = `(${Math.floor(rowId / RECORDS_PER_PAGE)},${rowId % RECORDS_PER_PAGE})`;
+        span.title = `Page ${Math.floor(rowId / RECORDS_PER_PAGE)}, Slot ${rowId % RECORDS_PER_PAGE}`;
+        ridDiv.appendChild(span);
+        if (ri < entry.rowIds.length - 1) {
+          ridDiv.appendChild(document.createTextNode(' '));
+        }
+      });
+
+      cell.appendChild(keyDiv);
+      cell.appendChild(ridDiv);
+      box.appendChild(cell);
+
+      // Separator between cells
+      if (i < entries.length - 1) {
+        // separator is part of cell border-right — nothing extra needed
+      }
+    });
+
+    nodeDiv.appendChild(box);
+
+    // "→ heap" label underneath
+    const lbl = document.createElement('div');
+    lbl.className = 'leaf-pointer';
+    lbl.textContent = '↓ heap fetch via RID';
+    nodeDiv.appendChild(lbl);
+
+    return nodeDiv;
+  };
+
+  // Root level
+  if (hasRoot) {
+    const rootLevel = document.createElement('div');
+    rootLevel.className = 'btree-level';
+    const lbl = document.createElement('div');
+    lbl.className = 'btree-level-label';
+    lbl.textContent = 'ROOT';
+    rootLevel.appendChild(lbl);
+    const rootKeys = internals.map(grp => grp[0][0].key);
+    rootLevel.appendChild(makeInternalNode(rootKeys, 'root'));
+    container.appendChild(rootLevel);
+  }
+
+  // Internal level
+  if (internals && internals.length >= 1) {
+    const intLevel = document.createElement('div');
+    intLevel.className = 'btree-level';
+    const lbl = document.createElement('div');
+    lbl.className = 'btree-level-label';
+    lbl.textContent = 'INTERNAL';
+    intLevel.appendChild(lbl);
+    internals.forEach((grp, gi) => {
+      const keys = grp.map(leafChunk => leafChunk[0].key);
+      intLevel.appendChild(makeInternalNode(keys, `int-${gi}`));
+    });
+    container.appendChild(intLevel);
+  }
+
+  // Leaf level — pass full entry objects so RIDs are available
+  const leafLevel = document.createElement('div');
+  leafLevel.className = 'btree-level';
+  const leafLbl = document.createElement('div');
+  leafLbl.className = 'btree-level-label';
+  leafLbl.textContent = 'LEAF';
+  leafLevel.appendChild(leafLbl);
+  leaves.forEach((chunk, ci) => {
+    leafLevel.appendChild(makeLeafNode(chunk, `leaf-${ci}`));
+  });
+  container.appendChild(leafLevel);
+
+  // Draw arrows after DOM is painted
+  requestAnimationFrame(() => requestAnimationFrame(drawBTreeArrows));
+}
+
+function syncHeapToIndex() {
+  renderHeap('heapContainer2');
+}
+
+// ───────────────────────────────────────────────
+// DRAW BTREE ARROWS
+// ───────────────────────────────────────────────
+function drawBTreeArrows() {
+  const svg = document.getElementById('btreeSvg');
+  if (!svg) return;
+  // Remove old arrows (keep defs)
+  [...svg.children].forEach(c => { if (c.tagName !== 'defs') c.remove(); });
+
+  const wrap = document.getElementById('btreeWrap');
+  const wrapRect = wrap.getBoundingClientRect();
+
+  // Helper: get centre-bottom of an element relative to the wrap
+  function cb(el) {
+    const r = el.getBoundingClientRect();
+    return {
+      x: r.left + r.width / 2 - wrapRect.left,
+      y: r.bottom - wrapRect.top
+    };
+  }
+  // Helper: get centre-top
+  function ct(el) {
+    const r = el.getBoundingClientRect();
+    return {
+      x: r.left + r.width / 2 - wrapRect.left,
+      y: r.top - wrapRect.top
+    };
+  }
+
+  function makePath(x1, y1, x2, y2, cls) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const cy = (y1 + y2) / 2;
+    path.setAttribute('d', `M ${x1} ${y1} C ${x1} ${cy}, ${x2} ${cy}, ${x2} ${y2}`);
+    path.setAttribute('class', 'btree-arrow ' + cls);
+    if (cls.includes('active')) {
+      path.setAttribute('marker-end', 'url(#arrowhead-active)');
+    } else {
+      path.setAttribute('marker-end', 'url(#arrowhead)');
+    }
+    return path;
+  }
+
+  const fanout = 4;
+  if (!activeIndexKey || !indexes[activeIndexKey]) return;
+  const idx = indexes[activeIndexKey];
+  const entries = idx.entries;
+  const leaves = chunkArray(entries, fanout);
+  const internals = leaves.length > 1 ? chunkArray(leaves, fanout) : null;
+  const hasRoot = internals && internals.length > 1;
+
+  // Root → each internal node
+  if (hasRoot) {
+    const rootBox = document.getElementById('btnode-root');
+    if (rootBox) {
+      internals.forEach((_, gi) => {
+        const intBox = document.getElementById(`btnode-int-${gi}`);
+        if (intBox) {
+          const from = cb(rootBox);
+          const to   = ct(intBox);
+          svg.appendChild(makePath(from.x, from.y, to.x, to.y, ''));
+        }
+      });
+    }
+  }
+
+  // Internal → leaf nodes
+  if (internals) {
+    internals.forEach((grp, gi) => {
+      const intBox = document.getElementById(hasRoot ? `btnode-int-${gi}` : `btnode-int-0`);
+      if (!intBox) return;
+      grp.forEach((_, li) => {
+        const globalLeafIdx = gi * fanout + li;
+        const leafBox = document.getElementById(`btnode-leaf-${globalLeafIdx}`);
+        if (leafBox) {
+          const from = cb(intBox);
+          const to   = ct(leafBox);
+          svg.appendChild(makePath(from.x, from.y, to.x, to.y, ''));
+        }
+      });
+    });
+  } else if (leaves.length === 1) {
+    // No internals — nothing to connect upward (single leaf only)
+  }
+
+  // Sibling arrows between leaf nodes (left→right chain)
+  leaves.forEach((_, li) => {
+    if (li >= leaves.length - 1) return;
+    const a = document.getElementById(`btnode-leaf-${li}`);
+    const b = document.getElementById(`btnode-leaf-${li + 1}`);
+    if (a && b) {
+      const ra = a.getBoundingClientRect();
+      const rb = b.getBoundingClientRect();
+      const x1 = ra.right  - wrapRect.left;
+      const y1 = ra.top + ra.height / 2 - wrapRect.top;
+      const x2 = rb.left   - wrapRect.left;
+      const y2 = rb.top + rb.height / 2 - wrapRect.top;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`);
+      path.setAttribute('class', 'btree-arrow');
+      path.setAttribute('marker-end', 'url(#arrowhead)');
+      path.setAttribute('stroke-dasharray', '4 3');
+      svg.appendChild(path);
+    }
+  });
+}
+
+function chunkArray(arr, size) {
+  const res = [];
+  for (let i = 0; i < arr.length; i += size) res.push(arr.slice(i, i+size));
+  return res;
+}
+
+// ───────────────────────────────────────────────
+// INDEX SCAN
+// ───────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// INDEX USABILITY ANALYSIS  (mimics PostgreSQL B-tree planner rules)
+// ─────────────────────────────────────────────────────────────────
+// PostgreSQL B-tree rules modelled here:
+//   1. Leading column MUST appear with a seek-able operator (=, <, <=, >, >=).
+//   2. Composite index (a,b,c): WHERE b=2 alone → NOT usable (no leading col).
+//   3. Inequality (!=), pattern match, function wrapping → seq scan.
+//   4. Non-leading cols alongside a valid leading condition → index filter / recheck.
+function analyzeIndexUsability(predText, indexCols) {
+  const leadCol = indexCols[0];
+
+  // Escape a string for use inside RegExp
+  function esc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  // Does predText mention col as a whole word?
+  function mentions(col) { return new RegExp('\\b' + esc(col) + '\\b').test(predText); }
+
+  const indexColsInPred = indexCols.filter(c => mentions(c));
+
+  // ── Case 1: no index column at all in predicate ──────────────────
+  if (indexColsInPred.length === 0) {
+    const otherCols = columns.filter(c => !indexCols.includes(c) && mentions(c));
+    return {
+      usable: false, seekType: null,
+      reason: 'Index on (' + indexCols.join(', ') + ') is not used',
+      detail: otherCols.length > 0
+        ? 'The WHERE clause references ' + otherCols.map(c => '"'+c+'"').join(', ') +
+          ', which ' + (otherCols.length === 1 ? 'is' : 'are') + ' not in this index. PostgreSQL falls back to a sequential scan.'
+        : 'The WHERE clause does not reference any column in this index. Sequential scan used.'
+    };
+  }
+
+  // ── Case 2: only non-leading index columns referenced ────────────
+  if (!mentions(leadCol)) {
+    return {
+      usable: false, seekType: null,
+      reason: 'Index on (' + indexCols.join(', ') + ') is not used',
+      detail: 'The WHERE clause references ' + indexColsInPred.map(c => '"'+c+'"').join(', ') +
+              ' but NOT the leading column "' + leadCol + '". ' +
+              'PostgreSQL B-tree indexes must be accessed left-to-right — ' +
+              'without a condition on "' + leadCol + '" the index cannot be used. ' +
+              'Sequential scan used instead.' +
+              (indexCols.length > 1 ? ' Tip: create a separate index on (' + indexColsInPred.join(', ') + ').' : '')
+    };
+  }
+
+  // ── Leading column IS referenced — check the operator ────────────
+  const e = esc(leadCol);
+  const notEqRe = new RegExp('\\b' + e + '\\s*!==?');
+  const eqRe    = new RegExp('\\b' + e + '\\s*===?');
+  const rangeRe = new RegExp('\\b' + e + '\\s*[<>]=?');
+  const likeRe  = new RegExp('\\b' + e + '\\b[^;]*(includes|startsWith|endsWith|\\.match)');
+  const fnRe    = new RegExp('[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(\\s*' + e + '\\s*[,)]');
+
+  const additionalCols = indexColsInPred.filter(c => c !== leadCol);
+
+  if (notEqRe.test(predText)) {
+    return {
+      usable: false, seekType: null,
+      reason: 'Index on (' + indexCols.join(', ') + ') is not used',
+      detail: 'Inequality (!= / !==) on "' + leadCol + '" cannot use a B-tree index — ' +
+              'Postgres would need to scan nearly all pages anyway. Sequential scan used.'
+    };
+  }
+  if (likeRe.test(predText)) {
+    return {
+      usable: false, seekType: null,
+      reason: 'Index on (' + indexCols.join(', ') + ') is not used',
+      detail: 'Pattern match (includes / startsWith / endsWith) on "' + leadCol + '" cannot use a plain B-tree index. ' +
+              'A text_pattern_ops index or pg_trgm GIN index would be needed. Sequential scan used.'
+    };
+  }
+  if (fnRe.test(predText)) {
+    return {
+      usable: false, seekType: null,
+      reason: 'Index on (' + indexCols.join(', ') + ') is not used',
+      detail: '"' + leadCol + '" is inside a function call. PostgreSQL cannot use a plain B-tree index ' +
+              'through a function barrier — a functional index on that expression would be needed. Sequential scan used.'
+    };
+  }
+  if (eqRe.test(predText)) {
+    const detail = additionalCols.length > 0
+      ? 'Equality on "' + leadCol + '" (leading column) → index seek. ' +
+        'Condition(s) on ' + additionalCols.map(c => '"'+c+'"').join(', ') +
+        ' used as index filter (evaluated inside the B-tree, no extra heap fetch needed for those).'
+      : 'Equality on leading column "' + leadCol + '" → direct index seek to matching key(s).';
+    return { usable: true, seekType: 'equality', seekCol: leadCol,
+             reason: 'Index scan on (' + indexCols.join(', ') + ')', detail };
+  }
+  if (rangeRe.test(predText)) {
+    const detail = additionalCols.length > 0
+      ? 'Range on "' + leadCol + '" (leading column) → index range scan. ' +
+        'Condition(s) on ' + additionalCols.map(c => '"'+c+'"').join(', ') +
+        ' applied as recheck filter on each fetched heap row.'
+      : 'Range condition on leading column "' + leadCol + '" → index range scan across contiguous leaf pages.';
+    return { usable: true, seekType: 'range', seekCol: leadCol,
+             reason: 'Index range scan on (' + indexCols.join(', ') + ')', detail };
+  }
+
+  return {
+    usable: false, seekType: null,
+    reason: 'Index on (' + indexCols.join(', ') + ') is not used',
+    detail: '"' + leadCol + '" appears in the predicate but without a simple equality or range operator. ' +
+            'PostgreSQL would fall back to a sequential scan.'
+  };
+}
+function startIndexScan() {
+  if (!activeIndexKey) { alert('Build an index first!'); return; }
+  resetScan(false);
+  const pred = getPredicate();
+  if (!pred) return;
+
+  const idx = indexes[activeIndexKey];
+  const predText = document.getElementById('predicateInput').value.trim();
+
+  // ── PLANNER: decide whether the index is usable ──────────────────
+  const analysis = analyzeIndexUsability(predText, idx.cols);
+
+  // ── Helper: append to the index scan log ────────────────────────
+  function logToIndex(type, msg) {
+    const log = document.getElementById('stepLog2');
+    const entry = document.createElement('div');
+    entry.className = 'log-entry ' + type;
+    entry.textContent = msg;
+    log.appendChild(entry);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  if (!analysis.usable) {
+    logToIndex('system', 'Planner: analysing index (' + idx.cols.join(', ') + ') for WHERE clause...');
+    logToIndex('miss',   '⚠  ' + analysis.reason + ': ' + analysis.detail);
+    logToIndex('system', '→ Falling back to sequential heap scan on heapContainer2.');
+
+    // Run a heap scan on heapContainer2 (the index section's heap view) in place
+    scanning = true;
+    scanIndex = 0;
+    matchedRecords = [];
+    document.getElementById('btnRunScan').disabled = true;
+
+    function doFallbackHeapStep(fpred) {
+      if (scanIndex >= records.length) {
+        scanning = false;
+        document.getElementById('btnRunScan').disabled = false;
+        logToIndex('system', 'Sequential scan complete. ' + matchedRecords.length + '/' + records.length + ' rows matched.');
+        showResults(matchedRecords, 'resultsSection2', 'resultsTable2', 'resultCount2');
+        updateStats(records.length, matchedRecords.length);
+        updateProgress(records.length, records.length);
+        return;
+      }
+      const i = scanIndex;
+      const rec = records[i];
+      const page = Math.floor(i / RECORDS_PER_PAGE);
+      const el = document.getElementById('rec-heapContainer2-' + i);
+
+      if (i > 0) {
+        const prev = document.getElementById('rec-heapContainer2-' + (i-1));
+        if (prev && !prev.classList.contains('match')) prev.classList.add('miss');
+      }
+      if (el) { el.classList.remove('not-scanned'); el.classList.add('scanning'); }
+
+      const pageEl = document.getElementById('page-heapContainer2-' + page);
+      if (pageEl) {
+        document.querySelectorAll('#heapContainer2 .heap-page').forEach(p => p.style.outline = '');
+        pageEl.style.outline = '2px solid #ffc107';
+      }
+
+      const match = fpred(rec);
+      if (match) {
+        if (el) { el.classList.remove('scanning'); el.classList.add('match'); }
+        matchedRecords.push(rec);
+        logToIndex('match', '[' + i + '] Page ' + page + ' RID (' + page + ',' + (i%RECORDS_PER_PAGE) + '): ✓ MATCH');
+      } else {
+        logToIndex('miss', '[' + i + '] Page ' + page + ' RID (' + page + ',' + (i%RECORDS_PER_PAGE) + '): ✗ miss');
+      }
+      updateStats(i+1, matchedRecords.length);
+      updateProgress(i+1, records.length);
+      scanIndex++;
+
+      const delay = parseInt(document.getElementById('speedSlider').value);
+      if (scanning) scanTimer = setTimeout(() => doFallbackHeapStep(fpred), delay);
+    }
+
+    logToIndex('system', 'Sequential scan: WHERE ' + (predText || 'TRUE'));
+    const delay = parseInt(document.getElementById('speedSlider').value);
+    scanTimer = setTimeout(() => doFallbackHeapStep(pred), delay);
+    return;
+  }
+
+  // Index is usable — proceed with index scan
+  scanning = true;
+  addLog('system', '✓ ' + analysis.reason + ' — ' + analysis.detail);
+
+  const entries = idx.entries;
+  btreeScanSteps = [];
+  btreeScanIdx = 0;
+
+  const fanout = 4;
+  const leaves = chunkArray(entries, fanout);
+  const internals = leaves.length > 1 ? chunkArray(leaves, fanout) : null;
+  const hasRoot = internals && internals.length > 1;
+
+  // Compare two key values (numeric or lexicographic)
+  function keyCompare(a, b) {
+    const na = Number(a), nb = Number(b);
+    if (!isNaN(na) && !isNaN(nb)) return na < nb ? -1 : na > nb ? 1 : 0;
+    return a < b ? -1 : a > b ? 1 : 0;
+  }
+
+  // ── Compute seekKeys: entries whose indexed column satisfies the seek condition ──
+  //
+  // The B-tree only knows about indexed columns. Non-indexed columns in the WHERE
+  // clause (e.g. city='Boston' when index is on age) are recheck conditions applied
+  // after the heap fetch — the B-tree ignores them when deciding which keys are in range.
+  //
+  // To test whether a key is "in seek range" we run the full pred on a synthetic row:
+  //   - indexed cols  = this entry's actual key value
+  //   - non-indexed cols = taken from a "wildcard" row whose non-indexed values
+  //     satisfy the non-indexed sub-conditions of the predicate.
+  //
+  // Finding wildcardRow: scan all records and pick one where the pred passes when
+  // indexed cols are overridden to a neutral probe value (records[0]'s indexed vals).
+  // That row's non-indexed col values are "compatible" with the WHERE clause.
+
+  const probeRow = Object.assign({}, records[0]);
+  let wildcardRow = records[0];
+  for (const r of records) {
+    const synth = Object.assign({}, r);
+    idx.cols.forEach(c => { synth[c] = probeRow[c]; });
+    try { if (pred(synth)) { wildcardRow = r; break; } } catch(e) {}
+  }
+
+  const seekKeys = new Set(
+    entries.filter(e => {
+      const entryRow = records[e.rowIds[0]];
+      const synth = Object.assign({}, wildcardRow);
+      idx.cols.forEach(c => { synth[c] = entryRow[c]; });
+      try { return pred(synth); } catch(err) { return true; }
+    }).map(e => e.key)
+  );
+
+
+  addLog('system', 'Starting index scan on (' + idx.cols.join(', ') + '): WHERE ' + (predText || 'TRUE'));
+
+  if (seekKeys.size === 0) {
+    if (hasRoot) {
+      btreeScanSteps.push({ type: 'btree-key', nodeId: 'root', keyIdx: 0, targetNodeId: null,
+        msg: 'ROOT: no keys in range — index scan returns 0 rows immediately' });
+    }
+    btreeScanSteps.push({ type: 'noop',
+      msg: 'No keys satisfy the index seek condition — 0 heap fetches needed' });
+    scheduleIndexStep();
+    return;
+  }
+
+  // First and last keys in the SEEK range (contiguous in the sorted B-tree)
+  const sortedSeekKeys = [...seekKeys].sort(keyCompare);
+  const firstSeekKey = sortedSeekKeys[0];
+  const lastSeekKey  = sortedSeekKeys[sortedSeekKeys.length - 1];
+
+  const firstEntryIdx = entries.findIndex(e => e.key === firstSeekKey);
+  const lastEntryIdx  = entries.findIndex(e => e.key === lastSeekKey);
+  const firstLeafIdx  = Math.floor(firstEntryIdx / fanout);
+  const lastLeafIdx   = Math.floor(lastEntryIdx  / fanout);
+
+  // ── ROOT traversal: one comparison, one pointer followed ────────────
+  if (hasRoot) {
+    const rootKeys = internals.map(grp => grp[0][0].key);
+    let targetIntIdx = 0;
+    for (let i = 0; i < rootKeys.length; i++) {
+      if (keyCompare(rootKeys[i], firstSeekKey) <= 0) targetIntIdx = i;
+    }
+    btreeScanSteps.push({
+      type: 'btree-key', nodeId: 'root', keyIdx: targetIntIdx,
+      targetNodeId: 'int-' + targetIntIdx,
+      msg: 'ROOT: seek "' + firstSeekKey + '" — compare separator "' + rootKeys[targetIntIdx] + '" → follow pointer to INTERNAL node ' + targetIntIdx
+    });
+
+    // ── INTERNAL traversal: one node, one pointer ───────────────────
+    const intGrp = internals[targetIntIdx];
+    const intKeys = intGrp.map(leafChunk => leafChunk[0].key);
+    let targetLeafFromInt = 0;
+    for (let i = 0; i < intKeys.length; i++) {
+      if (keyCompare(intKeys[i], firstSeekKey) <= 0) targetLeafFromInt = i;
+    }
+    const globalLeafTarget = targetIntIdx * fanout + targetLeafFromInt;
+    btreeScanSteps.push({
+      type: 'btree-key', nodeId: 'int-' + targetIntIdx, keyIdx: targetLeafFromInt,
+      targetNodeId: 'leaf-' + globalLeafTarget,
+      msg: 'INTERNAL node ' + targetIntIdx + ': compare "' + intKeys[targetLeafFromInt] + '" → follow pointer to LEAF node ' + globalLeafTarget
+    });
+  } else if (internals) {
+    const intKeys = internals[0].map(leafChunk => leafChunk[0].key);
+    let targetLeafFromInt = 0;
+    for (let i = 0; i < intKeys.length; i++) {
+      if (keyCompare(intKeys[i], firstSeekKey) <= 0) targetLeafFromInt = i;
+    }
+    btreeScanSteps.push({
+      type: 'btree-key', nodeId: 'int-0', keyIdx: targetLeafFromInt,
+      targetNodeId: 'leaf-' + targetLeafFromInt,
+      msg: 'INTERNAL node: compare "' + intKeys[targetLeafFromInt] + '" → follow pointer to LEAF node ' + targetLeafFromInt
+    });
+  }
+
+  // ── LEAF traversal: scan ONLY the leaves in the seek range ──────────
+  // Within each leaf we check every entry against the INDEX seek condition
+  // (not the full predicate). Entries outside the seek range are shown as
+  // skipped once we've passed the last matching key (early termination).
+  for (let li = firstLeafIdx; li <= lastLeafIdx; li++) {
+    const leafChunk = leaves[li];
+    leafChunk.forEach((entry, ki) => {
+      const inSeekRange = seekKeys.has(entry.key);
+      btreeScanSteps.push({
+        type: 'leaf', nodeId: 'leaf-' + li, keyIdx: ki,
+        entry, isMatch: inSeekRange,
+        msg: 'LEAF ' + li + ': key "' + entry.key + '" ' + (inSeekRange ? '✓ in seek range' : '✗ outside seek range — stop scanning this leaf')
+      });
+    });
+    if (li < lastLeafIdx) {
+      btreeScanSteps.push({
+        type: 'leaf-next', fromLeaf: li, toLeaf: li + 1,
+        msg: 'LEAF ' + li + ': seek range continues → follow sibling pointer to LEAF ' + (li + 1)
+      });
+    }
+  }
+
+  // ── RID lookup + heap fetch for each key in seek range ─────────────
+  // Full predicate is rechecked AT THE HEAP (index may match age>30 but
+  // city='Boston' is only verified after the row is fetched).
+  for (let ei = firstEntryIdx; ei <= lastEntryIdx; ei++) {
+    const entry = entries[ei];
+    if (!seekKeys.has(entry.key)) continue;
+    const leafIdx  = Math.floor(ei / fanout);
+    const keyIdx   = ei % fanout;
+    const nodeId   = 'leaf-' + leafIdx;
+    const ridCount = entry.rowIds.length;
+
+    btreeScanSteps.push({
+      type: 'rid-lookup', nodeId, keyIdx, rids: entry.rowIds,
+      msg: 'Key "' + entry.key + '" in seek range — leaf stores ' + ridCount + ' RID' + (ridCount > 1 ? 's' : '') + ': ' +
+           entry.rowIds.map(id => '(' + Math.floor(id/RECORDS_PER_PAGE) + ',' + (id%RECORDS_PER_PAGE) + ')').join(', ')
+    });
+
+    entry.rowIds.forEach((rowId, ri) => {
+      const page = Math.floor(rowId / RECORDS_PER_PAGE);
+      const slot = rowId % RECORDS_PER_PAGE;
+      const passesFullPred = pred(records[rowId]);
+      btreeScanSteps.push({
+        type: 'rid-follow', nodeId, keyIdx, ridIdx: ri, rowId,
+        msg: 'Follow RID ' + (ri+1) + '/' + ridCount + ': (' + page + ',' + slot + ') → page ' + page + ', slot ' + slot
+      });
+      if (passesFullPred) {
+        btreeScanSteps.push({
+          type: 'heap-fetch', rowId, nodeId, keyIdx, ridIdx: ri,
+          msg: 'Heap fetch (' + page + ',' + slot + '): row passes full predicate ✓'
+        });
+      } else {
+        btreeScanSteps.push({
+          type: 'heap-miss', rowId, nodeId, keyIdx, ridIdx: ri,
+          msg: 'Heap fetch (' + page + ',' + slot + '): index key matched but full predicate fails ✗ (recheck rejected)'
+        });
+      }
+    });
+  }
+
+  scheduleIndexStep();
+}
+
+function scheduleIndexStep() {
+  if (!scanning) return;
+  const delay = parseInt(document.getElementById('speedSlider').value);
+  scanTimer = setTimeout(() => doIndexStep(), delay);
+}
+
+function doIndexStep(stepMode = false) {
+  if (btreeScanIdx >= btreeScanSteps.length) {
+    finishIndexScan();
+    return;
+  }
+  const step = btreeScanSteps[btreeScanIdx];
+  btreeScanIdx++;
+
+  // Clear previous active highlights before each step
+  document.querySelectorAll('.btree-node-box.active').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.btree-key.active').forEach(k => k.classList.remove('active'));
+
+  if (step.type === 'btree-key') {
+    // Highlight the specific key used for the comparison in a root/internal node
+    const node = document.getElementById(`btnode-${step.nodeId}`);
+    const key  = document.getElementById(`btkey-${step.nodeId}-${step.keyIdx}`);
+    if (node) node.classList.add('active');
+    if (key)  key.classList.add('active');
+    // Highlight the outgoing arrow from this node
+    highlightArrowFrom(step.nodeId, step.targetNodeId);
+    addLog('btree', `🌳 ${step.msg}`);
+    document.getElementById('statBtree').textContent = btreeScanIdx;
+
+  } else if (step.type === 'leaf') {
+    const node = document.getElementById(`btnode-${step.nodeId}`);
+    const cell = document.getElementById(`btleaf-${step.nodeId}-${step.keyIdx}`);
+    if (node) node.classList.add('active');
+    // Clear only the transient "currently scanning" highlight — preserve key-found (green)
+    // on cells already identified as in seek range so they stay green throughout RID steps.
+    document.querySelectorAll(`[id^="btleaf-${step.nodeId}-"]`).forEach(c =>
+      c.classList.remove('key-active', 'rid-active', 'rid-found')
+    );
+    if (cell) cell.classList.add('key-active');
+    if (step.isMatch) {
+      if (cell) { cell.classList.remove('key-active'); cell.classList.add('key-found'); }
+      addLog('match', `🌿 ${step.msg}`);
+    } else {
+      addLog('miss', `🌿 ${step.msg}`);
+    }
+    document.getElementById('statBtree').textContent = btreeScanIdx;
+
+  } else if (step.type === 'leaf-next') {
+    // Sibling pointer traversal between adjacent leaves
+    const fromNode = document.getElementById(`btnode-leaf-${step.fromLeaf}`);
+    const toNode   = document.getElementById(`btnode-leaf-${step.toLeaf}`);
+    if (fromNode) fromNode.classList.remove('active');
+    if (toNode)   toNode.classList.add('active');
+    addLog('btree', `↔ ${step.msg}`);
+
+  } else if (step.type === 'rid-lookup') {
+    // Key row stays green (key-found) — we know we want to check these rows.
+    // Light up only the RID row to show "there are N pointers to follow".
+    document.querySelectorAll('.btree-rid-chip').forEach(c => c.classList.remove('rid-chip-active','rid-chip-found','rid-chip-miss'));
+    const cell = document.getElementById(`btleaf-${step.nodeId}-${step.keyIdx}`);
+    if (cell) {
+      // Keep key-found on key row; activate the RID row beneath it
+      cell.classList.remove('rid-active', 'rid-found');
+      cell.classList.add('rid-active');
+    }
+    addLog('btree', `🔖 ${step.msg}`);
+    document.getElementById('statBtree').textContent = btreeScanIdx;
+
+  } else if (step.type === 'rid-follow') {
+    // Key row stays green. Highlight just this one RID chip.
+    document.querySelectorAll('.btree-rid-chip.rid-chip-active').forEach(c => c.classList.remove('rid-chip-active'));
+    const chip = document.getElementById(`btrid-${step.nodeId}-${step.keyIdx}-${step.ridIdx}`);
+    if (chip) chip.classList.add('rid-chip-active');
+    const page = Math.floor(step.rowId / RECORDS_PER_PAGE);
+    document.querySelectorAll('.heap-page').forEach(p => p.style.outline = '');
+    const pageEl = document.getElementById(`page-heapContainer2-${page}`);
+    if (pageEl) pageEl.style.outline = '2px solid #6f42c1';
+    addLog('btree', `→ ${step.msg}`);
+    document.getElementById('statBtree').textContent = btreeScanIdx;
+
+  } else if (step.type === 'heap-fetch') {
+    // Heap row matched — chip goes green, key row stays green, RID row goes green
+    const chip = document.getElementById(`btrid-${step.nodeId}-${step.keyIdx}-${step.ridIdx}`);
+    if (chip) { chip.classList.remove('rid-chip-active'); chip.classList.add('rid-chip-found'); }
+    const cell = document.getElementById(`btleaf-${step.nodeId}-${step.keyIdx}`);
+    if (cell) { cell.classList.remove('rid-active'); cell.classList.add('rid-found'); }
+    const el = document.getElementById(`rec-heapContainer2-${step.rowId}`);
+    if (el) {
+      el.classList.remove('not-scanned');
+      el.classList.add('btree-fetch');
+      setTimeout(() => { if (el) { el.classList.remove('btree-fetch'); el.classList.add('match'); } }, 300);
+    }
+    matchedRecords.push(records[step.rowId]);
+    updateStats(btreeScanIdx, matchedRecords.length);
+    addLog('match', `📦 ${step.msg}`);
+
+  } else if (step.type === 'heap-miss') {
+    // Heap row failed recheck — chip goes red, key row loses green (recheck rejected)
+    const chip = document.getElementById(`btrid-${step.nodeId}-${step.keyIdx}-${step.ridIdx}`);
+    if (chip) { chip.classList.remove('rid-chip-active'); chip.classList.add('rid-chip-miss'); }
+    const cell = document.getElementById(`btleaf-${step.nodeId}-${step.keyIdx}`);
+    if (cell) { cell.classList.remove('key-found'); }
+    const el = document.getElementById(`rec-heapContainer2-${step.rowId}`);
+    if (el) {
+      el.classList.remove('not-scanned');
+      el.classList.add('miss');
+    }
+    updateStats(btreeScanIdx, matchedRecords.length);
+    addLog('miss', `✗ ${step.msg}`);
+
+  } else if (step.type === 'noop') {
+    addLog('system', `ℹ️ ${step.msg}`);
+    finishIndexScan();
+    return;
+  }
+
+  updateProgress(btreeScanIdx, btreeScanSteps.length);
+  if (!stepMode) scheduleIndexStep();
+}
+
+function stepBTreeScan() {
+  if (btreeScanSteps.length === 0) {
+    startIndexScan();
+    return;
+  }
+  if (btreeScanIdx >= btreeScanSteps.length) {
+    finishIndexScan();
+    return;
+  }
+  doIndexStep(true);
+}
+
+function finishIndexScan() {
+  scanning = false;
+  const unique = [...new Map(matchedRecords.map(r => [r.__id, r])).values()];
+  addLog('system', `Index scan complete. ${unique.length} of ${records.length} records matched. B-Tree nodes visited: ${document.getElementById('statBtree').textContent}`);
+  showResults(unique, 'resultsSection2', 'resultsTable2', 'resultCount2');
+}
+
+function runAllIndex() {
+  resetScan(false);
+  if (!activeIndexKey) { alert('Build an index first!'); return; }
+  startIndexScan();
+  // Skip to end
+  while (btreeScanIdx < btreeScanSteps.length) doIndexStep(true);
+  finishIndexScan();
+}
+
+// Override startScan/stepScan to route to index mode
+const _origStart = startScan;
+window.startScan = function() {
+  if (mode === 'index') { startIndexScan(); return; }
+  _origStart();
+};
+
+window.stepScan = function() {
+  if (mode === 'index') { stepBTreeScan(); return; }
+  // heap step
+  if (scanIndex >= records.length) {
+    resetScan(false);
+    const pred = getPredicate();
+    if (!pred) return;
+    scanning = true;
+    scanIndex = 0;
+    matchedRecords = [];
+    document.getElementById('btnRunScan').disabled = true;
+    document.getElementById('btnReset').disabled = false;
+    addLog('system', `Starting heap scan (step mode)`);
+  }
+  const pred = getPredicate();
+  if (pred) doHeapStep(pred, true);
+};
+
+window.runAll = function() {
+  if (mode === 'index') { runAllIndex(); return; }
+  resetScan(false);
+  const pred = getPredicate();
+  if (!pred) return;
+  matchedRecords = [];
+  for (let i = 0; i < records.length; i++) {
+    const rec = records[i];
+    const el = document.getElementById(`rec-heapContainer-${i}`);
+    const match = pred(rec);
+    if (el) el.className = 'record ' + (match ? 'match' : 'miss');
+    if (match) matchedRecords.push(rec);
+  }
+  updateStats(records.length, matchedRecords.length);
+  updateProgress(records.length, records.length);
+  addLog('system', `Full scan: ${matchedRecords.length}/${records.length} matched.`);
+  showResults(matchedRecords, 'resultsSection', 'resultsTable', 'resultCount');
+};
+
+// Auto-load sample on start for better UX
+window.addEventListener('load', () => {
+  setTimeout(loadSample, 100);
+});
+
+window.addEventListener('resize', () => {
+  if (activeIndexKey) drawBTreeArrows();
+});
+
+function highlightArrowFrom(fromNodeId, toNodeId) {
+  // Reset all arrows to default
+  document.querySelectorAll('.btree-arrow').forEach(p => {
+    p.classList.remove('active-arrow');
+    p.setAttribute('marker-end', 'url(#arrowhead)');
+  });
+  if (!toNodeId) return;
+  // Find the arrow whose path goes from fromNode to toNode by re-querying positions
+  const svg = document.getElementById('btreeSvg');
+  if (!svg) return;
+  const wrap = document.getElementById('btreeWrap');
+  const wrapRect = wrap.getBoundingClientRect();
+  const fromEl = document.getElementById(`btnode-${fromNodeId}`);
+  const toEl   = document.getElementById(`btnode-${toNodeId}`);
+  if (!fromEl || !toEl) return;
+  // Find the path closest to the expected from→to midpoint
+  const fromR = fromEl.getBoundingClientRect();
+  const toR   = toEl.getBoundingClientRect();
+  const midX = (fromR.left + fromR.right) / 2 + (toR.left + toR.right) / 2;
+  const midY = fromR.bottom + (toR.top - fromR.bottom) / 2;
+  let closest = null, closestD = Infinity;
+  svg.querySelectorAll('.btree-arrow').forEach(path => {
+    const len = path.getTotalLength ? path.getTotalLength() : 0;
+    if (len > 0) {
+      const pt = path.getPointAtLength(len / 2);
+      const dx = pt.x + wrapRect.left - midX / 2;
+      const dy = pt.y + wrapRect.top  - midY / 2;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < closestD) { closestD = d; closest = path; }
+    }
+  });
+  if (closest) {
+    closest.classList.add('active-arrow');
+    closest.setAttribute('marker-end', 'url(#arrowhead-active)');
+    closest.parentNode.appendChild(closest); // bring to front
+  }
+}
+
+// ───────────────────────────────────────────────
+// SIDEBAR TOGGLE
+// ───────────────────────────────────────────────
+function toggleSidebar() {
+  const layout = document.getElementById('mainLayout');
+  layout.classList.toggle('sidebar-collapsed');
+}
+</script>
+</body>
+</html>
