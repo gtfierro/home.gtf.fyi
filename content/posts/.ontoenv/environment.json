@@ -1,0 +1,131 @@
+{
+  "ontologies": [
+    {
+      "id": {
+        "location": {
+          "url": "http://www.w3.org/ns/shacl#"
+        },
+        "name": "http://www.w3.org/ns/shacl#"
+      },
+      "name": "http://www.w3.org/ns/shacl#",
+      "imports": [],
+      "location": {
+        "url": "http://www.w3.org/ns/shacl#"
+      },
+      "last_updated": "2026-03-06T00:44:09.649387Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"W3C Shapes Constraint Language (SHACL) Vocabulary\"@en"
+      },
+      "namespace_map": {
+        "sh": "http://www.w3.org/ns/shacl#"
+      },
+      "content_hash": "6cfb01a621afc8420f57e90e21f7d79acfdbbbab99d4f374bcf4be46fb18ce42"
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://qudt.org/3.1.8/shacl/qudt-all"
+        },
+        "name": "http://qudt.org/3.1.8/shacl/qudt-all"
+      },
+      "name": "http://qudt.org/3.1.8/shacl/qudt-all",
+      "imports": [
+        "http://www.w3.org/ns/shacl#",
+        "http://www.w3.org/2004/02/skos/core",
+        "http://www.linkedmodel.org/schema/vaem"
+      ],
+      "location": {
+        "url": "http://qudt.org/3.1.8/shacl/qudt-all"
+      },
+      "last_updated": "2026-03-06T00:44:09.649389Z",
+      "version_properties": {
+        "http://www.w3.org/2000/01/rdf-schema#label": "\"QUDT SHACL Collection Metadata Version 3.1.8\"",
+        "http://www.w3.org/2002/07/owl#versionIRI": "<http://qudt.org/3.1.8/shacl/qudt-all>",
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": "<http://qudt.org/3.1.8/shacl/qudt-all>",
+        "http://purl.org/dc/terms/created": "\"2025-05-12\"^^<http://www.w3.org/2001/XMLSchema#date>",
+        "http://purl.org/dc/terms/title": "\"QUDT SHACL Collection - Version 3.1.8\"",
+        "http://purl.org/dc/terms/modified": "\"2025-11-13T13:18:55Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime>"
+      },
+      "namespace_map": {},
+      "content_hash": "6da17cc138740a2597123966402f303a9fd8bf33295c71b89f19f1a1f66ba286"
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://www.linkedmodel.org/schema/vaem"
+        },
+        "name": "http://www.linkedmodel.org/schema/vaem"
+      },
+      "name": "http://www.linkedmodel.org/schema/vaem",
+      "imports": [],
+      "location": {
+        "url": "http://www.linkedmodel.org/schema/vaem"
+      },
+      "last_updated": "2026-03-06T00:44:09.649391Z",
+      "version_properties": {},
+      "namespace_map": {},
+      "content_hash": "428dd9c5e992169aaafbc120d79add28b70844c79021c8a93a3d3397519a7d71"
+    },
+    {
+      "id": {
+        "location": {
+          "url": "https://open223.info/223p.ttl"
+        },
+        "name": "http://data.ashrae.org/standard223/1.0/model/all"
+      },
+      "name": "http://data.ashrae.org/standard223/1.0/model/all",
+      "imports": [
+        "http://www.w3.org/ns/shacl#",
+        "http://qudt.org/3.1.8/shacl/qudt-all"
+      ],
+      "location": {
+        "url": "https://open223.info/223p.ttl"
+      },
+      "last_updated": "2026-03-06T00:44:09.649384Z",
+      "version_properties": {
+        "http://www.w3.org/2002/07/owl#versionInfo": "\"1.0.0-ppr.2\""
+      },
+      "namespace_map": {
+        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "quantitykind": "http://qudt.org/vocab/quantitykind/",
+        "role": "http://data.ashrae.org/standard223/1.0/vocab/role#",
+        "qudt": "http://qudt.org/schema/qudt/",
+        "sh": "http://www.w3.org/ns/shacl#",
+        "qudtqk": "http://qudt.org/vocab/quantitykind/",
+        "s223": "http://data.ashrae.org/standard223#",
+        "unit": "http://qudt.org/vocab/unit/"
+      },
+      "content_hash": "caad8459a5c7e65d54ff81c56401951b5a3c05b4392454270c4aa7bb2c200fdd"
+    },
+    {
+      "id": {
+        "location": {
+          "url": "http://www.w3.org/2004/02/skos/core"
+        },
+        "name": "http://www.w3.org/2004/02/skos/core"
+      },
+      "name": "http://www.w3.org/2004/02/skos/core",
+      "imports": [],
+      "location": {
+        "url": "http://www.w3.org/2004/02/skos/core"
+      },
+      "last_updated": "2026-03-06T00:44:09.649389Z",
+      "version_properties": {
+        "http://purl.org/dc/terms/title": "\"SKOS Vocabulary\"@en",
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": "<http://www.w3.org/TR/skos-reference/>"
+      },
+      "namespace_map": {},
+      "content_hash": "ff114c5c20184d31e9ccbc59091b689dd108ec94910ed019446b6fdc5855cbfa"
+    }
+  ],
+  "default_policy": "default",
+  "aliases": {
+    "https://open223.info/223p.ttl": {
+      "location": {
+        "url": "https://open223.info/223p.ttl"
+      },
+      "name": "http://data.ashrae.org/standard223/1.0/model/all"
+    }
+  }
+}
