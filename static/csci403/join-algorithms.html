@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join Algorithm Visualizer</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&family=PT+Serif:ital,wght@0,700;1,400&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { height:100%; } body { height:100%; overflow:hidden; background:#f0efe8; font-family:'PT Sans',sans-serif; color:#1a1a1a; font-size:16px; display:flex; flex-direction:column; }
+
+/* ── Top bar ──────────────────────────────────────────────── */
+#topbar {
+  background:#1a1a2e; color:#fff;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px; height:52px; border-bottom:4px solid #e8b000;
+  flex-shrink:0;
+}
+#topbar h1 { font-family:'PT Serif',serif; font-size:20px; letter-spacing:.3px; white-space:nowrap; }
+#topbar .subtitle { font-family:'Source Code Pro',monospace; font-size:12px; color:#8899bb; margin-left:16px; }
+#topbar-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+
+/* ── Config bar ───────────────────────────────────────────── */
+#configbar { background:#fff; border-bottom:2px solid #ccc; display:flex; align-items:center; gap:16px; padding:6px 20px; flex-shrink:0; flex-wrap:wrap; }
+#configbar label { font-family:'Source Code Pro',monospace; font-size:12px; color:#555; white-space:nowrap; }
+#configbar input[type=range] { width:80px; vertical-align:middle; }
+#configbar select { font-family:'Source Code Pro',monospace; font-size:13px; border:1px solid #bbb; border-radius:2px; padding:3px 6px; background:#fff; }
+#configbar .cfg-val { font-family:'Source Code Pro',monospace; font-size:13px; font-weight:700; color:#1a1a2e; min-width:42px; }
+.btn { font-family:'Source Code Pro',monospace; font-weight:700; border:none; border-radius:2px; cursor:pointer; padding:7px 16px; font-size:13px; letter-spacing:.2px; }
+.btn-dark   { background:#1a1a2e; color:#fff; }
+.btn-dark:hover { background:#2d2d4e; }
+.btn-amber  { background:#e8b000; color:#111; }
+.btn-amber:hover { background:#d0a000; }
+.btn-green  { background:#2a7a2a; color:#fff; }
+.btn-green:hover { background:#226022; }
+.btn-gray   { background:#ddd; color:#333; border:1px solid #bbb; }
+.btn-gray:hover { background:#ccc; }
+.btn-pause  { background:#e8b000; color:#111; }
+
+/* ── Tab bar ──────────────────────────────────────────────── */
+#tabbar {
+  background:#e8e8e0; border-bottom:3px solid #1a1a2e;
+  display:flex; align-items:flex-end; padding:0 20px; gap:3px;
+  flex-shrink:0;
+}
+.algo-tab-btn {
+  font-family:'PT Sans',sans-serif; font-weight:700; font-size:14px;
+  background:#d8d8d0; color:#444; border:2px solid transparent;
+  border-bottom:none; padding:8px 22px; cursor:pointer; outline:none;
+  border-radius:3px 3px 0 0; letter-spacing:.2px;
+  transition: background .12s;
+}
+.algo-tab-btn:hover { background:#c8c8c0; color:#111; }
+.algo-tab-btn.active { background:#1a1a2e; color:#fff; border-color:#1a1a2e; }
+
+/* ── Main content area ────────────────────────────────────── */
+#main-area { display:flex; flex-direction:column; flex:1; overflow:hidden; min-height:0; }
+
+/* ── Tab panes ────────────────────────────────────────────── */
+.tab-pane { display:none; height:100%; }
+.tab-pane.active { display:flex; flex-direction:column; }
+
+/* ── Algo layout: 3-column grid ───────────────────────────── */
+.algo-layout {
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  overflow:hidden;
+  min-height:0;
+}
+.algo-layout-heads {
+  display:flex;
+  flex-shrink:0;
+}
+.algo-layout-bodies {
+  display:flex;
+  flex:1;
+  overflow:hidden;
+  min-height:0;
+}
+.col-pseudo {
+  width:300px;
+  min-width:160px;
+  max-width:600px;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.col-tables {
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+}
+.col-results {
+  width:260px;
+  min-width:160px;
+  flex-shrink:0;
+  overflow:hidden;
+}
+.resize-handle {
+  width:6px;
+  background:#ddd;
+  cursor:col-resize;
+  flex-shrink:0;
+  position:relative;
+  transition:background .15s;
+  z-index:10;
+}
+.resize-handle:hover, .resize-handle.dragging { background:#e8b000; }
+.resize-handle::after {
+  content:'';
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:2px; height:32px;
+  background:rgba(0,0,0,.2);
+  border-radius:2px;
+}
+.col-head-pseudo  { flex-shrink:0; width:300px; min-width:160px; }
+.col-head-tables  { flex:1; min-width:0; }
+.col-head-results { flex-shrink:0; width:260px; min-width:160px; }
+.col-head-spacer  { width:6px; flex-shrink:0; background:#2d2d2d; border-right:1px solid #555; }
+
+/* column headers */
+.col-head {
+  background:#2d2d2d; color:#e8e0c8;
+  font-family:'Source Code Pro',monospace; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.6px;
+  padding:5px 12px; border-right:1px solid #444;
+  display:flex; align-items:center; gap:8px;
+}
+.col-head:last-child { border-right:none; }
+.col-head .dot { width:8px; height:8px; border-radius:50%; background:#e8b000; flex-shrink:0; }
+.col-head .dot-blue { background:#4499ff; }
+.col-head .dot-green { background:#44cc44; }
+
+/* column bodies */
+.col-body {
+  overflow-y:auto; overflow-x:hidden;
+  padding:10px 12px;
+  border-right:2px solid #ccc;
+  background:#fff;
+  min-height:0;
+}
+.col-body:last-child { border-right:none; background:#fafaf5; }
+.col-body-dark { background:#1e1e2e !important; }
+
+/* ── Stats strip ──────────────────────────────────────────── */
+.stats-strip {
+  display:flex; gap:0; border-bottom:2px solid #ccc;
+  flex-shrink:0; background:#fff;
+}
+.stat-cell {
+  flex:1; padding:6px 12px; border-right:2px solid #eee;
+  border-top:3px solid #ccc;
+}
+.stat-cell:last-child { border-right:none; }
+.stat-cell .sl { font-family:'Source Code Pro',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:#888; }
+.stat-cell .sv { font-family:'Source Code Pro',monospace; font-size:26px; font-weight:700; color:#1a1a2e; line-height:1.1; }
+.stat-cell .ss { font-family:'Source Code Pro',monospace; font-size:10px; color:#aaa; }
+.st-io  { border-top-color:#e8b000; }
+.st-cmp { border-top-color:#0066cc; }
+.st-mat { border-top-color:#2a7a2a; }
+.st-stp { border-top-color:#8844aa; }
+
+/* ── Controls strip ───────────────────────────────────────── */
+.ctrl-strip {
+  display:flex; align-items:center; gap:8px; padding:7px 12px;
+  border-bottom:2px solid #ccc; flex-shrink:0; background:#f5f5f0;
+}
+.ctrl-strip .speed-lbl { font-family:'Source Code Pro',monospace; font-size:12px; color:#666; }
+.ctrl-strip input[type=range] { width:80px; }
+.phase-badge {
+  display:inline-block; padding:2px 10px; border-radius:2px;
+  font-family:'Source Code Pro',monospace; font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:.5px;
+}
+.phase-build { background:#ffe0a0; color:#7a4400; border:1px solid #e8b000; }
+.phase-probe { background:#d4f0ff; color:#004488; border:1px solid #0066cc; }
+.phase-sort  { background:#f0d4ff; color:#440077; border:1px solid #8844aa; }
+.phase-merge { background:#d4ffd4; color:#004400; border:1px solid #2a7a2a; }
+
+.finished-banner {
+  background:#2a7a2a; color:#fff; text-align:center;
+  padding:5px 12px; border-radius:2px;
+  font-family:'Source Code Pro',monospace; font-weight:700; font-size:13px;
+  display:none;
+}
+.finished-banner.show { display:inline-block; }
+
+/* ── Data tables ──────────────────────────────────────────── */
+.section-label { font-family:'Source Code Pro',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:#888; margin-bottom:4px; }
+.data-table-wrap { border:2px solid #999; border-radius:2px; overflow:hidden; font-family:'Source Code Pro',monospace; font-size:14px; margin-bottom:10px; }
+.data-table-wrap .tbl-header { background:#1a1a2e; color:#fff; padding:4px 10px; font-weight:700; font-size:13px; letter-spacing:.5px; }
+.data-table-wrap table { width:100%; margin:0; background:#fff; border-collapse:collapse; }
+.data-table-wrap table thead tr th { background:#eaeae0; color:#333; padding:4px 8px; border-bottom:2px solid #999; font-size:12px; text-transform:uppercase; letter-spacing:.3px; text-align:left; }
+.data-table-wrap table tbody tr td { padding:5px 8px; border-bottom:1px solid #e0e0d8; transition:background .12s; }
+.data-table-wrap table tbody tr:last-child td { border-bottom:none; }
+.row-active  { background:#fff3b0 !important; font-weight:700; }
+.row-outer   { background:#d4eeff !important; font-weight:700; }
+.row-inner   { background:#ffd4e8 !important; font-weight:700; }
+.row-match   { background:#b8f0b0 !important; font-weight:700; }
+.row-scanned { background:#f5f5ee !important; color:#bbb; }
+.row-probe   { background:#c8f8ff !important; font-weight:700; }
+
+/* ── Center column indicators ─────────────────────────────── */
+.cmp-indicator {
+  font-family:'Source Code Pro',monospace; font-size:15px;
+  color:#0066cc; font-weight:700; padding:4px 0; min-height:26px;
+  text-align:center;
+}
+.match-indicator {
+  font-family:'Source Code Pro',monospace; font-size:15px;
+  font-weight:700; padding:4px 0; min-height:26px; text-align:center;
+}
+.match-yes { color:#2a7a2a; }
+.match-no  { color:#cc2200; }
+
+/* ── Hash table display ───────────────────────────────────── */
+.ht-wrap { background:#fff8ee; border:2px solid #e8b000; border-radius:3px; padding:8px 10px; margin-bottom:8px; }
+.ht-wrap h6 { font-family:'Source Code Pro',monospace; font-size:11px; font-weight:700; color:#7a4400; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+.bucket-row { display:flex; align-items:flex-start; margin-bottom:4px; font-family:'Source Code Pro',monospace; font-size:13px; gap:6px; }
+.bucket-key { background:#ffe0a0; border:1px solid #e8b000; padding:1px 7px; border-radius:2px; min-width:30px; text-align:center; font-weight:700; color:#7a4400; flex-shrink:0; }
+.bucket-vals { display:flex; flex-wrap:wrap; gap:3px; }
+.bucket-val { background:#eaeae0; border:1px solid #ccc; padding:1px 5px; border-radius:2px; font-size:12px; }
+.bucket-val.just-added { background:#b8f0b0; border-color:#2a7a2a; font-weight:700; }
+
+/* ── Sort display ─────────────────────────────────────────── */
+.sort-display { background:#f8f0ff; border:2px solid #8844aa; border-radius:3px; padding:8px 10px; margin-bottom:8px; font-family:'Source Code Pro',monospace; font-size:13px; }
+.sort-display h6 { font-size:11px; font-weight:700; color:#440077; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+.sorted-row { display:inline-block; padding:2px 7px; margin:2px; border:1px solid #8844aa; border-radius:2px; background:#f0d4ff; color:#440077; font-size:13px; }
+.sorted-row.ptr-r { border-color:#0066cc; background:#d4eeff; color:#00448a; font-weight:700; }
+.sorted-row.ptr-s { border-color:#2a7a2a; background:#d4ffd4; color:#004400; font-weight:700; }
+
+/* ── Index display ────────────────────────────────────────── */
+.index-wrap { background:#fff4f4; border:2px solid #cc3300; border-radius:3px; padding:8px 10px; margin-bottom:8px; }
+.index-wrap h6 { font-family:'Source Code Pro',monospace; font-size:11px; font-weight:700; color:#660000; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+.index-entry { display:flex; align-items:center; gap:6px; margin-bottom:3px; font-family:'Source Code Pro',monospace; font-size:13px; }
+.index-key { background:#ffd4d4; border:1px solid #cc3300; padding:1px 7px; border-radius:2px; min-width:30px; text-align:center; font-weight:700; color:#660000; flex-shrink:0; }
+.index-arrow { color:#cc3300; font-weight:700; }
+.index-ptr { background:#fff8f0; border:1px solid #cc9966; padding:1px 6px; border-radius:2px; font-size:12px; color:#553300; }
+.index-ptr.active-ptr { background:#ffd4d4; border-color:#cc3300; font-weight:700; }
+
+/* ── Result panel ─────────────────────────────────────────── */
+.result-inner { font-family:'Source Code Pro',monospace; font-size:13px; }
+.result-inner table { width:100%; border-collapse:collapse; }
+.result-inner table thead th { background:#d8f0d8; border-bottom:2px solid #2a7a2a; padding:4px 8px; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.3px; color:#2a7a2a; }
+.result-inner table tbody td { padding:4px 8px; border-bottom:1px solid #e8f4e8; font-size:13px; }
+.result-inner table tbody tr:last-child td { border-bottom:none; }
+.result-row-new { animation:flashGreen .5s ease; }
+@keyframes flashGreen { 0%{background:#b8f0b0;} 100%{background:transparent;} }
+.result-empty { font-size:13px; color:#aaa; font-style:italic; padding:6px 0; }
+.result-head { font-family:'Source Code Pro',monospace; font-size:12px; font-weight:700; color:#2a7a2a; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+
+/* ── Pseudocode panel ─────────────────────────────────────── */
+.pseudo-body { padding:4px 0; }
+.ps-line { display:flex; align-items:baseline; font-family:'Source Code Pro',monospace; font-size:14px; line-height:2.0; padding:0 10px; transition:background .1s; }
+.ps-ln { min-width:22px; color:#4a4a6a; font-size:11px; text-align:right; margin-right:10px; user-select:none; flex-shrink:0; }
+.ps-code { color:#c8d0e8; white-space:pre; }
+.ps-kw  { color:#c792ea; }
+.ps-fn  { color:#82aaff; }
+.ps-cmt { color:#7faacc; font-style:italic; }
+.ps-cmt-line { line-height:1.5 !important; margin-bottom:2px; }
+.ps-cmt-line .ps-ln { min-width:22px; }
+.ps-line.ps-active { background:#3d3520 !important; }
+.ps-line.ps-active .ps-code { color:#ffe082; font-weight:700; }
+.ps-line.ps-active .ps-ln { color:#e8b000; }
+.ps-line.ps-match  { background:#1a3320 !important; }
+.ps-line.ps-match  .ps-code { color:#a8e6b0; font-weight:700; }
+.ps-line.ps-match  .ps-ln  { color:#44cc44; }
+
+/* ── Log panel ────────────────────────────────────────────── */
+.log-panel { background:#111826; color:#8899bb; border-radius:2px; padding:6px 10px; font-family:'Source Code Pro',monospace; font-size:11px; max-height:80px; overflow-y:auto; margin-top:6px; }
+.log-entry { line-height:1.6; }
+.log-entry.log-io    { color:#f0d060; }
+.log-entry.log-cmp   { color:#80c8ff; }
+.log-entry.log-match { color:#80ff80; font-weight:700; }
+.log-entry.log-phase { color:#ffaa44; font-weight:700; }
+.log-entry.log-info  { color:#6677aa; }
+
+/* ── Comparison table (shown at done) ─────────────────────── */
+#comparison-panel { display:none; padding:8px 12px; background:#fff; border-top:2px solid #ccc; flex-shrink:0; }
+#comparison-panel h6 { font-family:'Source Code Pro',monospace; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#555; margin-bottom:6px; }
+#comparison-panel table { width:100%; border-collapse:collapse; font-family:'Source Code Pro',monospace; font-size:13px; }
+#comparison-panel table th { background:#eaeae0; border-bottom:2px solid #999; padding:3px 10px; text-align:left; font-size:11px; text-transform:uppercase; }
+#comparison-panel table td { padding:3px 10px; border-bottom:1px solid #eee; }
+#comparison-panel table tr:last-child td { border-bottom:none; }
+
+/* scrollbar slim */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:#eee; }
+::-webkit-scrollbar-thumb { background:#aaa; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP BAR ════════════════════════════════════════════ -->
+<div id="topbar">
+  <div style="display:flex;align-items:baseline;gap:12px;">
+    <h1>Join Algorithm Visualizer</h1>
+    <span class="subtitle">R ⋈ S on key &nbsp;·&nbsp; count I/Os &amp; comparisons</span>
+  </div>
+</div>
+
+<!-- ═══ CONFIG BAR ═════════════════════════════════════════ -->
+<div id="configbar">
+  <label>R rows</label>
+  <input type="range" id="rSize" min="3" max="7" value="5">
+  <span class="cfg-val" id="rSizeVal">5</span>
+  <label style="margin-left:8px;">S rows</label>
+  <input type="range" id="sSize" min="3" max="7" value="6">
+  <span class="cfg-val" id="sSizeVal">6</span>
+  <label style="margin-left:8px;">Selectivity</label>
+  <select id="selectivity">
+    <option value="low">Low (~20%)</option>
+    <option value="med" selected>Medium (~50%)</option>
+    <option value="high">High (~80%)</option>
+  </select>
+  <button class="btn btn-amber" onclick="generateTables()" style="margin-left:4px;">&#8635; Regenerate</button>
+  <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:#aaa;margin-left:8px;">join condition: R.key = S.key</span>
+</div>
+
+<!-- ═══ TAB BAR ════════════════════════════════════════════ -->
+<div id="tabbar">
+  <button class="algo-tab-btn active" data-target="tab-snl" onclick="switchTab('tab-snl')">Nested Loop</button>
+  <button class="algo-tab-btn" data-target="tab-inl"  onclick="switchTab('tab-inl')">Index Nested Loop</button>
+  <button class="algo-tab-btn" data-target="tab-hash" onclick="switchTab('tab-hash')">Hash Join</button>
+  <button class="algo-tab-btn" data-target="tab-smj"  onclick="switchTab('tab-smj')">Sort-Merge Join</button>
+</div>
+
+<!-- ═══ MAIN AREA ══════════════════════════════════════════ -->
+<div id="main-area">
+
+<!-- ════════════ SNL ════════════ -->
+<div class="tab-pane active" id="tab-snl">
+  <!-- controls + stats -->
+  <div class="ctrl-strip">
+    <button class="btn btn-dark"  onclick="startAlgo('snl')">&#9654; Start</button>
+    <button class="btn btn-gray"  onclick="stepAlgo('snl')">Step &rarr;</button>
+    <button class="btn btn-green" onclick="autoAlgo('snl')" id="snl-auto-btn">&#9654;&#9654; Auto</button>
+    <button class="btn btn-gray"  onclick="resetAlgo('snl')">&#8635; Reset</button>
+    <span class="speed-lbl" style="margin-left:8px;">Speed</span>
+    <input type="range" id="snl-speed" min="1" max="10" value="5">
+    <div id="snl-finished" class="finished-banner">&#10003; Join Complete!</div>
+    <div style="flex:1;"></div>
+    <div class="stats-strip" style="border:none;background:transparent;gap:16px;">
+      <div class="stat-cell st-io"  style="border:none;padding:2px 10px;"><span class="sl">I/O Reads</span><br><span class="sv" id="snl-io">0</span></div>
+      <div class="stat-cell st-cmp" style="border:none;padding:2px 10px;"><span class="sl">Comparisons</span><br><span class="sv" id="snl-cmp">0</span></div>
+      <div class="stat-cell st-mat" style="border:none;padding:2px 10px;"><span class="sl">Matches</span><br><span class="sv" id="snl-match">0</span></div>
+      <div class="stat-cell st-stp" style="border:none;padding:2px 10px;"><span class="sl">Step</span><br><span class="sv" id="snl-step">—</span> <span class="ss">/ <span id="snl-total">?</span></span></div>
+    </div>
+  </div>
+  <!-- 3-col layout -->
+  <div class="algo-layout">
+    <!-- col heads -->
+    <div class="algo-layout-heads">
+      <div class="col-head col-head-pseudo" id="snl-head-pseudo"><span class="dot"></span>Pseudocode</div>
+      <div class="col-head-spacer"></div>
+      <div class="col-head col-head-tables"><span class="dot dot-blue"></span>Relations R &amp; S</div>
+      <div class="col-head col-head-results"><span class="dot dot-green"></span>Join Results (<span id="snl-res-count">0</span>)</div>
+    </div>
+    <div class="algo-layout-bodies">
+    <div class="col-pseudo col-body col-body-dark" id="snl-pseudo-col">
+      <div class="pseudo-body" id="snl-pseudo">
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// outer loop</span></span></div>
+        <div class="ps-line" id="snl-ps-1"><span class="ps-ln">1</span><span class="ps-code"><span class="ps-kw">for each</span> r <span class="ps-kw">in</span> R:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;<span class="ps-cmt">// scan all of S</span></span></div>
+        <div class="ps-line" id="snl-ps-2"><span class="ps-ln">2</span><span class="ps-code">  <span class="ps-kw">for each</span> s <span class="ps-kw">in</span> S:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ps-cmt">// compare</span></span></div>
+        <div class="ps-line" id="snl-ps-3"><span class="ps-ln">3</span><span class="ps-code">    <span class="ps-kw">if</span> r.key == s.key:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="ps-cmt">// output match</span></span></div>
+        <div class="ps-line" id="snl-ps-4"><span class="ps-ln">4</span><span class="ps-code">      emit(r &#8904; s)</span></div>
+      </div>
+      <div class="log-panel" id="snl-log"></div>
+    </div>
+    <div class="resize-handle" id="snl-resize" title="Drag to resize"></div>
+    <div class="col-tables col-body" id="snl-tables-col">
+      <div class="section-label">Relation R &mdash; outer</div>
+      <div class="data-table-wrap"><div class="tbl-header">R</div><div id="snl-r-table"></div></div>
+      <div style="text-align:center;padding:4px 0;">
+        <div class="cmp-indicator" id="snl-cmp-ind"></div>
+        <div class="match-indicator" id="snl-match-ind"></div>
+      </div>
+      <div class="section-label">Relation S &mdash; inner</div>
+      <div class="data-table-wrap"><div class="tbl-header">S</div><div id="snl-s-table"></div></div>
+    </div>
+    <div class="col-results col-body" id="snl-result-col">
+      <div class="result-head">Result tuples</div>
+      <div class="result-inner" id="snl-result-table"><div class="result-empty">No matches yet.</div></div>
+    </div>
+    </div><!-- /algo-layout-bodies -->
+  </div><!-- /algo-layout -->
+</div><!-- /tab-snl -->
+
+<!-- ════════════ INL ════════════ -->
+<div class="tab-pane" id="tab-inl">
+  <div class="ctrl-strip">
+    <button class="btn btn-dark"  onclick="startAlgo('inl')">&#9654; Start</button>
+    <button class="btn btn-gray"  onclick="stepAlgo('inl')">Step &rarr;</button>
+    <button class="btn btn-green" onclick="autoAlgo('inl')" id="inl-auto-btn">&#9654;&#9654; Auto</button>
+    <button class="btn btn-gray"  onclick="resetAlgo('inl')">&#8635; Reset</button>
+    <span class="speed-lbl" style="margin-left:8px;">Speed</span>
+    <input type="range" id="inl-speed" min="1" max="10" value="5">
+    <div id="inl-finished" class="finished-banner">&#10003; Join Complete!</div>
+    <div style="flex:1;"></div>
+    <div class="stats-strip" style="border:none;background:transparent;gap:16px;">
+      <div class="stat-cell st-io"  style="border:none;padding:2px 10px;"><span class="sl">I/O Reads</span><br><span class="sv" id="inl-io">0</span></div>
+      <div class="stat-cell st-cmp" style="border:none;padding:2px 10px;"><span class="sl">Index Probes</span><br><span class="sv" id="inl-cmp">0</span></div>
+      <div class="stat-cell st-mat" style="border:none;padding:2px 10px;"><span class="sl">Matches</span><br><span class="sv" id="inl-match">0</span></div>
+      <div class="stat-cell st-stp" style="border:none;padding:2px 10px;"><span class="sl">Step</span><br><span class="sv" id="inl-step">—</span> <span class="ss">/ <span id="inl-total">?</span></span></div>
+    </div>
+  </div>
+  <div class="algo-layout">
+    <div class="algo-layout-heads">
+      <div class="col-head col-head-pseudo" id="inl-head-pseudo"><span class="dot"></span>Pseudocode</div>
+      <div class="col-head-spacer"></div>
+      <div class="col-head col-head-tables"><span class="dot dot-blue"></span>Relations &amp; Index</div>
+      <div class="col-head col-head-results"><span class="dot dot-green"></span>Join Results (<span id="inl-res-count">0</span>)</div>
+    </div>
+    <div class="algo-layout-bodies">
+    <div class="col-pseudo col-body col-body-dark" id="inl-pseudo-col">
+      <div class="pseudo-body" id="inl-pseudo">
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// index on S.key pre-built</span></span></div>
+        <div class="ps-line" id="inl-ps-0"><span class="ps-ln">0</span><span class="ps-code"></span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// outer loop</span></span></div>
+        <div class="ps-line" id="inl-ps-1"><span class="ps-ln">1</span><span class="ps-code"><span class="ps-kw">for each</span> r <span class="ps-kw">in</span> R:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;<span class="ps-cmt">// probe index</span></span></div>
+        <div class="ps-line" id="inl-ps-2"><span class="ps-ln">2</span><span class="ps-code">  matches = index[r.key]</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;<span class="ps-cmt">// fetch S rows</span></span></div>
+        <div class="ps-line" id="inl-ps-3"><span class="ps-ln">3</span><span class="ps-code">  <span class="ps-kw">for each</span> s <span class="ps-kw">in</span> matches:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ps-cmt">// output match</span></span></div>
+        <div class="ps-line" id="inl-ps-4"><span class="ps-ln">4</span><span class="ps-code">    emit(r &#8904; s)</span></div>
+      </div>
+      <div class="log-panel" id="inl-log"></div>
+    </div>
+    <div class="resize-handle" id="inl-resize" title="Drag to resize"></div>
+    <div class="col-tables col-body" id="inl-tables-col">
+      <div class="section-label">Relation R &mdash; outer</div>
+      <div class="data-table-wrap"><div class="tbl-header">R</div><div id="inl-r-table"></div></div>
+      <div class="index-wrap" style="margin-top:8px;">
+        <h6>Index on S.key</h6>
+        <div id="inl-index-display"></div>
+      </div>
+      <div class="cmp-indicator" id="inl-cmp-ind" style="font-size:13px;text-align:left;margin-top:4px;"></div>
+      <div class="section-label" style="margin-top:6px;">Relation S &mdash; inner</div>
+      <div class="data-table-wrap"><div class="tbl-header">S</div><div id="inl-s-table"></div></div>
+    </div>
+    <div class="col-results col-body" id="inl-result-col">
+      <div class="result-head">Result tuples</div>
+      <div class="result-inner" id="inl-result-table"><div class="result-empty">No matches yet.</div></div>
+    </div>
+    </div><!-- /algo-layout-bodies -->
+  </div><!-- /algo-layout -->
+</div><!-- /tab-inl -->
+
+<!-- ════════════ HASH ════════════ -->
+<div class="tab-pane" id="tab-hash">
+  <div class="ctrl-strip">
+    <button class="btn btn-dark"  onclick="startAlgo('hash')">&#9654; Start</button>
+    <button class="btn btn-gray"  onclick="stepAlgo('hash')">Step &rarr;</button>
+    <button class="btn btn-green" onclick="autoAlgo('hash')" id="hash-auto-btn">&#9654;&#9654; Auto</button>
+    <button class="btn btn-gray"  onclick="resetAlgo('hash')">&#8635; Reset</button>
+    <span class="speed-lbl" style="margin-left:8px;">Speed</span>
+    <input type="range" id="hash-speed" min="1" max="10" value="5">
+    <div id="hash-finished" class="finished-banner">&#10003; Join Complete!</div>
+    <div id="hash-phase-badge" style="margin-left:8px;"></div>
+    <div style="flex:1;"></div>
+    <div class="stats-strip" style="border:none;background:transparent;gap:16px;">
+      <div class="stat-cell st-io"  style="border:none;padding:2px 10px;"><span class="sl">I/O Reads</span><br><span class="sv" id="hash-io">0</span></div>
+      <div class="stat-cell st-cmp" style="border:none;padding:2px 10px;"><span class="sl">Probes</span><br><span class="sv" id="hash-cmp">0</span></div>
+      <div class="stat-cell st-mat" style="border:none;padding:2px 10px;"><span class="sl">Matches</span><br><span class="sv" id="hash-match">0</span></div>
+      <div class="stat-cell st-stp" style="border:none;padding:2px 10px;"><span class="sl">Step</span><br><span class="sv" id="hash-step">—</span> <span class="ss">/ <span id="hash-total">?</span></span></div>
+    </div>
+  </div>
+  <div class="algo-layout">
+    <div class="algo-layout-heads">
+      <div class="col-head col-head-pseudo" id="hash-head-pseudo"><span class="dot"></span>Pseudocode</div>
+      <div class="col-head-spacer"></div>
+      <div class="col-head col-head-tables"><span class="dot dot-blue"></span>Relations &amp; Hash Table</div>
+      <div class="col-head col-head-results"><span class="dot dot-green"></span>Join Results (<span id="hash-res-count">0</span>)</div>
+    </div>
+    <div class="algo-layout-bodies">
+    <div class="col-pseudo col-body col-body-dark" id="hash-pseudo-col">
+      <div class="pseudo-body" id="hash-pseudo">
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// ── Phase 1: Build ──────────────</span></span></div>
+        <div class="ps-line" id="hash-ps-b0"><span class="ps-ln">1</span><span class="ps-code"></span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// scan R</span></span></div>
+        <div class="ps-line" id="hash-ps-b1"><span class="ps-ln">2</span><span class="ps-code"><span class="ps-kw">for each</span> r <span class="ps-kw">in</span> R:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;<span class="ps-cmt">// insert</span></span></div>
+        <div class="ps-line" id="hash-ps-b2"><span class="ps-ln">3</span><span class="ps-code">  HT[ h(r.key) ] += r</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// ── Phase 2: Probe ──────────────</span></span></div>
+        <div class="ps-line" id="hash-ps-p0"><span class="ps-ln">4</span><span class="ps-code"></span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// scan S</span></span></div>
+        <div class="ps-line" id="hash-ps-p1"><span class="ps-ln">5</span><span class="ps-code"><span class="ps-kw">for each</span> s <span class="ps-kw">in</span> S:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;<span class="ps-cmt">// probe</span></span></div>
+        <div class="ps-line" id="hash-ps-p2"><span class="ps-ln">6</span><span class="ps-code">  <span class="ps-kw">for each</span> r <span class="ps-kw">in</span> HT[h(s.key)]:</span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="ps-cmt">// output match</span></span></div>
+        <div class="ps-line" id="hash-ps-p3"><span class="ps-ln">7</span><span class="ps-code">    emit(r &#8904; s)</span></div>
+      </div>
+      <div class="log-panel" id="hash-log"></div>
+    </div>
+    <div class="resize-handle" id="hash-resize" title="Drag to resize"></div>
+    <div class="col-tables col-body" id="hash-tables-col">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <div class="section-label">R &mdash; build input</div>
+          <div class="data-table-wrap"><div class="tbl-header">R</div><div id="hash-r-table"></div></div>
+        </div>
+        <div>
+          <div class="section-label">S &mdash; probe input</div>
+          <div class="data-table-wrap"><div class="tbl-header">S</div><div id="hash-s-table"></div></div>
+        </div>
+      </div>
+      <div class="ht-wrap" style="margin-top:8px;">
+        <h6>Hash Table HT (keyed on R.key)</h6>
+        <div id="hash-ht-display"><em style="font-size:12px;color:#aaa;">Empty &mdash; build phase not started</em></div>
+      </div>
+      <div class="cmp-indicator" id="hash-cmp-ind" style="font-size:13px;text-align:left;margin-top:4px;"></div>
+    </div>
+    <div class="col-results col-body" id="hash-result-col">
+      <div class="result-head">Result tuples</div>
+      <div class="result-inner" id="hash-result-table"><div class="result-empty">No matches yet.</div></div>
+    </div>
+    </div><!-- /algo-layout-bodies -->
+  </div><!-- /algo-layout -->
+</div><!-- /tab-hash -->
+
+<!-- ════════════ SMJ ════════════ -->
+<div class="tab-pane" id="tab-smj">
+  <div class="ctrl-strip">
+    <button class="btn btn-dark"  onclick="startAlgo('smj')">&#9654; Start</button>
+    <button class="btn btn-gray"  onclick="stepAlgo('smj')">Step &rarr;</button>
+    <button class="btn btn-green" onclick="autoAlgo('smj')" id="smj-auto-btn">&#9654;&#9654; Auto</button>
+    <button class="btn btn-gray"  onclick="resetAlgo('smj')">&#8635; Reset</button>
+    <span class="speed-lbl" style="margin-left:8px;">Speed</span>
+    <input type="range" id="smj-speed" min="1" max="10" value="5">
+    <div id="smj-finished" class="finished-banner">&#10003; Join Complete!</div>
+    <div id="smj-phase-badge" style="margin-left:8px;"></div>
+    <div style="flex:1;"></div>
+    <div class="stats-strip" style="border:none;background:transparent;gap:16px;">
+      <div class="stat-cell st-io"  style="border:none;padding:2px 10px;"><span class="sl">I/O Reads</span><br><span class="sv" id="smj-io">0</span></div>
+      <div class="stat-cell st-cmp" style="border:none;padding:2px 10px;"><span class="sl">Comparisons</span><br><span class="sv" id="smj-cmp">0</span></div>
+      <div class="stat-cell st-mat" style="border:none;padding:2px 10px;"><span class="sl">Matches</span><br><span class="sv" id="smj-match">0</span></div>
+      <div class="stat-cell st-stp" style="border:none;padding:2px 10px;"><span class="sl">Step</span><br><span class="sv" id="smj-step">—</span> <span class="ss">/ <span id="smj-total">?</span></span></div>
+    </div>
+  </div>
+  <div class="algo-layout">
+    <div class="algo-layout-heads">
+      <div class="col-head col-head-pseudo" id="smj-head-pseudo"><span class="dot"></span>Pseudocode</div>
+      <div class="col-head-spacer"></div>
+      <div class="col-head col-head-tables"><span class="dot dot-blue"></span>Relations R &amp; S</div>
+      <div class="col-head col-head-results"><span class="dot dot-green"></span>Join Results (<span id="smj-res-count">0</span>)</div>
+    </div>
+    <div class="algo-layout-bodies">
+    <div class="col-pseudo col-body col-body-dark" id="smj-pseudo-col">
+      <div class="pseudo-body" id="smj-pseudo">
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// ── Phase 1: Sort ───────────────</span></span></div>
+        <div class="ps-line" id="smj-ps-s0"><span class="ps-ln">1</span><span class="ps-code"></span></div>
+        <div class="ps-line ps-cmt-line"><span class="ps-ln"></span><span class="ps-code"><span class="ps-cmt">// ── Phase 2: Merge ──────────────</span></span></div>
+        <div class="ps-line" id="smj-ps-s1"><span class="ps-ln">2</span><span class="ps-code">R' = <span class="ps-fn">sort</span>(R)  ;  S' = <span class="ps-fn">sort</span>(S)  </span></div>
+        <div class="ps-line" id="smj-ps-m0"><span class="ps-ln">3</span><span class="ps-code"></span></div>
+        <div class="ps-line" id="smj-ps-m1"><span class="ps-ln">4</span><span class="ps-code">pR = 0  ;  pS = 0               </span></div>
+        <div class="ps-line" id="smj-ps-m2"><span class="ps-ln">5</span><span class="ps-code"><span class="ps-kw">while</span> pR &lt; |R'| <span class="ps-kw">and</span> pS &lt; |S'|: </span></div>
+        <div class="ps-line" id="smj-ps-m3"><span class="ps-ln">6</span><span class="ps-code">  <span class="ps-kw">if</span>   R'[pR].key == S'[pS].key: emit &#8904; </span></div>
+        <div class="ps-line" id="smj-ps-m4"><span class="ps-ln">7</span><span class="ps-code">  <span class="ps-kw">elif</span> R'[pR].key  &lt; S'[pS].key: pR++ </span></div>
+        <div class="ps-line" id="smj-ps-m5"><span class="ps-ln">8</span><span class="ps-code">  <span class="ps-kw">else</span>:                          pS++ </span></div>
+      </div>
+      <div class="log-panel" id="smj-log"></div>
+    </div>
+    <div class="resize-handle" id="smj-resize" title="Drag to resize"></div>
+    <div class="col-tables col-body" id="smj-tables-col">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <div class="section-label">Relation R</div>
+          <div class="data-table-wrap"><div class="tbl-header">R</div><div id="smj-r-table"></div></div>
+        </div>
+        <div>
+          <div class="section-label">Relation S</div>
+          <div class="data-table-wrap"><div class="tbl-header">S</div><div id="smj-s-table"></div></div>
+        </div>
+      </div>
+      <div class="sort-display" id="smj-sort-display" style="display:none;margin-top:8px;">
+        <h6>Sorted sequences &nbsp; <span style="color:#0066cc;">&#9655; pR</span> &nbsp; <span style="color:#2a7a2a;">&#9655; pS</span></h6>
+        <div id="smj-sorted-r" style="margin-bottom:4px;"></div>
+        <div id="smj-sorted-s"></div>
+      </div>
+      <div style="margin-top:6px;display:flex;gap:16px;align-items:center;">
+        <div class="cmp-indicator" id="smj-cmp-ind" style="font-size:13px;"></div>
+        <div class="match-indicator" id="smj-match-ind" style="font-size:13px;"></div>
+      </div>
+    </div>
+    <div class="col-results col-body" id="smj-result-col">
+      <div class="result-head">Result tuples</div>
+      <div class="result-inner" id="smj-result-table"><div class="result-empty">No matches yet.</div></div>
+    </div>
+    </div><!-- /algo-layout-bodies -->
+  </div><!-- /algo-layout -->
+</div><!-- /tab-smj -->
+
+<!-- comparison panel -->
+<div id="comparison-panel">
+  <h6>Algorithm Comparison &mdash; this dataset</h6>
+  <table><thead><tr><th>Algorithm</th><th>I/O Reads</th><th>Comparisons/Probes</th><th>Matches</th><th>Complexity</th></tr></thead>
+  <tbody id="comparison-tbody"></tbody></table>
+</div>
+
+</div><!-- main-area -->
+
+<script>
+var tableR=[], tableS=[];
+var NAMES_R=['Alice','Bob','Carol','Dave','Eve','Frank','Grace','Hank'];
+var NAMES_S=['X1','X2','X3','X4','X5','X6','X7','X8'];
+var DESCS_R=['Mgr','Dev','QA','DBA','PM','Lead','Intern','CTO'];
+var DESCS_S=['Sales','Eng','Mkt','Ops','HR','Legal','Finance','IT'];
+
+function generateTables(){
+  var rSz=parseInt(document.getElementById('rSize').value);
+  var sSz=parseInt(document.getElementById('sSize').value);
+  var sel=document.getElementById('selectivity').value;
+
+  // Use a smaller key domain so duplicates arise naturally.
+  // domain size ~ 60-70% of total rows, guaranteeing some repeats.
+  var domain = Math.max(3, Math.round((rSz + sSz) * 0.6));
+  var keys = []; for(var i=1;i<=domain;i++) keys.push(i);
+
+  // Pick overlap keys (keys that appear in BOTH relations)
+  var overlapCount = sel==='low' ? Math.max(1,Math.round(domain*.25))
+                   : sel==='med' ? Math.max(2,Math.round(domain*.50))
+                   :               Math.max(2,Math.round(domain*.75));
+  var shuffledKeys = keys.slice().sort(function(){return Math.random()-.5;});
+  var overlapPool  = shuffledKeys.slice(0, overlapCount);
+  var rOnlyPool    = shuffledKeys.slice(overlapCount);
+  var sOnlyPool    = keys.slice().sort(function(){return Math.random()-.5;})
+                        .filter(function(k){ return overlapPool.indexOf(k)<0; });
+
+  // Build rKeys: fill from overlap pool (with possible repeats), top off from rOnlyPool
+  function pickWithRepeats(pool, n, extraRepeatChance) {
+    var result = [];
+    for(var i=0;i<n;i++){
+      // ~30% chance to repeat a key already chosen (if any exist)
+      if(result.length > 0 && Math.random() < (extraRepeatChance||0.28)) {
+        result.push(result[Math.floor(Math.random()*result.length)]);
+      } else {
+        result.push(pool[Math.floor(Math.random()*pool.length)]);
+      }
+    }
+    return result;
+  }
+
+  // R gets a mix: mostly from overlap pool, some from rOnly
+  var rBase = overlapPool.concat(rOnlyPool);
+  var rKeys = pickWithRepeats(rBase, rSz, 0.25);
+
+  // S gets a mix: mostly from overlap pool, some from sOnly
+  var sBase = overlapPool.concat(sOnlyPool);
+  var sKeys = pickWithRepeats(sBase, sSz, 0.25);
+
+  // Shuffle both so they're not in key order
+  rKeys = rKeys.sort(function(){return Math.random()-.5;});
+  sKeys = sKeys.sort(function(){return Math.random()-.5;});
+
+  tableR=rKeys.map(function(k,i){return {id:i,key:k,name:NAMES_R[i%NAMES_R.length],dept:DESCS_R[i%DESCS_R.length]};});
+  tableS=sKeys.map(function(k,i){return {id:i,key:k,name:NAMES_S[i%NAMES_S.length],dept:DESCS_S[i%DESCS_S.length]};});
+  ['snl','inl','hash','smj'].forEach(function(a){
+    renderBaseTable(a,'r',tableR);
+    renderBaseTable(a,'s',tableS);
+    resetAlgo(a);
+  });
+  renderInlIndex();
+  document.getElementById('comparison-panel').style.display='none';
+}
+
+function renderBaseTable(algo,which,data){
+  var el=document.getElementById(algo+'-'+which+'-table');
+  if(!el) return;
+  var html='<table><thead><tr><th>rid</th><th>key</th><th>name</th><th>dept</th></tr></thead><tbody>';
+  data.forEach(function(row,i){
+    html+='<tr id="'+algo+'-'+which+'-row-'+i+'" data-key="'+row.key+'"><td>'+row.id+'</td><td>'+row.key+'</td><td>'+row.name+'</td><td>'+row.dept+'</td></tr>';
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+function setRowClass(algo,which,idx,cls){
+  var row=document.getElementById(algo+'-'+which+'-row-'+idx);
+  if(row) row.className=cls;
+}
+function clearHighlights(algo,which){
+  var tbl=document.getElementById(algo+'-'+which+'-table');
+  if(tbl) tbl.querySelectorAll('tr').forEach(function(r){r.className='';});
+}
+
+function renderInlIndex(){
+  var idx={};
+  tableS.forEach(function(row,i){if(!idx[row.key])idx[row.key]=[];idx[row.key].push(i);});
+  var html='';
+  Object.keys(idx).sort(function(a,b){return a-b;}).forEach(function(k){
+    var ptrs=idx[k].map(function(i){return '<span class="index-ptr" id="inl-idx-ptr-'+k+'-'+i+'">S['+i+'] key='+tableS[i].key+'</span>';}).join(' ');
+    html+='<div class="index-entry"><span class="index-key">'+k+'</span><span class="index-arrow">&rarr;</span><span class="bucket-vals">'+ptrs+'</span></div>';
+  });
+  document.getElementById('inl-index-display').innerHTML=html||'<em style="font-size:11px;color:#aaa;">Empty</em>';
+}
+
+function renderResult(algo,results){
+  var el=document.getElementById(algo+'-result-table');
+  var cnt=document.getElementById(algo+'-res-count');
+  if(!results.length){el.innerHTML='<div class="result-empty">No matches yet.</div>';cnt.textContent='0';return;}
+  cnt.textContent=results.length;
+  var html='<table><thead><tr><th>R.key</th><th>R.name</th><th>R.dept</th><th>S.key</th><th>S.name</th><th>S.dept</th></tr></thead><tbody>';
+  results.forEach(function(r,i){
+    html+='<tr class="'+(i===results.length-1?'result-row-new':'')+'"><td>'+r.rKey+'</td><td>'+r.rName+'</td><td>'+r.rDept+'</td><td>'+r.sKey+'</td><td>'+r.sName+'</td><td>'+r.sDept+'</td></tr>';
+  });
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+function addLog(algo,msg,cls){
+  cls=cls||'log-info';
+  var el=document.getElementById(algo+'-log');
+  if(!el) return;
+  var div=document.createElement('div');
+  div.className='log-entry '+cls;
+  div.textContent=msg;
+  el.appendChild(div);
+  el.scrollTop=el.scrollHeight;
+}
+function clearLog(algo){var el=document.getElementById(algo+'-log');if(el)el.innerHTML='';}
+
+function updateStats(algo,io,cmp,match,step,total){
+  document.getElementById(algo+'-io').textContent=io;
+  document.getElementById(algo+'-cmp').textContent=cmp;
+  document.getElementById(algo+'-match').textContent=match;
+  document.getElementById(algo+'-step').textContent=(step===null?'—':step);
+  var te=document.getElementById(algo+'-total');
+  if(te&&total!==null) te.textContent=total;
+}
+
+// ---- Step Builders ----
+function buildSNLSteps(R,S){
+  var steps=[],io=0,cmp=0,matches=0,results=[];
+  steps.push({type:'phase',msg:'Starting Simple Nested Loop Join',io:io,cmp:cmp,matches:matches,results:[],ri:-1,si:-1,cmpInd:'',matchInd:''});
+  for(var ri=0;ri<R.length;ri++){
+    io++;
+    steps.push({type:'outer',msg:'Read R['+ri+'] (key='+R[ri].key+')',io:io,cmp:cmp,matches:matches,results:results.slice(),ri:ri,si:-1,cmpInd:'R['+ri+'].key = '+R[ri].key,matchInd:''});
+    for(var si=0;si<S.length;si++){
+      io++;cmp++;
+      var match=R[ri].key===S[si].key;
+      if(match){matches++;results.push({rKey:R[ri].key,rName:R[ri].name,rDept:R[ri].dept,sKey:S[si].key,sName:S[si].name,sDept:S[si].dept});}
+      steps.push({type:'compare',msg:'Compare R['+ri+'].key('+R[ri].key+') vs S['+si+'].key('+S[si].key+') \u2192 '+(match?'MATCH':'no match'),io:io,cmp:cmp,matches:matches,results:results.slice(),ri:ri,si:si,cmpInd:R[ri].key+' vs '+S[si].key,matchInd:match?'\u2713 MATCH':'\u2717'});
+    }
+  }
+  steps.push({type:'done',msg:'Done. '+matches+' matches. I/Os: '+io+', Comparisons: '+cmp,io:io,cmp:cmp,matches:matches,results:results.slice(),ri:-1,si:-1,cmpInd:'',matchInd:''});
+  return steps;
+}
+
+function buildINLSteps(R,S){
+  var idx={};
+  S.forEach(function(row,i){if(!idx[row.key])idx[row.key]=[];idx[row.key].push(i);});
+  var steps=[],io=0,cmp=0,matches=0,results=[];
+  steps.push({type:'phase',msg:'Starting Index Nested Loop Join. Index on S.key pre-built.',io:0,cmp:0,matches:0,results:[],ri:-1,si:-1,lookupKey:null,activePtrs:[]});
+  for(var ri=0;ri<R.length;ri++){
+    io++;cmp++;
+    var rKey=R[ri].key;
+    var msi=idx[rKey]||[];
+    steps.push({type:'outer',msg:'Read R['+ri+'] (key='+rKey+'). Probe index. Found '+msi.length+' entry/entries.',io:io,cmp:cmp,matches:matches,results:results.slice(),ri:ri,si:-1,lookupKey:rKey,activePtrs:msi.map(function(i){return rKey+'-'+i;})});
+    if(msi.length>0){
+      for(var j=0;j<msi.length;j++){
+        var si=msi[j];io++;matches++;
+        results.push({rKey:R[ri].key,rName:R[ri].name,rDept:R[ri].dept,sKey:S[si].key,sName:S[si].name,sDept:S[si].dept});
+        steps.push({type:'match',msg:'Index hit: fetch S['+si+'] (key='+S[si].key+') \u2192 MATCH with R['+ri+']',io:io,cmp:cmp,matches:matches,results:results.slice(),ri:ri,si:si,lookupKey:rKey,activePtrs:[rKey+'-'+si]});
+      }
+    } else {
+      steps.push({type:'no_match',msg:'No index entry for key='+rKey+'. Skip.',io:io,cmp:cmp,matches:matches,results:results.slice(),ri:ri,si:-1,lookupKey:rKey,activePtrs:[]});
+    }
+  }
+  steps.push({type:'done',msg:'Done. '+matches+' matches. I/Os: '+io+', Index probes: '+cmp,io:io,cmp:cmp,matches:matches,results:results.slice(),ri:-1,si:-1,lookupKey:null,activePtrs:[]});
+  return steps;
+}
+
+function buildHashSteps(R,S){
+  var steps=[],io=0,cmp=0,matches=0,results=[],ht={};
+  steps.push({type:'phase',msg:'Phase 1: BUILD \u2014 scan R and insert into hash table',io:0,cmp:0,matches:0,results:[],phase:'build',ri:-1,si:-1,ht:{}});
+  for(var ri=0;ri<R.length;ri++){
+    io++;
+    var k=R[ri].key;
+    if(!ht[k])ht[k]=[];
+    ht[k].push(ri);
+    steps.push({type:'build',msg:'Read R['+ri+'] (key='+k+'). Insert into bucket ['+k+'].',io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'build',ri:ri,si:-1,ht:JSON.parse(JSON.stringify(ht)),justAdded:ri});
+  }
+  steps.push({type:'phase',msg:'Phase 2: PROBE \u2014 scan S and probe hash table',io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'probe',ri:-1,si:-1,ht:JSON.parse(JSON.stringify(ht))});
+  for(var si=0;si<S.length;si++){
+    io++;cmp++;
+    var sk=S[si].key;
+    var bucket=ht[sk]||[];
+    steps.push({type:'probe',msg:'Read S['+si+'] (key='+sk+'). Probe bucket ['+sk+']. Found '+bucket.length+' R-row(s).',io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'probe',ri:-1,si:si,ht:JSON.parse(JSON.stringify(ht)),probeKey:sk});
+    for(var b=0;b<bucket.length;b++){
+      var bri=bucket[b];matches++;
+      results.push({rKey:R[bri].key,rName:R[bri].name,rDept:R[bri].dept,sKey:S[si].key,sName:S[si].name,sDept:S[si].dept});
+      steps.push({type:'match',msg:'Match: R['+bri+'] (key='+R[bri].key+') \u2194 S['+si+'] (key='+S[si].key+')',io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'probe',ri:bri,si:si,ht:JSON.parse(JSON.stringify(ht)),probeKey:sk});
+    }
+  }
+  steps.push({type:'done',msg:'Done. '+matches+' matches. I/Os: '+io+', Probes: '+cmp,io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'done',ri:-1,si:-1,ht:JSON.parse(JSON.stringify(ht))});
+  return steps;
+}
+
+function buildSMJSteps(R,S){
+  var steps=[],io=0,cmp=0,matches=0,results=[];
+  steps.push({type:'phase',msg:'Phase 1: SORT \u2014 sorting R and S on key',io:0,cmp:0,matches:0,results:[],phase:'sort',sortedR:null,sortedS:null,pR:-1,pS:-1});
+  var sortedRIdx=[];for(var i=0;i<R.length;i++)sortedRIdx.push(i);
+  sortedRIdx.sort(function(a,b){return R[a].key-R[b].key;});
+  var sortedSIdx=[];for(var i=0;i<S.length;i++)sortedSIdx.push(i);
+  sortedSIdx.sort(function(a,b){return S[a].key-S[b].key;});
+  sortedRIdx.forEach(function(){io++;});
+  steps.push({type:'sort_r',msg:'Sorted R: ['+sortedRIdx.map(function(i){return R[i].key;}).join(', ')+']. Reads: '+io,io:io,cmp:cmp,matches:matches,results:[],phase:'sort',sortedR:sortedRIdx.slice(),sortedS:null,pR:-1,pS:-1});
+  sortedSIdx.forEach(function(){io++;});
+  steps.push({type:'sort_s',msg:'Sorted S: ['+sortedSIdx.map(function(i){return S[i].key;}).join(', ')+']. Reads: '+io,io:io,cmp:cmp,matches:matches,results:[],phase:'sort',sortedR:sortedRIdx.slice(),sortedS:sortedSIdx.slice(),pR:-1,pS:-1});
+  steps.push({type:'phase',msg:'Phase 2: MERGE \u2014 advance pointers through sorted sequences',io:io,cmp:cmp,matches:matches,results:[],phase:'merge',sortedR:sortedRIdx.slice(),sortedS:sortedSIdx.slice(),pR:0,pS:0});
+  var sR=sortedRIdx.map(function(i){return R[i];}),sS=sortedSIdx.map(function(i){return S[i];});
+  var pR=0,pS=0;
+  while(pR<sR.length&&pS<sS.length){
+    cmp++;
+    var rk=sR[pR].key,sk=sS[pS].key;
+    var cmpLabel=rk===sk?'= MATCH group':rk<sk?'< advance R':'> advance S';
+    steps.push({type:'compare',msg:'Compare R[pR='+pR+'].key('+rk+') vs S[pS='+pS+'].key('+sk+')',io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'merge',sortedR:sortedRIdx.slice(),sortedS:sortedSIdx.slice(),pR:pR,pS:pS,cmpInd:rk+' vs '+sk,matchInd:cmpLabel});
+    if(rk===sk){
+      var mk=rk,pS0=pS,pRstart=pR;
+      while(pR<sR.length&&sR[pR].key===mk){
+        var pSi=pS0;
+        while(pSi<sS.length&&sS[pSi].key===mk){
+          matches++;
+          results.push({rKey:sR[pR].key,rName:sR[pR].name,rDept:sR[pR].dept,sKey:sS[pSi].key,sName:sS[pSi].name,sDept:sS[pSi].dept});
+          steps.push({type:'match',msg:'Match: R[pR='+pR+'] (key='+sR[pR].key+') \u2194 S[pS='+pSi+'] (key='+sS[pSi].key+')',io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'merge',sortedR:sortedRIdx.slice(),sortedS:sortedSIdx.slice(),pR:pR,pS:pSi,cmpInd:'',matchInd:'\u2713 emitted'});
+          pSi++;
+        }
+        pR++;
+      }
+      pS=pSi;
+    } else if(rk<sk){pR++;} else {pS++;}
+  }
+  steps.push({type:'done',msg:'Done. '+matches+' matches. I/Os: '+io+', Comparisons: '+cmp,io:io,cmp:cmp,matches:matches,results:results.slice(),phase:'done',sortedR:sortedRIdx.slice(),sortedS:sortedSIdx.slice(),pR:sR.length,pS:sS.length});
+  return steps;
+}
+
+// ---- State Machine ----
+var state={};
+['snl','inl','hash','smj'].forEach(function(a){state[a]={steps:[],cur:-1,running:false,timer:null};});
+
+function startAlgo(algo){
+  resetAlgo(algo);
+  var steps;
+  if(algo==='snl') steps=buildSNLSteps(tableR,tableS);
+  else if(algo==='inl') steps=buildINLSteps(tableR,tableS);
+  else if(algo==='hash') steps=buildHashSteps(tableR,tableS);
+  else steps=buildSMJSteps(tableR,tableS);
+  state[algo].steps=steps;
+  state[algo].cur=-1;
+  updateStats(algo,0,0,0,0,steps.length-1);
+  clearLog(algo);
+  addLog(algo,'\u25b6 '+algo.toUpperCase()+' started. '+(steps.length-1)+' steps.','log-phase');
+  stepAlgo(algo);
+}
+
+function resetAlgo(algo){
+  if(state[algo].timer){clearTimeout(state[algo].timer);state[algo].timer=null;}
+  state[algo].running=false;state[algo].cur=-1;state[algo].steps=[];
+  clearHighlights(algo,'r');clearHighlights(algo,'s');
+  updateStats(algo,0,0,0,null,null);
+  renderResult(algo,[]);clearLog(algo);
+  document.getElementById(algo+'-finished').classList.remove('show');
+  var ab=document.getElementById(algo+'-auto-btn');
+  if(ab){ab.textContent='\u25b6\u25b6 Auto';ab.className='btn btn-success btn-sm';}
+  if(algo==='hash'){
+    document.getElementById('hash-ht-display').innerHTML='<em style="font-size:11px;color:#aaa;">Empty</em>';
+    document.getElementById('hash-phase-badge').innerHTML='';
+    document.getElementById('hash-cmp-ind').textContent='';
+  }
+  if(algo==='smj'){
+    document.getElementById('smj-sort-display').style.display='none';
+    document.getElementById('smj-phase-badge').innerHTML='';
+    document.getElementById('smj-cmp-ind').textContent='';
+    document.getElementById('smj-match-ind').textContent='';
+  }
+  if(algo==='inl'){renderInlIndex();document.getElementById('inl-cmp-ind').textContent='';}
+  if(algo==='snl'){document.getElementById('snl-cmp-ind').textContent='';document.getElementById('snl-match-ind').textContent='';}
+}
+
+function stepAlgo(algo){
+  var s=state[algo];
+  if(s.steps.length===0){startAlgo(algo);return;}
+  if(s.cur>=s.steps.length-1) return;
+  s.cur++;
+  applyStep(algo,s.steps[s.cur],s.cur,s.steps.length);
+}
+
+function autoAlgo(algo){
+  var s=state[algo];
+  var btn=document.getElementById(algo+'-auto-btn');
+  if(s.running){
+    s.running=false;if(s.timer){clearTimeout(s.timer);s.timer=null;}
+    if(btn){btn.textContent='\u25b6\u25b6 Auto';btn.className='btn btn-success btn-sm';}return;
+  }
+  if(s.steps.length===0) startAlgo(algo);
+  if(s.cur>=s.steps.length-1) return;
+  s.running=true;
+  if(btn){btn.textContent='\u23f8 Pause';btn.className='btn btn-warning btn-sm';}
+  function tick(){
+    if(!s.running||s.cur>=s.steps.length-1){
+      s.running=false;if(btn){btn.textContent='\u25b6\u25b6 Auto';btn.className='btn btn-success btn-sm';}return;
+    }
+    stepAlgo(algo);
+    var sp=parseInt(document.getElementById(algo+'-speed').value);
+    s.timer=setTimeout(tick,Math.round(1200/sp));
+  }
+  tick();
+}
+
+function applyStep(algo,step,cur,total){
+  updateStats(algo,step.io,step.cmp,step.matches,cur,total-1);
+  renderResult(algo,step.results||[]);
+  addLog(algo,'['+cur+'/'+(total-1)+'] '+step.msg,
+    step.type==='match'?'log-match':step.type==='phase'?'log-phase':(step.type==='compare'||step.type==='probe')?'log-cmp':(step.type.indexOf('build')>=0||step.type.indexOf('sort')>=0)?'log-io':'log-info');
+  if(step.type==='done'){
+    document.getElementById(algo+'-finished').classList.add('show');
+    var ab=document.getElementById(algo+'-auto-btn');
+    if(ab){ab.textContent='\u25b6\u25b6 Auto';ab.className='btn btn-success btn-sm';}
+    state[algo].running=false;
+    updateComparisonPanel(algo,step.io,step.cmp,step.matches);
+  }
+
+  if(algo==='snl'){
+    clearHighlights('snl','r');clearHighlights('snl','s');
+    if(step.ri>=0){
+      for(var i=0;i<step.ri;i++) setRowClass('snl','r',i,'row-scanned');
+      setRowClass('snl','r',step.ri,'row-outer');
+    }
+    if(step.si>=0){
+      for(var i=0;i<step.si;i++) setRowClass('snl','s',i,'row-scanned');
+      var isMatch=tableR[step.ri]&&tableS[step.si]&&tableR[step.ri].key===tableS[step.si].key;
+      setRowClass('snl','s',step.si,isMatch?'row-match':'row-inner');
+    }
+    document.getElementById('snl-cmp-ind').textContent=step.cmpInd||'';
+    var mi=document.getElementById('snl-match-ind');
+    mi.textContent=step.matchInd||'';
+    mi.className='match-indicator '+(step.matchInd&&step.matchInd.indexOf('\u2713')>=0?'match-yes':step.matchInd?'match-no':'');
+  }
+
+  if(algo==='inl'){
+    clearHighlights('inl','r');clearHighlights('inl','s');
+    document.querySelectorAll('[id^="inl-idx-ptr-"]').forEach(function(e){e.className='index-ptr';});
+    if(step.ri>=0){for(var i=0;i<step.ri;i++)setRowClass('inl','r',i,'row-scanned');setRowClass('inl','r',step.ri,'row-outer');}
+    if(step.si>=0) setRowClass('inl','s',step.si,'row-match');
+    if(step.activePtrs) step.activePtrs.forEach(function(id){var el=document.getElementById('inl-idx-ptr-'+id);if(el)el.className='index-ptr active-ptr';});
+    var lk=step.lookupKey;
+    document.getElementById('inl-cmp-ind').textContent=lk!==null&&lk!==undefined?'Probing index for key = '+lk+' \u2192 '+(step.activePtrs||[]).length+' hit(s)':'';
+  }
+
+  if(algo==='hash'){
+    clearHighlights('hash','r');clearHighlights('hash','s');
+    if(step.phase==='build'){
+      document.getElementById('hash-phase-badge').innerHTML='<span class="phase-badge phase-build">Phase 1: Build</span>';
+      if(step.ri>=0){for(var i=0;i<step.ri;i++)setRowClass('hash','r',i,'row-scanned');setRowClass('hash','r',step.ri,'row-active');}
+    } else if(step.phase==='probe'||step.phase==='done'){
+      document.getElementById('hash-phase-badge').innerHTML='<span class="phase-badge phase-probe">Phase 2: Probe</span>';
+      if(step.si>=0){for(var i=0;i<step.si;i++)setRowClass('hash','s',i,'row-scanned');setRowClass('hash','s',step.si,'row-probe');}
+      if(step.ri>=0) setRowClass('hash','r',step.ri,'row-match');
+    }
+    if(step.ht) renderHashTable(step.ht,step.justAdded);
+    document.getElementById('hash-cmp-ind').textContent=(step.probeKey!==undefined&&step.probeKey!==null)?'Probing bucket ['+step.probeKey+']':(step.type==='match'?'\u2713 Match in bucket ['+step.probeKey+']':'');
+  }
+
+  if(algo==='smj'){
+    clearHighlights('smj','r');clearHighlights('smj','s');
+    if(step.phase==='sort') document.getElementById('smj-phase-badge').innerHTML='<span class="phase-badge phase-sort">Phase 1: Sort</span>';
+    else if(step.phase==='merge'||step.phase==='done') document.getElementById('smj-phase-badge').innerHTML='<span class="phase-badge phase-merge">Phase 2: Merge</span>';
+    if(step.sortedR){document.getElementById('smj-sort-display').style.display='block';renderSMJSorted(step.sortedR,step.sortedS,step.pR,step.pS);}
+    if((step.phase==='merge'||step.phase==='done')&&step.sortedR){
+      if(step.pR>=0&&step.pR<step.sortedR.length) setRowClass('smj','r',step.sortedR[step.pR],step.type==='match'?'row-match':'row-outer');
+      if(step.sortedS&&step.pS>=0&&step.pS<step.sortedS.length) setRowClass('smj','s',step.sortedS[step.pS],step.type==='match'?'row-match':'row-inner');
+    }
+    document.getElementById('smj-cmp-ind').textContent=step.cmpInd||'';
+    var mi2=document.getElementById('smj-match-ind');
+    if(step.matchInd){
+      mi2.textContent=step.matchInd;
+      mi2.className='match-indicator '+(step.matchInd.indexOf('=')>=0||step.matchInd.indexOf('\u2713')>=0?'match-yes':'match-no');
+    } else {mi2.textContent='';}
+  }
+
+  // pseudocode highlighting
+  if(algo==='snl') highlightSNLPseudo(step);
+  if(algo==='inl') highlightINLPseudo(step);
+  if(algo==='hash') highlightHashPseudo(step);
+  if(algo==='smj') highlightSMJPseudo(step);
+}
+
+function renderHashTable(ht,justAdded){
+  var el=document.getElementById('hash-ht-display');
+  var keys=Object.keys(ht).sort(function(a,b){return a-b;});
+  if(!keys.length){el.innerHTML='<em style="font-size:11px;color:#aaa;">Empty</em>';return;}
+  var html='';
+  keys.forEach(function(k){
+    var vals=ht[k].map(function(ri){
+      var isNew=(ri===justAdded);
+      return '<span class="bucket-val '+(isNew?'just-added':'')+'">R['+ri+'] key='+(tableR[ri]?tableR[ri].key:'?')+'</span>';
+    }).join('');
+    html+='<div class="bucket-row"><span class="bucket-key">'+k+'</span><span class="bucket-vals">'+vals+'</span></div>';
+  });
+  el.innerHTML=html;
+}
+
+function renderSMJSorted(sortedR,sortedS,pR,pS){
+  var rEl=document.getElementById('smj-sorted-r');
+  var sEl=document.getElementById('smj-sorted-s');
+  if(!sortedR) return;
+  var rHtml='<strong style="font-size:11px;color:#0066cc;">R sorted:</strong> ';
+  sortedR.forEach(function(origIdx,pos){
+    var k=tableR[origIdx].key,isPR=(pos===pR);
+    rHtml+='<span class="sorted-row '+(isPR?'ptr-r':'')+'">'+(isPR?'\u25b7 ':'')+k+'</span>';
+  });
+  rEl.innerHTML=rHtml;
+  if(!sortedS) return;
+  var sHtml='<strong style="font-size:11px;color:#2a7a2a;">S sorted:</strong> ';
+  sortedS.forEach(function(origIdx,pos){
+    var k=tableS[origIdx].key,isPS=(pos===pS);
+    sHtml+='<span class="sorted-row '+(isPS?'ptr-s':'')+'">'+(isPS?'\u25b7 ':'')+k+'</span>';
+  });
+  sEl.innerHTML=sHtml;
+}
+
+var algoStats={};
+function updateComparisonPanel(algo,io,cmp,matches){
+  var labels={snl:'Nested Loop',inl:'Index Nested Loop',hash:'Hash Join',smj:'Sort-Merge Join'};
+  var notes={snl:'O(|R|\xd7|S|) comparisons',inl:'O(|R|\xd7lookup) \u2014 avoids full S scan',hash:'O(|R|+|S|) \u2014 linear both sides',smj:'O(|R|+|S|) merge + sort cost'};
+  algoStats[algo]={io:io,cmp:cmp,matches:matches,label:labels[algo],note:notes[algo]};
+  document.getElementById('comparison-panel').style.display='block';
+  var html='',order=['snl','inl','hash','smj'];
+  order.forEach(function(a){
+    if(!algoStats[a]) return;
+    var st=algoStats[a];
+    html+='<tr><td>'+st.label+'</td><td>'+st.io+'</td><td>'+st.cmp+'</td><td>'+st.matches+'</td><td style="color:#666;">'+st.note+'</td></tr>';
+  });
+  document.getElementById('comparison-tbody').innerHTML=html;
+}
+
+document.getElementById('rSize').addEventListener('input',function(){document.getElementById('rSizeVal').textContent=this.value+' rows';});
+document.getElementById('sSize').addEventListener('input',function(){document.getElementById('sSizeVal').textContent=this.value+' rows';});
+
+function switchTab(targetId) {
+  // Hide all panes
+  document.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+  // Deactivate all buttons
+  document.querySelectorAll('.algo-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  // Show target pane
+  document.getElementById(targetId).classList.add('active');
+  // Activate clicked button
+  document.querySelector('[data-target="'+targetId+'"]').classList.add('active');
+  // Re-render tables for the newly shown tab
+  var algo = targetId.replace('tab-','');
+  renderBaseTable(algo,'r',tableR);
+  renderBaseTable(algo,'s',tableS);
+  if(algo==='inl') renderInlIndex();
+}
+
+
+// ── Pseudocode highlighting ──────────────────────────────────────────────────
+function psReset(algo) {
+  document.querySelectorAll('#'+algo+'-pseudo .ps-line').forEach(function(el){
+    el.classList.remove('ps-active','ps-match');
+  });
+}
+function psHL(id, isMatch) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add(isMatch ? 'ps-match' : 'ps-active');
+  // scroll into view inside pseudo-body
+  el.scrollIntoView({block:'nearest'});
+}
+
+function highlightSNLPseudo(step) {
+  psReset('snl');
+  if (step.type==='phase') return;
+  if (step.type==='outer')   { psHL('snl-ps-1'); }
+  if (step.type==='compare') {
+    psHL('snl-ps-2'); psHL('snl-ps-3');
+    var isM = tableR[step.ri]&&tableS[step.si]&&tableR[step.ri].key===tableS[step.si].key;
+    if (isM) psHL('snl-ps-4', true);
+  }
+  if (step.type==='done') {}
+}
+
+function highlightINLPseudo(step) {
+  psReset('inl');
+  if (step.type==='phase') return;
+  if (step.type==='outer')    { psHL('inl-ps-1'); psHL('inl-ps-2'); }
+  if (step.type==='match')    { psHL('inl-ps-3'); psHL('inl-ps-4', true); }
+  if (step.type==='no_match') { psHL('inl-ps-2'); }
+}
+
+function highlightHashPseudo(step) {
+  psReset('hash');
+  if (step.type==='phase') {
+    if (step.phase==='build') psHL('hash-ps-b0');
+    if (step.phase==='probe') psHL('hash-ps-p0');
+    return;
+  }
+  if (step.type==='build') { psHL('hash-ps-b1'); psHL('hash-ps-b2'); }
+  if (step.type==='probe') { psHL('hash-ps-p1'); psHL('hash-ps-p2'); }
+  if (step.type==='match') { psHL('hash-ps-p2'); psHL('hash-ps-p3', true); }
+}
+
+function highlightSMJPseudo(step) {
+  psReset('smj');
+  if (step.type==='phase') {
+    if (step.phase==='sort')  psHL('smj-ps-s0');
+    if (step.phase==='merge') { psHL('smj-ps-m0'); psHL('smj-ps-m1'); }
+    return;
+  }
+  if (step.type==='sort_r' || step.type==='sort_s') { psHL('smj-ps-s1'); }
+  if (step.type==='compare') {
+    psHL('smj-ps-m2');
+    var rk = step.cmpInd ? parseInt(step.cmpInd.split(' vs ')[0]) : null;
+    var sk = step.cmpInd ? parseInt(step.cmpInd.split(' vs ')[1]) : null;
+    if (rk !== null && sk !== null) {
+      if (rk === sk) psHL('smj-ps-m3');
+      else if (rk < sk) psHL('smj-ps-m4');
+      else psHL('smj-ps-m5');
+    }
+  }
+  if (step.type==='match') { psHL('smj-ps-m3', true); }
+}
+
+generateTables();
+
+// ── Resizable pseudocode column ───────────────────────────────────────────────
+(function() {
+  var algos = ['snl','inl','hash','smj'];
+  algos.forEach(function(algo) {
+    var handle = document.getElementById(algo+'-resize');
+    var pseudoCol = document.getElementById(algo+'-pseudo-col');
+    var headPseudo = document.getElementById(algo+'-head-pseudo');
+    if (!handle || !pseudoCol) return;
+
+    var startX, startW;
+
+    function onMouseDown(e) {
+      startX = e.clientX;
+      startW = pseudoCol.offsetWidth;
+      handle.classList.add('dragging');
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      e.preventDefault();
+    }
+
+    function onMouseMove(e) {
+      var dx = e.clientX - startX;
+      var newW = Math.max(160, Math.min(600, startW + dx));
+      pseudoCol.style.width = newW + 'px';
+      if (headPseudo) headPseudo.style.width = newW + 'px';
+    }
+
+    function onMouseUp() {
+      handle.classList.remove('dragging');
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+
+    handle.addEventListener('mousedown', onMouseDown);
+  });
+})();
+
+</script>
+</body>
+</html>
