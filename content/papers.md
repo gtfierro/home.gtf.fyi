@@ -32,7 +32,7 @@ date: 2021-06-12T16:51:38-07:00
 <div class="pub pub-conference">
 
 **I Can’t Read All That! Improving the Usability of Semantic Models Using Concise, Ontology-Agnostic, Building-Specific Schemas**
-**[[pdf]](/papers/bschema2025paul)[[link]](https://doi.org/10.1145/3736425.3770107)**
+**[[pdf]](/papers/bschema2025paul.pdf)[[link]](https://doi.org/10.1145/3736425.3770107)**
 
 Lazlo Paul, Ozan Baris Mulayim, Umut Mete Saka, Anand Krishnan Prakash, Gabe Fierro, Marco Pritoni
 
