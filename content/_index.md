@@ -63,11 +63,17 @@ I received my PhD in Computer Science from [UC Berkeley](https://eecs.berkeley.e
 
 ## Resources for Students
 
+What is a PhD and how do I get one?
 * [Matt Might's Illustrated Guide to a PhD](https://matt.might.net/articles/phd-school-in-pictures/)
+* Overview of [getting a CS PhD in the US](https://parentheticallyspeaking.org/articles/us-cs-phd-faq/)
+
+Technical Reading, Writing, and Reviewing:
 * Advice on [technical writing](https://www.cs.tufts.edu/~nr/pubs/two-abstract.html):
     * on [systems papers](http://svr-sk818-web.cl.cam.ac.uk/keshav/papers/10/ogres2.pdf)
+* Advice on [writing your dissertation](https://www.ccs.neu.edu/home/shivers/diss-advice.html)
 * Advice on reviewing papers ([1](https://people.inf.ethz.ch/troscoe/pubs/review-writing.pdf), [2](https://www.cs.utexas.edu/users/mckinley/notes/reviewing-smith.pdf))
 * Advice on reading papers ([1](http://www.sigcomm.org/sites/default/files/ccr/papers/2007/July/1273445-1273458.pdf) w/ summary [here](https://derekchia.com/how-to-read-a-research-paper-3-pass-approach/))
-* Advice on [writing your dissertation](https://www.ccs.neu.edu/home/shivers/diss-advice.html)
-* Overview of [getting a CS PhD in the US](https://parentheticallyspeaking.org/articles/us-cs-phd-faq/)
+
+General advice and experiences:
+* [Lessons from my PhD (Austin Z. Henley)](https://austinhenley.com/blog/lessonsfrommyphd.html)
 * [10 simple rules for attending your first conference](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8282073/)
