@@ -25,6 +25,10 @@ date: 2021-06-12T16:51:38-07:00
       <div class="box pub-misc"></div>
       <span class="label">Tech Report</span>
   </div>
+  <div class="item-container">
+      <div class="box pub-software"></div>
+      <span class="label">Software</span>
+  </div>
 </div>
 
 ### 2026
