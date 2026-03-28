@@ -61,7 +61,7 @@ Lazlo Paul, Ozan Baris Mulayim, Umut Mete Saka, Anand Krishnan Prakash, Gabe Fie
 <div class="pub pub-conference">
 
 **BuildingQA: A Benchmark for Natural Language Question Answering over Building Knowledge Graphs**
-**[[pdf]](/papers/buildingqa2025mulayim.pdf)[[link]](https://doi.org/10.1145/3736425.3770097)<i style="color:red">  Best Paper Award Runner-Up</i>**
+**[[pdf]](/papers/buildingqa2025mulayim.pdf)[[link]](https://doi.org/10.1145/3736425.3770097)[[repo]](https://github.com/INFERLab/BuildingQA)<i style="color:red">  Best Paper Award Runner-Up</i>**
 
 Ozan Baris Mulayim, Avia Anwar, Umut Mete Saka, Lazlo Paul, Anand Krishnan Prakash, Gabe Fierro, Marco Pritoni, Mario Bergés
 
@@ -121,7 +121,7 @@ Jesan Ahammed Ovi, Gabe Fierro, C. Estelle Smith
 <div class="pub pub-workshop">
 
 **Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs**
-**[[pdf]](/papers/mulayim2025towards.pdf)[[link]](https://dl.acm.org/doi/10.1145/3722565.3727197)<i style="color:red">  Best Paper Award</i>**
+**[[pdf]](/papers/mulayim2025towards.pdf)[[link]](https://dl.acm.org/doi/10.1145/3722565.3727197)[[repo]](https://github.com/ozanbarism/DA-KGQA)<i style="color:red">  Best Paper Award</i>**
 
 Ozan Baris Mulayim, Gabe Fierro, Mario Bergés, Marco Pritoni
 
@@ -269,7 +269,7 @@ Therese Peffer, Gabe Fierro, Paul Raftery, Carlos Duarte Roa, Marco Pritoni, Mic
 <div class="pub pub-conference">
 
 **Application-Driven Creation of Building Metadata Models with Semantic Sufficiency**
-**[[pdf]](/papers/fierro2022application.pdf)[[link]](https://dl.acm.org/doi/10.1145/3563357.3564083)**
+**[[pdf]](/papers/fierro2022application.pdf)[[link]](https://dl.acm.org/doi/10.1145/3563357.3564083)[[repo]](https://github.com/NREL/BuildingMOTIF)**
 
 Gabe Fierro, Avijit Saha, Tobias Shapinsky, Matthew Steen, Hannah Eslinger
 
@@ -281,7 +281,7 @@ Gabe Fierro, Avijit Saha, Tobias Shapinsky, Matthew Steen, Hannah Eslinger
 <div class="pub pub-conference">
 
 **Notes Paper: Enabling Building Application Development with Simulated Digital Twins**
-**[[pdf]](/papers/fierro2022simulated.pdf)[[link]](https://dl.acm.org/doi/abs/10.1145/3563357.3564060)**
+**[[pdf]](/papers/fierro2022simulated.pdf)[[link]](https://dl.acm.org/doi/abs/10.1145/3563357.3564060)[[repo]](https://github.com/gtfierro/simulated-digital-twin)**
 
 Gabe Fierro, Anand Prakash, David Blum, Joel Bender, Erik Paulson, Michael Wetter
 
@@ -305,7 +305,7 @@ Amir Roth, Michael Wetter, Kyle Benne, David Blum, Yan Chen, Gabe Fierro, Marco 
 <div class="pub pub-journal">
 
 **Extending the Brick Schema to Represent Metadata of Occupants**
-**[[pdf]](/papers/extending2022luo.pdf)[[link]](https://doi.org/10.1016/j.autcon.2022.104307)**
+**[[pdf]](/papers/extending2022luo.pdf)[[link]](https://doi.org/10.1016/j.autcon.2022.104307)[[repo]](https://github.com/gtfierro/brick-occupancy-extension)**
 
 Na Luo, Gabe Fierro, Yapan Liu, Bing Dong, Tianzhen Hong
 
@@ -342,7 +342,7 @@ Ruiji Sun, Carlos Duarte Roa, Paul Raftery, Gabe Fierro
 <div class="pub pub-conference">
 
 **Query Relaxation for Portable Brick-Based Applications**
-**[[pdf]](/papers/query2021bennani.pdf)[[link]](https://dl.acm.org/doi/abs/10.1145/3486611.3486671)**
+**[[pdf]](/papers/query2021bennani.pdf)[[link]](https://dl.acm.org/doi/abs/10.1145/3486611.3486671)[[repo]](https://github.com/anandkp92/relaxed-brick-queries/)**
 
 Imane Bennani, Anand Prakash, Marina Zafiris, Lazlo Paul, Carlos Duarte Roa, Paul Raftery, Marco Pritoni, Gabe Fierro
 
@@ -403,7 +403,7 @@ Keith Moffat, Jasper Pakshong, Leo Chu, Gabe Fierro, Jaimie Swartz, Maxime Baude
 <div class="pub pub-conference">
 
 **An Extensible Software and Communication Platform for Distributed Energy Resource Management**
-**[[link]](https://ieeexplore.ieee.org/abstract/document/9303006)**
+**[[link]](https://ieeexplore.ieee.org/abstract/document/9303006)[[repo]](https://github.com/gtfierro/DEGC)**
 
 Gabe Fierro, Keith Moffat, Jasper Pakshong, Alexandra von Meier
 
@@ -415,7 +415,7 @@ Gabe Fierro, Keith Moffat, Jasper Pakshong, Alexandra von Meier
 <div class="pub pub-conference">
 
 **Shepherding Metadata Through the Building Lifecycle**
-**[[pdf]](/papers/shepherding2020fierro.pdf)[[link]](https://dl.acm.org/doi/10.1145/3408308.3427627)**
+**[[pdf]](/papers/shepherding2020fierro.pdf)[[link]](https://dl.acm.org/doi/10.1145/3408308.3427627)[[repo]](https://github.com/gtfierro/shepherding)**
 
 Gabe Fierro, Anand Krishnan Prakash, Cory Mosiman, Marco Pritoni, Paul Raftery, Michael Wetter, David E. Culler
 
@@ -427,7 +427,7 @@ Gabe Fierro, Anand Krishnan Prakash, Cory Mosiman, Marco Pritoni, Paul Raftery, 
 <div class="pub pub-demoposter">
 
 **Demo Abstract: Interactive Metadata Integration with Brick**
-**[[pdf]](/papers/interactive2020fierro.pdf)**
+**[[pdf]](/papers/interactive2020fierro.pdf)[[repo]](https://github.com/gtfierro/shepherding-metadata)**
 
 Gabe Fierro, Anand Krishnan Prakash, Cory Mosiman, Marco Pritoni, Paul Raftery, Michael Wetter, David E Culler
 
@@ -439,7 +439,7 @@ Gabe Fierro, Anand Krishnan Prakash, Cory Mosiman, Marco Pritoni, Paul Raftery, 
 <div class="pub pub-journal">
 
 **Formalizing Tag-Based Metadata With the Brick Ontology**
-**[[pdf]](/papers/house2020fierro.pdf)[[link]](https://doi.org/10.3389/fbuil.2020.558034)**
+**[[pdf]](/papers/house2020fierro.pdf)[[link]](https://doi.org/10.3389/fbuil.2020.558034)[[repo]](https://github.com/BrickSchema/Brick)**
 
 Gabe Fierro, Jason Koh, Shreyas Nagare, Xiaolin Zang, Yuvraj Agarwal, Rajesh K. Gupta and David E. Culler
 
