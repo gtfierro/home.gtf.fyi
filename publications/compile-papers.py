@@ -39,7 +39,7 @@ md_template = jinja2.Template("""
 <div class="pub pub-{{ type }}">
 
 **{{ title }}**
-**{% if pdf %}[[pdf]](/papers/{{ pdf }}){% endif %}{% if link %}[[link]]({{ link }}){% endif %}{% if award %}<i style="color:red">  {{ award }}</i>{% endif %}**
+**{% if pdf %}[[pdf]](/papers/{{ pdf }}){% endif %}{% if link %}[[link]]({{ link }}){% endif %}{% if repo %}[[repo]]({{ repo }}){% endif %}{% if award %}<i style="color:red">  {{ award }}</i>{% endif %}**
 
 {% for name in authors %}{{ name }}{{ ", " if not loop.last else "" }}{% endfor %}
 
@@ -75,6 +75,10 @@ date: 2021-06-12T16:51:38-07:00
   <div class="item-container">
       <div class="box pub-misc"></div>
       <span class="label">Tech Report</span>
+  </div>
+  <div class="item-container">
+      <div class="box pub-software"></div>
+      <span class="label">Software</span>
   </div>
 </div>
 """)
