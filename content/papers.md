@@ -40,7 +40,7 @@ date: 2021-06-12T16:51:38-07:00
 
 Gabe Fierro
 
-** March, 2026.
+March, 2026.
 
 </div>
 

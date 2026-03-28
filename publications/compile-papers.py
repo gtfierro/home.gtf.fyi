@@ -43,7 +43,7 @@ md_template = jinja2.Template("""
 
 {% for name in authors %}{{ name }}{{ ", " if not loop.last else "" }}{% endfor %}
 
-*{{ conference if conference else ""}}*{{ ". " if conference else ""}} {{ location if location else ""}}{{ ", " if location else ""}}{{ month if month else ""}}{{ ", " if month else ""}}{{ year }}.
+{% if conference %}*{{ conference }}*.  {{ location if location else ""}}{{ ", " if location else ""}}{{ month if month else ""}}{{ ", " if month else ""}}{{ year }}.{% else %}{{ location if location else ""}}{{ ", " if location else ""}}{{ month if month else ""}}{{ ", " if month else ""}}{{ year }}.{% endif %}
 
 </div>
 
