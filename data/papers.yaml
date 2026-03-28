@@ -722,3 +722,14 @@
   title: Economic Feasibility of IoT-Based Controls in Low-Income Residential Buildings
   type: demoposter
   year: 2025
+- authors: Gabe Fierro
+  award: null
+  conference: null
+  link: https://zenodo.org/records/19296439
+  location: null
+  month: March
+  pdf: null
+  slides: null
+  title: 'OntoEnv: a lightweight dependency manager for RDF ontologies'
+  type: software
+  year: 2026

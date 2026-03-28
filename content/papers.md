@@ -27,6 +27,19 @@ date: 2021-06-12T16:51:38-07:00
   </div>
 </div>
 
+### 2026
+
+<div class="pub pub-software">
+
+**OntoEnv: a lightweight dependency manager for RDF ontologies**
+**[[link]](https://zenodo.org/records/19296439)**
+
+Gabe Fierro
+
+** March, 2026.
+
+</div>
+
 ### 2025
 
 <div class="pub pub-conference">
