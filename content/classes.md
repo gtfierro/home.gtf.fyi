@@ -11,6 +11,7 @@ date: 2021-06-12T12:13:19-07:00
     - I made a utility for creating temporary postgres databases: https://git.sr.ht/~gabe/pg
     - [RDBMS Page/index visualizer](/csci403/dbms-page-index-visualizer.html)
     - [Join algorithm visualizer](/csci403/join-algorithms.html)
+    - [PEV2 Query Plan Visualizer](/csci403/pev2.html) -- source from [GitHub](https://github.com/dalibo/pev2)
 
 
 ## 2025
