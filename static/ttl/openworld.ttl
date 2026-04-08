@@ -1,0 +1,19 @@
+# this file is a list of known Closed World shapes. These are expensive
+# shapes to run, and I have better things to do than wait for them to complete
+# when I just want to test something else. SO, I'm just going to collect all
+# of the deactivation statements in one place so I can easily disable these shapes
+# without having to edit a text file every time I want to run a test.
+#
+# if you're using my 'shifty' tool (https://github.com/gtfierro/shifty) you can use
+# this just by including this shape graph as part of your shape graph, 
+# and it will automatically deactivate these shapes for you:
+#
+#       shifty validate --run-inference -d data.ttl -s shapes.ttl -s https://gtf.fyi/ttl/openworld.ttl
+#
+# if there are any other closed world shapes that you know of, send me an email!
+
+
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+<http://data.ashrae.org/standard223#ClosedWorldQUDTShape> sh:deactivated true .
+s223:ClosedWorld223Shape sh:deactivated true .
