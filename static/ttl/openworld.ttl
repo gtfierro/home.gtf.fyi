@@ -15,5 +15,6 @@
 
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
+# for ASHRAE Standard 223(P)
 <http://data.ashrae.org/standard223#ClosedWorldQUDTShape> sh:deactivated true .
-s223:ClosedWorld223Shape sh:deactivated true .
+<http://data.ashrae.org/standard223#ClosedWorld223Shape> sh:deactivated true .
