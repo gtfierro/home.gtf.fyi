@@ -5,7 +5,7 @@
 # without having to edit a text file every time I want to run a test.
 #
 # if you're using my 'shifty' tool (https://github.com/gtfierro/shifty) you can use
-# this just by including this shape graph as part of your shape graph, 
+# this just by including this shape graph as part of your shape graph,
 # and it will automatically deactivate these shapes for you:
 #
 #       shifty validate --run-inference -d data.ttl -s shapes.ttl -s https://gtf.fyi/ttl/openworld.ttl
@@ -14,6 +14,9 @@
 
 
 @prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+<https://gtf.fyi/ttl/openworld.ttl> a owl:Ontology .
 
 # for ASHRAE Standard 223(P)
 <http://data.ashrae.org/standard223#ClosedWorldQUDTShape> sh:deactivated true .
