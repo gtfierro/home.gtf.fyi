@@ -27,19 +27,6 @@
     </div>
     {{ end }}
 
-    {{ with .Pages.ByLastmod.Reverse }}
-    <div class="post-section">
-        <h3>posts</h3>
-        <ul>
-            {{ range . }}
-            <li data-tags="{{ range $i, $c := .Params.categories }}{{ if $i }},{{ end }}{{ $c | lower }}{{ end }}">
-                <a href="{{ .Permalink }}">{{ .Title }}</a><span class="post-item-meta"> &mdash; {{ .Lastmod.Format "2006-01-02" }}{{ with .Params.maturity }} &middot; <span class="maturity-badge" data-maturity="{{ . }}">{{ . }}</span>{{ end }}</span>
-            </li>
-            {{ end }}
-        </ul>
-    </div>
-    {{ end }}
-
     <hr />
 
     <h2 id="by-maturity">By Maturity</h2>

@@ -74,7 +74,7 @@ from buildingmotif.dataclasses import Model
 bldg = Model.from_file("tutorial.ttl")
 ```
 
-Annoyingly, I haven't yet gotten around to integrating the automatic handling of ontology dependencies like in [the previous example](/posts/brick-notes/minimal-brick-validation-example/).
+Annoyingly, I haven't yet gotten around to integrating the automatic handling of ontology dependencies like in [the previous example](/posts/brick/minimal-brick-validation-example/).
 So, we need to manually load the Brick and QUDT ontologies into `Library` objects.
 
 ```python

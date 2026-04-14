@@ -10,7 +10,7 @@ updates:
     note: "Initial draft"
 ---
 
-*For additional background on Brick, be sure to check out the [reading list](posts/brick-notes/getting-started-brick-research/)*
+*For additional background on Brick, be sure to check out the [reading list](posts/brick/getting-started-brick-research/)*
 
 ---
 
