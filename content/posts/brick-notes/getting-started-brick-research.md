@@ -3,6 +3,11 @@ title: "Getting Started with Brick Research"
 date: 2023-05-17T00:00:00Z
 categories: ['Brick','Research']
 type: post
+maturity: sprout
+lastmod: 2023-05-17
+updates:
+  - date: "2023-05-17"
+    note: "Initial draft"
 ---
 
 

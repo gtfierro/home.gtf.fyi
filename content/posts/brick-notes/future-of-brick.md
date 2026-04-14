@@ -4,6 +4,11 @@ date: 2021-07-27T00:00:00Z
 categories: ['Brick', 'SHACL', 'Ontology Design']
 type: post
 draft: true
+maturity: seedling
+lastmod: 2021-07-27
+updates:
+  - date: "2021-07-27"
+    note: "Initial draft"
 ---
 
 

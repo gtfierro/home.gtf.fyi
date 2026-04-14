@@ -3,6 +3,10 @@ title: "Validating ASHRAE 223P models"
 date: 2026-03-05
 categories: ['223P', 'SHACL', 'ontoenv', 'shifty']
 type: post
+maturity: sprout
+updates:
+- date: "2026-03-05"
+  note: "Initial draft"
 ---
 
 *Note: I'll be using my [ontoenv](https://ontoenv.gtf.fyi/) tool to build this post*

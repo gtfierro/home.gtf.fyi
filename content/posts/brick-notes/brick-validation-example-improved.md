@@ -3,6 +3,11 @@ title: "223P Validation Example (improved!)"
 date: 2025-12-04
 categories: ['Brick', 'SHACL', 'BuildingMOTIF']
 type: post
+maturity: seedling
+lastmod: 2025-12-04
+updates:
+  - date: "2025-12-04"
+    note: "Initial draft"
 ---
 
 I recommend installing [uv](https://docs.astral.sh/uv/) to handle Python dependencies and versions.

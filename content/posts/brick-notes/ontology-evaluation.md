@@ -3,6 +3,11 @@ title: "Ontology Evaluation"
 date: 2020-01-12T17:14:12-07:00
 categories: ['Brick']
 type: post
+maturity: sprout
+lastmod: 2020-01-12
+updates:
+  - date: "2020-01-12"
+    note: "Initial draft"
 ---
 
 This document establishes an empirical methodology for evaluating the 223 standard in order to codify the properties of 223 that make it successful and suitable for its intended use cases. We draw some inspiration from [this paper](https://dl.acm.org/doi/10.1145/2821650.2821669), which established the empirical metadata evaluation methodology that drove development of the Brick ontology. The original [Brick paper](https://dl.acm.org/doi/abs/10.1145/2993422.2993577) lays out three general properties of an ontology that make it successful for the building domain: completeness, extensibility and usability. We define each of these terms in the context of 223 and outline the specific evaluation procedures used.

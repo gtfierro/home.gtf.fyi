@@ -3,6 +3,11 @@ title: "Brick Validation Example (with BuildingMOTIF)"
 date: 2025-02-04
 categories: ['Brick', 'SHACL', 'BuildingMOTIF']
 type: post
+maturity: sprout
+lastmod: 2025-02-04
+updates:
+  - date: "2025-02-04"
+    note: "Initial draft"
 ---
 
 We will use the Brick model from the previous post:

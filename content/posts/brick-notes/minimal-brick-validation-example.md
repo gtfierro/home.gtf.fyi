@@ -3,6 +3,11 @@ title: "Minimal Brick Validation Example (no BuildingMOTIF)"
 date: 2025-01-20
 categories: ['Brick','SHACL','ontoenv']
 type: post
+maturity: sprout
+lastmod: 2025-01-20
+updates:
+  - date: "2025-01-20"
+    note: "Initial draft"
 ---
 
 

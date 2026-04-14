@@ -3,6 +3,11 @@ title: "My shortest Brick validation+inference script yet"
 date: 2026-02-19
 categories: ['Brick', 'SHACL', 'ontoenv', 'shifty']
 type: post
+maturity: seedling
+lastmod: 2026-02-19
+updates:
+  - date: "2026-02-19"
+    note: "Initial draft"
 ---
 
 My evenings these past few weeks have been spent working on [ontoenv](https://ontoenv.gtf.fyi/) (a dev environment manager for ontologies) and [shifty](https://github.com/gtfierro/shifty) (a vibe-coded SHACL implementation).

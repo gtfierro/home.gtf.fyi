@@ -3,6 +3,10 @@ title: "Temporary Postgres Databases"
 date: 2026-03-03
 categories: ['postgres']
 type: post
+maturity: seedling
+updates:
+    - date: "2026-03-03"
+      note: "Initial draft"
 ---
 
 When teaching my undergraduate database course, I often have the need for writing little "throwaway" SQL tables and queries to help illustrate concepts or to test out a feature. Connecting to the "real" course server

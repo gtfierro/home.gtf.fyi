@@ -3,6 +3,11 @@ title: "Point Mapping Overview"
 date: 2023-06-21T00:00:00Z
 categories: ['Brick','Research','BMS','label','mapping']
 type: post
+maturity: evergreen
+lastmod: 2023-06-21
+updates:
+  - date: "2023-06-21"
+    note: "Initial draft"
 ---
 
 *For additional background on Brick, be sure to check out the [reading list](posts/brick-notes/getting-started-brick-research/)*

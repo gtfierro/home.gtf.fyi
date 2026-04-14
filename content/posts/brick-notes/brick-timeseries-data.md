@@ -3,6 +3,11 @@ title: "Brick Timeseries Data"
 date: 2020-02-02T17:15:14-07:00
 categories: ['Brick']
 type: post
+maturity: sprout
+lastmod: 2020-02-02
+updates:
+  - date: "2020-02-02"
+    note: "Initial draft"
 ---
 
 # Brick Timeseries Access 

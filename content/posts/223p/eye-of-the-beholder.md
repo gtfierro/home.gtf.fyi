@@ -3,6 +3,10 @@ title: "Deriving Views over RDF Graphs"
 date: 2025-02-23T00:00:00Z
 categories: ['223p','rdf']
 type: post
+maturity: seedling
+updates:
+- date: "2025-02-23"
+  note: "Initial draft"
 ---
 
 *(the model is in the eye of the beholder)*
