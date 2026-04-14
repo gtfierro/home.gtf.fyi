@@ -1,17 +1,22 @@
 @font-face {
-  font-family: 'Iosevka';
-  src: url('fonts/Iosevka-Regular.woff2') format('woff2');
+  font-family: 'Berkeley';
+  src:  url('fonts/BerkeleyMono-Regular.woff2') format('woff2'),
+        url('fonts/BerkeleyMono-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Berkeley';
-  src:  url('fonts/BerkeleyMono-Regular.woff2') format('woff2'),
-        url('fonts/BerkeleyMono-Regular.woff') format('woff');
+  src:  url('fonts/BerkeleyMono-Bold.woff2') format('woff2'),
+        url('fonts/BerkeleyMono-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
   font-display: swap;
 }
 
-/* Fallback stack: Iosevka → Berkeley → system monospace */
 :root {
-  --mono-font: 'Iosevka', 'Berkeley', monospace;
+  --mono-font: 'Berkeley', monospace;
+  --sans-font: 'Public Sans', system-ui, sans-serif;
 }

@@ -69,11 +69,20 @@ $y-medium: 1.0rem;
 }
 
 // Style
+html {
+    font-size: 17px;
+}
 * {
     color: $black;
-    font-family: "Berkeley";
-    line-height: 1.2;
+    line-height: 1.6;
     font-weight: normal;
+}
+body {
+    font-family: var(--sans-font);
+}
+code, pre, kbd, tt, var, samp {
+    font-family: var(--mono-font);
+    line-height: 1.4;
 }
 .container {
     max-width: $max-width;
@@ -104,9 +113,11 @@ $y-medium: 1.0rem;
 .pub {
     font-size: 13px;
     max-width: 100%;
+    line-height: 1.4;
     p {
         white-space: pre-wrap; /* Preserve line breaks */
         word-wrap: break-word;
+        margin-bottom: 0.1rem;
     }
     border-radius: 10px;
     padding-left: 5px;
@@ -163,12 +174,12 @@ $y-medium: 1.0rem;
         @extend %link-default;
     }
     p {
-        margin-bottom: $y-small;
+        margin-bottom: 1rem;
     }
     h1, h2, h3, h4, h5, h6 {
         font-size: medium;
-        font-weight: bold;
-        margin: $y-medium 0 $y-small 0;
+        font-weight: 600;
+        margin: 1.75rem 0 0.5rem 0;
     }
     @for $i from 1 through 4 {
         h#{$i} {
@@ -258,13 +269,21 @@ $y-medium: 1.0rem;
     }
     code {
         color: $black;
+        font-family: var(--mono-font);
         background-color: #efefef;
         border: 1px solid #cccccc;
         border-radius: 3px;
         padding: 1px 5px;
     }
+    pre {
+        font-family: var(--mono-font);
+    }
     pre code {
-        all: unset;
+        background: none;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        font-family: var(--mono-font);
     }
     .highlight {
         margin: $y-medium auto;
@@ -272,8 +291,10 @@ $y-medium: 1.0rem;
         border: 1px solid #cccccc;
         border-left: 3px solid $blue;
         border-radius: 3px;
+        font-family: var(--mono-font);
         & > pre {
             padding: 12px 14px;
+            font-family: var(--mono-font);
         }
     }
 }
@@ -376,7 +397,6 @@ $y-medium: 1.0rem;
         color: $blue;
         white-space: nowrap;
         cursor: pointer;
-        font-family: "Berkeley";
         transition: background-color 0.15s, color 0.15s, border-color 0.15s;
 
         &:hover {
