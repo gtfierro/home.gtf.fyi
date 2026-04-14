@@ -1,0 +1,125 @@
+{{ define "main" }}
+<div class="container">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+
+    <nav class="post-view-nav">
+        <a href="#by-category">by category</a> &middot;
+        <a href="#by-maturity">by maturity</a> &middot;
+        <a href="#by-date">by date</a> &middot;
+        <a href="#tags">tags</a>
+    </nav>
+
+    <hr />
+
+    <h2 id="by-category">By Category</h2>
+
+    {{ range .Sections.ByLastmod.Reverse }}
+    <div class="post-section">
+        <h3>{{ .Title }}</h3>
+        <ul>
+            {{ range .RegularPages.ByLastmod.Reverse }}
+            <li data-tags="{{ range $i, $c := .Params.categories }}{{ if $i }},{{ end }}{{ $c | lower }}{{ end }}">
+                <a href="{{ .Permalink }}">{{ .Title }}</a><span class="post-item-meta"> &mdash; {{ .Lastmod.Format "2006-01-02" }}{{ with .Params.maturity }} &middot; <span class="maturity-badge" data-maturity="{{ . }}">{{ . }}</span>{{ end }}</span>
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+
+    {{ with .Pages.ByLastmod.Reverse }}
+    <div class="post-section">
+        <h3>posts</h3>
+        <ul>
+            {{ range . }}
+            <li data-tags="{{ range $i, $c := .Params.categories }}{{ if $i }},{{ end }}{{ $c | lower }}{{ end }}">
+                <a href="{{ .Permalink }}">{{ .Title }}</a><span class="post-item-meta"> &mdash; {{ .Lastmod.Format "2006-01-02" }}{{ with .Params.maturity }} &middot; <span class="maturity-badge" data-maturity="{{ . }}">{{ . }}</span>{{ end }}</span>
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+
+    <hr />
+
+    <h2 id="by-maturity">By Maturity</h2>
+    {{ $allPosts := where .Site.RegularPages "Type" "post" }}
+    {{ range $allPosts.GroupByParam "maturity" }}
+    <div class="post-section">
+        <h3>{{ if .Key }}{{ .Key }}{{ else }}<em>unset</em>{{ end }}</h3>
+        <ul>
+            {{ range .Pages.ByLastmod.Reverse }}
+            <li data-tags="{{ range $i, $c := .Params.categories }}{{ if $i }},{{ end }}{{ $c | lower }}{{ end }}">
+                <a href="{{ .Permalink }}">{{ .Title }}</a><span class="post-item-meta"> &mdash; {{ .Lastmod.Format "2006-01-02" }}</span>
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+
+    <hr />
+
+    <h2 id="by-date">By Date</h2>
+    <ul id="by-date-list">
+        {{ $allPosts := where .Site.RegularPages "Type" "post" }}
+        {{ range $allPosts.ByDate.Reverse }}
+        <li data-tags="{{ range $i, $c := .Params.categories }}{{ if $i }},{{ end }}{{ $c | lower }}{{ end }}">
+            <span class="post-item-date">{{ .Date.Format "2006-01-02" }}</span>
+            &nbsp;<a href="{{ .Permalink }}">{{ .Title }}</a>{{ with .Params.maturity }} &middot; <span class="maturity-badge" data-maturity="{{ . }}">{{ . }}</span>{{ end }}
+        </li>
+        {{ end }}
+    </ul>
+
+    <hr />
+
+    <h2 id="tags">Tags</h2>
+    <div class="tag-cloud">
+        {{ range .Site.Taxonomies.categories.Alphabetical }}
+        <button class="tag-item" data-tag="{{ .Name | lower }}">{{ .Name }} ({{ .Count }})</button>
+        {{ end }}
+    </div>
+
+    <br />
+</div>
+
+<script>
+(function () {
+    var activeTag = null;
+
+    function resetFilter() {
+        activeTag = null;
+        document.querySelectorAll('.tag-item').forEach(function (b) { b.classList.remove('active'); });
+        document.querySelectorAll('li[data-tags]').forEach(function (li) { li.style.display = ''; });
+        document.querySelectorAll('.post-section').forEach(function (s) { s.style.display = ''; });
+    }
+
+    function applyFilter(tag) {
+        document.querySelectorAll('li[data-tags]').forEach(function (li) {
+            var tags = li.dataset.tags ? li.dataset.tags.split(',') : [];
+            li.style.display = tags.indexOf(tag) !== -1 ? '' : 'none';
+        });
+        document.querySelectorAll('.post-section').forEach(function (section) {
+            var items = section.querySelectorAll('li[data-tags]');
+            var anyVisible = Array.prototype.some.call(items, function (li) {
+                return li.style.display !== 'none';
+            });
+            section.style.display = anyVisible ? '' : 'none';
+        });
+    }
+
+    document.querySelectorAll('.tag-item').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var tag = this.dataset.tag;
+            if (activeTag === tag) {
+                resetFilter();
+            } else {
+                activeTag = tag;
+                document.querySelectorAll('.tag-item').forEach(function (b) { b.classList.remove('active'); });
+                this.classList.add('active');
+                applyFilter(tag);
+            }
+        });
+    });
+})();
+</script>
+{{ end }}
