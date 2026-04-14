@@ -4,6 +4,8 @@ title: "Selected Talks"
 
 ## Selected Talks
 
+- **Brick Tutorial, SenSys 2025**.
+    - [Slides](/files/Brick-SenSys-2025.pdf)
 - **Brick / RealEstateCore Conference** 2025.
     - [Slides](/files/Brick-RECCon-2025.pdf)
 - **Overview of Brick** 2025.
