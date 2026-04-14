@@ -3,6 +3,11 @@ title: "Making Your Academic Portfolio Website"
 date: 2025-05-21T09:40:12-06:00
 categories: ['Grad School','Student']
 type: post
+maturity: sprout
+lastmod: 2025-05-21
+updates:
+  - date: "2025-05-21"
+    note: "Initial draft"
 ---
 
 

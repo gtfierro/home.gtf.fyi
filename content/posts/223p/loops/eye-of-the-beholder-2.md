@@ -3,6 +3,11 @@ title: "Defining HVAC Loops"
 date: 2025-03-23T00:00:00Z
 categories: ['223p','rdf']
 type: post
+maturity: seedling
+lastmod: 2025-03-23
+updates:
+  - date: "2025-03-23"
+    note: "Initial draft"
 ---
 
 {{< announce >}}

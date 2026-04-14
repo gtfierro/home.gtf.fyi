@@ -3,6 +3,11 @@ title: "Getting all template bodies from BuildingMOTIF"
 date: 2023-06-12T17:15:14-07:00
 categories: ['BuildingMOTIF','scratch']
 type: post
+maturity: seedling
+lastmod: 2023-06-12
+updates:
+  - date: "2023-06-12"
+    note: "Initial draft"
 ---
 
 Here's a quick how-to on load libraries into a BuildingMOTIF installation and then list all of the templates in those libraries as well as the *bodies* (RDF graph component) of those templates.

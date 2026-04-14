@@ -3,6 +3,11 @@ title: "Shape to Query"
 categories: ['BuildingMOTIF','scratch']
 date: 2023-06-19T17:54:57-06:00
 type: post
+maturity: seedling
+lastmod: 2023-06-19
+updates:
+  - date: "2023-06-19"
+    note: "Initial draft"
 ---
 
 # SHACL Shape to SPARQL Query Transformation
