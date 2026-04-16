@@ -1,7 +1,6 @@
 baseURL = "https://gtf.fyi/"
 languageCode = "en-us"
 title = "Gabe Fierro"
-theme = "researcher"
 contentDir = "content/"
 
 enableRobotsTXT = true
