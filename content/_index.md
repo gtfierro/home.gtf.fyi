@@ -8,8 +8,7 @@ I am an assistant professor of Computer Science at [Colorado School of Mines](ht
 My research interests include (1) the design and implementation of high-performance databases, including graph and linked-data databases and timeseries databases; (2) IoT platforms that incorporate edge computing and cloud resources; (3) issues of digitization and data management in the built environment; (4) novel datasets or applications of data that motivate new data management techniques and abstractions.
 
 
-* <u>Email</u>: gtfierro -AT- mines -DOT- edu
-* <u>Pronouns</u>: he/him
+* <u>Email</u>: <span style="display: inline-block; -webkit-user-select: all; user-select: all;">gtfierro@mines.edu</span>
 * <u>Github</u>: [@gtfierro](https://github.com/gtfierro/)
 * <u>Bluesky</u>: [@gtf.fyi](https://bsky.app/profile/gtf.fyi)
 * <u>Office</u>: 214E CTLM ; 2-3pm Monday, 1-2pm Tuesday (or by appointment)
@@ -24,11 +23,6 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 
 ---
 
-<!--
-{{< announce >}}
-*I am looking for PhD, Masters and undergraduate students who are interested in research. If you are a prospective PhD or Masters student, please send me a <u>descriptive and specific</u> email introducing yourself and your research interests along with your current resume or CV. If you are a current student at Mines, feel free to drop by my office.*
-{{< /announce >}}
--->
 {{< announce >}}
 *I am not currently hiring for research positions. If you are curious about research and want to learn more about it, please drop by my office hours!*
 {{< /announce >}}
@@ -60,6 +54,7 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 ## Quick Bio
 
 I received my PhD in Computer Science from [UC Berkeley](https://eecs.berkeley.edu/) in 2021, advised by [Dr. David E. Culler](https://people.eecs.berkeley.edu/~culler/). I was part of the [Buildings, Energy and Transportation Systems project](http://bets.cs.berkeley.edu) and the [RISE lab](https://rise.cs.berkeley.edu). My dissertation title was [Self-Adapting Software for Cyberphysical Systems](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2021/EECS-2021-159.html).
+I use he/him pronouns.
 
 ## Resources for Students
 

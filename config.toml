@@ -54,3 +54,5 @@ enableRobotsTXT = true
     lineNos = false
     [markup.goldmark.renderer]
     unsafe = true
+    [markup.goldmark.extensions]
+    linkify = false
