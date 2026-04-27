@@ -57,8 +57,8 @@ Mortar is an open platform for developing robust, reproducible building analytic
 
 I maintain a variety of semantic web tooling that strives to make ontology development and management easier, faster and more intuitive. These tools include:
 
-- [ontoenv](https://github.com/gtfierro/ontoenv): a command-line utility and Python library for managing `owl:imports` statements and `owl:Ontology` definitions
-- [reasonable](https://github.com/gtfierro/reasonable): a decently fast OWL2 RL reasoner, written in Rust, with Python bindings; the design of `reasonable` is described in Chapter 7 of my dissertation
+- [ontoenv](https://ontoenv.gtf.fyi/) ([GitHub](https://github.com/gtfierro/ontoenv)): a command-line utility and Python library for managing `owl:imports` statements and `owl:Ontology` definitions
+- [reasonable](https://reasonable.gtf.fyi/) ([GitHub](https://github.com/gtfierro/reasonable)): a decently fast OWL2 RL reasoner, written in Rust, with Python bindings; the design of `reasonable` is described in Chapter 7 of my dissertation
 - [brickschema](https://github.com/BrickSchema/py-brickschema): a Python library, built on RDFlib, which facilitates querying, management, inference of Brick models
 - [WebSPARQL](https://github.com/gtfierro/rdf-ui): an online SPARQL query processor and result visualizer ([Online Demo](https://sparql.gtf.fyi/))
 
