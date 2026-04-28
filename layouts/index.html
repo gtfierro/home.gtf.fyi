@@ -7,9 +7,9 @@
         <div class="col-md-4" style="float: right; width: 30%;">
             <h3>Recent Posts</h3>
             <ul class="post-list">
-                {{ range first 5 .Site.RegularPages.ByDate.Reverse }}
+                {{ range first 5 .Site.RegularPages.ByLastmod.Reverse }}
                 <li>
-                    {{ .Date.Format "2006-01-02" }} <a href="{{ .Permalink }}">{{ .Title }}</a>
+                    {{ .Lastmod.Format "2006-01-02" }}{{ if .Lastmod.After .Date }} (updated){{ end }} <a href="{{ .Permalink }}">{{ .Title }}</a>
                 </li>
                 {{ end }}
             </ul>
