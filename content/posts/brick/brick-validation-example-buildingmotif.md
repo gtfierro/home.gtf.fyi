@@ -3,11 +3,13 @@ title: "Brick Validation Example (with BuildingMOTIF)"
 date: 2025-02-04
 categories: ['Brick', 'SHACL', 'BuildingMOTIF']
 type: post
-maturity: sprout
-lastmod: 2025-02-04
+maturity: seedling
+lastmod: 2026-04-28
 updates:
   - date: "2025-02-04"
     note: "Initial draft"
+  - date: "2026-04-28"
+    note: "Added compiled model example"
 ---
 
 We will use the Brick model from the previous post:
@@ -103,6 +105,45 @@ Specifically, `ValidationContext` has the following attributes:
 - `get_diffs_for_entity(entity)`: lists all reasons why a specific entity failed validation
 - `diffset`: a set of human-readable reasons why the model is invalid
     - this interprets the raw SHACL results into a more human-readable format
+
+---
+
+## Accessing the Compiled Graph
+
+BuildingMOTIF can also *compile* a model, which merges the model graph together with all of the ontology graphs it depends on into a single rdflib `Graph`.
+It then runs SHACL inference over this merged graph, so the resulting compiled graph includes all inferred triples as well.
+This is useful when you want to run SPARQL queries or other graph operations that need the full, resolved graph; for example, to traverse inferred relationships or to export a self-contained snapshot.
+
+`Model.validate()` automatically compiles the model as part of the validation process, but you can also explicitly compile the model yourself if you just want to access the merged graph without validating.
+
+Use `Model.compile()`. It takes the same list of shape collections and returns a `CompiledModel` whose underlying rdflib graph is available at `.graph`.
+
+```python
+# compile merges the model + all ontology graphs into one rdflib Graph
+compiled = bldg.compile([brick.get_shape_collection(), qudt_unit.get_shape_collection()])
+
+# you can also validate the compiled graph (the normal model.validate() does this automatically)
+context = compiled.validate()
+print(context.report_string)
+print(f"Is valid: {context.valid}")
+
+# compiled.graph is a plain rdflib Graph — use it like any other
+g = compiled.graph
+
+# example: count all triples in the compiled graph
+print(f"Triples in compiled graph: {len(g)}")
+
+# example: run a SPARQL query over the fully-resolved graph
+results = g.query("""
+    PREFIX brick: <https://brickschema.org/schema/Brick#>
+    SELECT ?ahu_downstream WHERE {
+        ?ahu a brick:Air_Handling_Unit .
+        ?ahu brick:feeds+ ?ahu_downstream .
+    }
+""")
+for row in results:
+    print(row.point)
+```
 
 ---
 
