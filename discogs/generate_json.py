@@ -108,6 +108,9 @@ def main() -> None:
         names = [a["name"] if isinstance(a, dict) else a.name for a in artists]
         artist_name = ", ".join(names)
         album_title = data.get("title", release.title)
+        # genres and styles are pre-populated from basic_information, so
+        # reading them here does not trigger an extra /releases/{id} call.
+        genres = list(data.get("genres") or []) + list(data.get("styles") or [])
         image = data.get("thumb") or data.get("cover_image") or "No image"
         high_res_image = (
             _extract_high_res_image_url(release) if args.fetch_high_res_images else None
@@ -117,6 +120,7 @@ def main() -> None:
             "artist": artist_name,
             "title": album_title,
             "image": image,
+            "genres": genres,
         }
         if high_res_image is not None:
             record["image_high_res"] = high_res_image
