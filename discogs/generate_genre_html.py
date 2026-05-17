@@ -98,6 +98,35 @@ TEMPLATE = """<!doctype html>
         letter-spacing: 0.04em;
         opacity: 0.7;
       }
+      .album .genres {
+        margin: 0.45rem 0 0;
+        font-size: 0.62rem;
+        font-style: italic;
+        line-height: 1.25;
+        opacity: 0.55;
+      }
+      .album.highlight {
+        outline: 3px solid #d2691e;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 6px rgba(210, 105, 30, 0.25), 0 16px 36px rgba(0, 0, 0, 0.25);
+        animation: pulse 0.6s ease-out;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        45% { transform: scale(1.06); }
+        100% { transform: scale(1); }
+      }
+      #random-btn {
+        font-family: inherit;
+        font-size: 1rem;
+        padding: 0.6rem 1.4rem;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        background: var(--fg);
+        color: var(--bg);
+        cursor: pointer;
+      }
+      #random-btn:hover { opacity: 0.85; }
       #empty {
         max-width: 1200px;
         margin: 3rem auto;
@@ -118,6 +147,7 @@ TEMPLATE = """<!doctype html>
           value="all genre"
           autocomplete="off"
           aria-label="Filter by genre">
+        <button id="random-btn" type="button">Random</button>
       </div>
       <p id="count"></p>
     </header>
@@ -132,6 +162,8 @@ TEMPLATE = """<!doctype html>
       const grid = document.getElementById('grid');
       const empty = document.getElementById('empty');
       const count = document.getElementById('count');
+      const randomBtn = document.getElementById('random-btn');
+      let cards = [];
 
       const imageUrlFor = (record) =>
         (record.image_high_res && record.image_high_res !== 'No image' && record.image_high_res) ||
@@ -148,7 +180,9 @@ TEMPLATE = """<!doctype html>
         const query = input.value;
         const filtered = records.filter((r) => matches(r, query));
         grid.innerHTML = '';
+        cards = [];
         empty.hidden = filtered.length !== 0;
+        randomBtn.disabled = filtered.length === 0;
         count.textContent = filtered.length
           ? `${filtered.length} record${filtered.length === 1 ? '' : 's'}`
           : '';
@@ -176,11 +210,32 @@ TEMPLATE = """<!doctype html>
           artist.textContent = record.artist;
           card.appendChild(artist);
 
+          const genreList = record.genres || [];
+          if (genreList.length) {
+            const genres = document.createElement('p');
+            genres.className = 'genres';
+            genres.textContent = genreList.join(' · ');
+            card.appendChild(genres);
+          }
+
           grid.appendChild(card);
+          cards.push(card);
         }
       };
 
+      const pickRandom = () => {
+        if (!cards.length) return;
+        const previous = grid.querySelector('.album.highlight');
+        if (previous) previous.classList.remove('highlight');
+        const card = cards[Math.floor(Math.random() * cards.length)];
+        // Re-trigger the pulse animation even if the same card is picked.
+        void card.offsetWidth;
+        card.classList.add('highlight');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+
       input.addEventListener('input', render);
+      randomBtn.addEventListener('click', pickRandom);
       window.addEventListener('DOMContentLoaded', render);
     </script>
   </body>
