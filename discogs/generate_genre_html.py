@@ -48,7 +48,7 @@ TEMPLATE = """<!doctype html>
         justify-content: center;
         flex-wrap: wrap;
       }
-      #genre-input {
+      .controls input[type="text"] {
         font-family: inherit;
         font-size: 1rem;
         padding: 0.6rem 1rem;
@@ -56,7 +56,7 @@ TEMPLATE = """<!doctype html>
         border-radius: 12px;
         background: var(--card);
         color: var(--fg);
-        width: min(70vw, 360px);
+        width: min(70vw, 280px);
       }
       #count {
         margin: 1rem 0 0;
@@ -117,6 +117,10 @@ TEMPLATE = """<!doctype html>
         100% { transform: scale(1); }
       }
       #random-btn {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 50;
         font-family: inherit;
         font-size: 1rem;
         padding: 0.6rem 1.4rem;
@@ -125,6 +129,7 @@ TEMPLATE = """<!doctype html>
         background: var(--fg);
         color: var(--bg);
         cursor: pointer;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
       }
       #random-btn:hover { opacity: 0.85; }
       #empty {
@@ -147,8 +152,20 @@ TEMPLATE = """<!doctype html>
           value="all genre"
           autocomplete="off"
           aria-label="Filter by genre">
-        <button id="random-btn" type="button">Random</button>
+        <input
+          id="artist-input"
+          type="text"
+          placeholder="Artist name"
+          autocomplete="off"
+          aria-label="Filter by artist">
+        <input
+          id="album-input"
+          type="text"
+          placeholder="Album name"
+          autocomplete="off"
+          aria-label="Filter by album">
       </div>
+      <button id="random-btn" type="button">Random</button>
       <p id="count"></p>
     </header>
 
@@ -158,7 +175,9 @@ TEMPLATE = """<!doctype html>
     <script id="records-data" type="application/json">{{ records_json | safe }}</script>
     <script>
       const records = JSON.parse(document.getElementById('records-data').textContent);
-      const input = document.getElementById('genre-input');
+      const genreInput = document.getElementById('genre-input');
+      const artistInput = document.getElementById('artist-input');
+      const albumInput = document.getElementById('album-input');
       const grid = document.getElementById('grid');
       const empty = document.getElementById('empty');
       const count = document.getElementById('count');
@@ -170,15 +189,24 @@ TEMPLATE = """<!doctype html>
         (record.image && record.image !== 'No image' && record.image) ||
         null;
 
-      const matches = (record, query) => {
+      const matchesGenre = (record, query) => {
         const q = query.trim().toLowerCase();
         if (q === '' || q === 'all genre' || q === 'all genres') return true;
         return (record.genres || []).some((g) => String(g).toLowerCase().includes(q));
       };
 
+      const matchesField = (value, query) => {
+        const q = query.trim().toLowerCase();
+        if (q === '') return true;
+        return String(value || '').toLowerCase().includes(q);
+      };
+
       const render = () => {
-        const query = input.value;
-        const filtered = records.filter((r) => matches(r, query));
+        const filtered = records.filter((r) =>
+          matchesGenre(r, genreInput.value) &&
+          matchesField(r.artist, artistInput.value) &&
+          matchesField(r.title, albumInput.value)
+        );
         grid.innerHTML = '';
         cards = [];
         empty.hidden = filtered.length !== 0;
@@ -234,7 +262,9 @@ TEMPLATE = """<!doctype html>
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       };
 
-      input.addEventListener('input', render);
+      genreInput.addEventListener('input', render);
+      artistInput.addEventListener('input', render);
+      albumInput.addEventListener('input', render);
       randomBtn.addEventListener('click', pickRandom);
       window.addEventListener('DOMContentLoaded', render);
     </script>
