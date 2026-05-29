@@ -4,10 +4,14 @@ date: 2025-05-21T09:40:12-06:00
 categories: ['Grad School','Student']
 type: post
 maturity: sprout
-lastmod: 2025-05-21
+lastmod: 2025-06-16
 updates:
   - date: "2025-05-21"
     note: "Initial draft"
+  - date: "2025-06-12"
+    note: "Updated with feedback from Kathleen Kelly (GitHub Pages)"
+  - date: "2025-06-16"
+    note: "Updated with feedback from Qi Han (university hosting) and Kaveh Fathian (Google Sites)"
 ---
 
 
@@ -90,9 +94,3 @@ My recommendation for how to get started is:
 Send me an email if you have any suggestions for other links or tutorials to include here, or if any information is wrong or out-of-date.
 
 Good luck!
-
----
-
-- *updated 2025-06-12 with feedback from [Kathleen Kelly (GitHub pages)](https://www.kathleenmariekelly.com)*
-- *updated 2025-06-16 with feedback from [Qi Han (university hosting)](https://people.mines.edu/qhan/), and [Kaveh Fathian (Google Sites)](https://sites.google.com/view/kavehfathian/home)*
-
