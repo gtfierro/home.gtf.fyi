@@ -29,6 +29,11 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 
 ---
 
+## Graduate Students
+
+* [Avia Anwar](https://aviaanwar.github.io/): PhD candidate
+* [Mete Saka](https://metesaka.com/): PhD candidate
+
 ## Projects and Grants
 
 * Enhancing Data-Driven Science for Water Treatment Pilot Systems with Semantic Metadata Management: Funded by the [National Alliance for Water Innovation](https://www.nawihub.org) to research and develop metadata ontologies for water resource recovery systems
@@ -40,6 +45,8 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 
 ## News
 
+* *[June 2026]* Brick v1.5.0 Release Candidate 1 posted on [GitHub](https://github.com/BrickSchema/Brick/releases/tag/v1.5.0-rc1) for community review and feedback
+* *[May 2026]* Congrats to Mete on his first author acceptance to BuildSys '26! See you all in Banff
 * *[November 2025]* Congrats to Ozan, Mete, and Avia on their **Best Paper Runner-Up Award** at [BuildSys'25](https://buildsys.acm.org/2025/)!
 * *[June 2025]* IEA's Annex 81 was finally closed. It was a joy to work with a brilliant team of internatioanl researchers on our data-driven smart buildings topic. Final reports and all deliverables are [on the IEA website](https://annex81.iea-ebc.org).
 * *[May 2025]* Congrats to Ozan Baris (CMU) and the rest of our team who won the **Best Paper Award** at [FMSys 2025](https://fmsys-org.github.io/2025/index.html) for our paper ["Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs"](https://gtf.fyi/papers/mulayim2025towards.pdf)
