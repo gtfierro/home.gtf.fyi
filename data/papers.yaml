@@ -733,3 +733,17 @@
   title: 'OntoEnv: a lightweight dependency manager for RDF ontologies'
   type: software
   year: 2026
+- authors: Umut Mete Saka, Fletcher T. Chapin, Lazlo Paul, Avia Anwar, Scott Struck,
+    Meagan S. Mauter, and Gabe Fierro
+  award: null
+  conference: Proceedings of 3th ACM International Conference on Systems for Energy-Efficient
+    Buildings, Cities, and Transportation (BuildSys 26)
+  link: null
+  location: Banff, Alberta, CA
+  month: June
+  pdf: acquirium2026saka.pdf
+  slides: null
+  title: 'Acquirium: Toward Interoperable Data Driven Applications in Water Treatment
+    Systems'
+  type: conference
+  year: 2026
