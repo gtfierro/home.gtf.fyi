@@ -4,6 +4,8 @@ title: "Selected Talks"
 
 ## Selected Talks
 
+- **WaTr Ontology and Acquirium Data Management, IWA-LET 2026**:
+    - [Slides](/files/2026-IWA-LET-Fierro.pdf)
 - **Brick Tutorial, SenSys 2025**.
     - [Slides](/files/Brick-SenSys-2025.pdf)
 - **Brick / RealEstateCore Conference** 2025.

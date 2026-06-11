@@ -36,7 +36,7 @@ date: 2021-06-12T16:51:38-07:00
 <div class="pub pub-conference">
 
 **Acquirium: Toward Interoperable Data Driven Applications in Water Treatment Systems**
-**[[pdf]](/papers/acquirium2026saka.pdf)**
+****
 
 Umut Mete Saka, Fletcher T. Chapin, Lazlo Paul, Avia Anwar, Scott Struck, Meagan S. Mauter, and Gabe Fierro
 
