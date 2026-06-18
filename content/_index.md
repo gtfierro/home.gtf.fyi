@@ -72,6 +72,7 @@ What is a PhD and how do I get one?
 Technical Reading, Writing, and Reviewing:
 * Advice on [technical writing](https://www.cs.tufts.edu/~nr/pubs/two-abstract.html):
     * on [systems papers](http://svr-sk818-web.cl.cam.ac.uk/keshav/papers/10/ogres2.pdf)
+* Advice on [doing impactful research](https://nicholas.carlini.com/writing/2026/how-to-win-a-best-paper-award.html)
 * Advice on [writing your dissertation](https://www.ccs.neu.edu/home/shivers/diss-advice.html)
 * Advice on reviewing papers ([1](https://people.inf.ethz.ch/troscoe/pubs/review-writing.pdf), [2](https://www.cs.utexas.edu/users/mckinley/notes/reviewing-smith.pdf))
 * Advice on reading papers ([1](http://www.sigcomm.org/sites/default/files/ccr/papers/2007/July/1273445-1273458.pdf) w/ summary [here](https://derekchia.com/how-to-read-a-research-paper-3-pass-approach/))
