@@ -36,11 +36,23 @@ date: 2021-06-12T16:51:38-07:00
 <div class="pub pub-conference">
 
 **Acquirium: Toward Interoperable Data Driven Applications in Water Treatment Systems**
-**[[pdf]](/papers/acquirium2026saka.pdf)**
+**[[pdf]](/papers/acquirium2026saka.pdf)[[link]](https://dl.acm.org/doi/full/10.1145/3744256.3812557)**
 
 Umut Mete Saka, Fletcher T. Chapin, Lazlo Paul, Avia Anwar, Scott Struck, Meagan S. Mauter, and Gabe Fierro
 
 *Proceedings of 3th ACM International Conference on Systems for Energy-Efficient Buildings, Cities, and Transportation (BuildSys 26)*.  Banff, Alberta, CA, June, 2026.
+
+</div>
+
+
+<div class="pub pub-demoposter">
+
+**Examining Feasibility of STL for Enforcing Safe Building Control**
+**[[pdf]](/papers/brown2026examining.pdf)[[link]](https://dl.acm.org/doi/full/10.1145/3765611.3815354)<i style="color:red">  Best Poster Nominee</i>**
+
+Jacob Brown, Gabe Fierro, Meera Sridhar
+
+*Proceedings of the 2026 ACM Sustainability Week*.  Banff, Alberta, CA, June, 2026.
 
 </div>
 
