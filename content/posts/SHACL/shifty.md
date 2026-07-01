@@ -1,14 +1,16 @@
 ---
 title: "Shifty SHACL Engine"
-date: 2026-05-29
+date: 2026-07-01
 categories: ['shifty','shacl','rdf']
 type: post
 maturity: seedling
-lastmod: 2026-05-29
+lastmod: 2026-07-01
 updates:
-  - date: "2026-05-29"
+  - date: "2026-07-01"
     note: "Initial draft"
 ---
+
+I vibe-coded a new SHACL validation and inference engine called [shifty](https://shifty.gtf.fyi) to address the speed and reporting issues I have run into with existing SHACL implementations.
 
 > Want to use pyshifty? Check out the [web playground](https://shifty.gtf.fyi/playground) or the [Python API](https://pypi.org/project/pyshifty/).
 > Links and docs available at [shifty.gtf.fyi](https://shifty.gtf.fyi).
