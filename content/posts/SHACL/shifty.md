@@ -1,13 +1,15 @@
 ---
 title: "Shifty SHACL Engine"
-date: 2026-07-01
+date: 2026-06-30
 categories: ['shifty','shacl','rdf']
 type: post
 maturity: seedling
 lastmod: 2026-07-01
 updates:
-  - date: "2026-07-01"
+  - date: "2026-06-30"
     note: "Initial draft"
+  - date: "2026-07-01"
+    note: "Add links to benchmarking scripts"
 ---
 
 I vibe-coded a new SHACL validation and inference engine called [shifty](https://shifty.gtf.fyi) to address the speed and reporting issues I have run into with existing SHACL implementations.
@@ -164,6 +166,45 @@ I gave all engines a 5 minute timeout (300 seconds), and any engine that took lo
 | s223 | large_223p_anon.ttl | 144226 | 26.41 | 166.85 | — | 6.3x | — |
 
 {{< figure width="100%" src="/posts/SHACL/img/inference_plus_validation.png" alt="Inference + Validation Time">}}
+
+<details>
+<summary>Benchmarking scripts and setup</summary>
+
+All the benchmarking scripts are [here](https://github.com/gtfierro/shifty/tree/main/benchmark/performance_comparison)
+
+With a file called `selected-models.csv`:
+```
+suite,model,triples
+brick,bldg24.ttl,16
+brick,bldg31.ttl,31
+brick,bldg16.ttl,90
+brick,bldg25.ttl,113
+brick,bldg19.ttl,304
+brick,bldg4.ttl,928
+brick,bldg8.ttl,1000
+brick,bldg30.ttl,2924
+brick,bldg11.ttl,8608
+brick,bldg37.ttl,10962
+s223,guideline36-2021-A-1.ttl,102
+s223,guideline36-2021-A-4.ttl,257
+s223,NIST-HPL.ttl,829
+s223,guideline36-2021-A-9.ttl,1060
+s223,lbnl-example-radiant.ttl,1709
+s223,nrel-example.ttl,8130
+s223,lbnl-bdg4-1.ttl,10568
+s223,lbnl-bdg3-1.ttl,26571
+s223,pnnl-bdg2-1.ttl,34810
+s223,lazlo_sdh_223p_anon.ttl,144226
+```
+
+You can run the benchmark with:
+
+```bash
+uv run benchmark/performance_comparison/compare_engines.py --model-manifest selected_models.csv --runs 1 --keep-going --run-timeout-seconds 300
+```
+
+This will output the plot above, as well as a CSV file with the raw results.
+</details>
 
 ### Why is Shifty Fast?
 
