@@ -138,32 +138,32 @@ for violation in result.violations():
 
 Shifty *roughly* an order of magnitude faster than TopQuadrant's SHACL implementation, and two orders of magnitude faster than pySHACL on the Brick and 223P benchmarks.
 
-The results below are from a simple benchmark (I will add more rigorous benchmarks in the future) that runs inference and then validation on a number of Brick and 223P graphs, and compares the time taken by shifty, TopQuadrant's SHACL implementation, and pySHACL.
+The results below are from a simple benchmark that runs inference and then validation on a number of Brick and 223P graphs, and compares the time taken by shifty, TopQuadrant's SHACL implementation, and pySHACL.
 The engines were each given the full "imports closure" of the Brick and 223P ontologies, and the time taken to load the ontologies is included in the benchmark results.
-I gave all engines a 5 minute timeout (300 seconds), and any engine that took longer than 5 minutes was terminated and marked as "—" in the results below.
+I gave all engines a 10 minute timeout (500 seconds), and any engine that took longer than 5 minutes was terminated and marked as "—" in the results below.
+The times recorded are the best of 5 runs.
 
 | Ontology | Model | Triples | pyshifty (s) | TopQuadrant (s) | pySHACL (s) | pyshifty vs TQ | pyshifty vs pySHACL |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| brick | bldg24.ttl | 16 | 4.78 | 42.68 | 184.87 | 8.9x | 38.7x |
-| brick | bldg31.ttl | 31 | 4.88 | 49.52 | 186.47 | 10.2x | 38.2x |
-| brick | bldg16.ttl | 90 | 5.00 | 42.42 | 193.11 | 8.5x | 38.6x |
-| brick | bldg25.ttl | 113 | 5.09 | 42.98 | 193.50 | 8.4x | 38.0x |
-| brick | bldg19.ttl | 304 | 5.07 | 43.46 | 192.71 | 8.6x | 38.0x |
-| brick | bldg4.ttl | 928 | 5.79 | 52.10 | — | 9.0x | — |
-| brick | bldg8.ttl | 1000 | 5.98 | 45.47 | — | 7.6x | — |
-| brick | bldg30.ttl | 2924 | 7.31 | 50.43 | — | 6.9x | — |
-| brick | bldg11.ttl | 8608 | 26.22 | 84.15 | — | 3.2x | — |
-| brick | bldg37.ttl | 10962 | 35.23 | 81.39 | — | 2.3x | — |
-| s223 | guideline36-2021-A-1.ttl | 102 | 1.37 | 34.29 | 150.21 | 25.1x | 109.8x |
-| s223 | guideline36-2021-A-4.ttl | 257 | 1.35 | 34.69 | — | 25.6x | — |
-| s223 | NIST-HPL.ttl | 829 | 1.39 | 34.31 | 171.55 | 24.7x | 123.7x |
-| s223 | guideline36-2021-A-9.ttl | 1060 | 1.57 | 35.14 | — | 22.4x | — |
-| s223 | lbnl-example-radiant.ttl | 1709 | 1.41 | 22.48 | 233.15 | 16.0x | 165.8x |
-| s223 | nrel-example.ttl | 8130 | 2.63 | 43.02 | — | 16.3x | — |
-| s223 | lbnl-bdg4-1.ttl | 10568 | 2.49 | 43.68 | — | 17.5x | — |
-| s223 | lbnl-bdg3-1.ttl | 26571 | 3.07 | 23.28 | — | 7.6x | — |
-| s223 | pnnl-bdg2-1.ttl | 34810 | 4.56 | 100.81 | — | 22.1x | — |
-| s223 | large_223p_anon.ttl | 144226 | 26.41 | 166.85 | — | 6.3x | — |
+| brick | bldg24.ttl | 16 | 4.54 | 43.49 | 130.05 | 9.6x | 28.7x |
+| brick | bldg31.ttl | 31 | 4.58 | 52.67 | 131.57 | 11.5x | 28.7x |
+| brick | bldg16.ttl | 90 | 4.59 | 44.83 | 132.73 | 9.8x | 28.9x |
+| brick | bldg25.ttl | 113 | 4.68 | 44.93 | 132.88 | 9.6x | 28.4x |
+| brick | bldg19.ttl | 304 | 4.73 | 45.05 | 135.21 | 9.5x | 28.6x |
+| brick | bldg4.ttl | 928 | 5.41 | 56.64 | 145.60 | 10.5x | 26.9x |
+| brick | bldg8.ttl | 1000 | 5.40 | 46.55 | 147.12 | 8.6x | 27.2x |
+| brick | bldg30.ttl | 2924 | 5.22 | 53.17 | 180.57 | 10.2x | 34.6x |
+| brick | bldg11.ttl | 8608 | 21.77 | 90.29 | 292.64 | 4.1x | 13.4x |
+| brick | bldg37.ttl | 10962 | 27.81 | 85.48 | 342.91 | 3.1x | 12.3x |
+| s223 | guideline36-2021-A-1.ttl | 102 | 1.38 | 35.51 | 100.36 | 25.6x | 72.5x |
+| s223 | guideline36-2021-A-4.ttl | 257 | 1.41 | 35.91 | — | 25.5x | — |
+| s223 | NIST-HPL.ttl | 829 | 1.45 | 36.76 | 120.99 | 25.3x | 83.4x |
+| s223 | guideline36-2021-A-9.ttl | 1060 | 1.55 | 36.90 | — | 23.7x | — |
+| s223 | lbnl-example-radiant.ttl | 1709 | 1.47 | 22.84 | 162.64 | 15.5x | 110.5x |
+| s223 | nrel-example.ttl | 8130 | 2.54 | 42.29 | — | 16.7x | — |
+| s223 | lbnl-bdg4-1.ttl | 10568 | 2.42 | 45.23 | — | 18.7x | — |
+| s223 | lbnl-bdg3-1.ttl | 26571 | 2.94 | 24.76 | — | 8.4x | — |
+| s223 | pnnl-bdg2-1.ttl | 34810 | 4.55 | 99.47 | — | 21.9x | — |
 
 {{< figure width="100%" src="/posts/SHACL/img/inference_plus_validation.png" alt="Inference + Validation Time">}}
 
@@ -269,4 +269,3 @@ There's a lot more to say about shifty, which I won't cover in this post:
 - **SPARQL lowering**: SHACL's `sh:sparql` constraints can be compiled to a native plan over an immutable, multiply-indexed dataset, with Oxigraph as a fallback for full SPARQL 1.1. This gives **significant** speedups over existing SHACL implementations, which typically use a SPARQL engine to evaluate each `sh:sparql` constraint in isolation.
 - **Profiling**: Per-shape and per-query telemetry, accessible via the Python API or the CLI. On the 223P/NIST benchmark, profiling is what revealed where time was actually going, and eventually motivated the native SPARQL work.
 - **Symbolic repair**: A library API that computes the full space of possible repairs for a validation failure.
-
