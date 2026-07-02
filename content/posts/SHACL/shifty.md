@@ -10,6 +10,8 @@ updates:
     note: "Initial draft"
   - date: "2026-07-01"
     note: "Add links to benchmarking scripts"
+  - date: "2026-07-01"
+    note: "Add bigger benchmark results (best of 5)"
 ---
 
 I vibe-coded a new SHACL validation and inference engine called [shifty](https://shifty.gtf.fyi) to address the speed and reporting issues I have run into with existing SHACL implementations.
