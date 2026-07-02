@@ -50,7 +50,7 @@ What elements of their websites do you like? Which elements made it difficult to
 
 Look at my website below. Can you find all the information listed above? How did I do?
 
-{{< figure width="50%" src="/img/portfolio-site.png" alt="Screenshot of my portfolio site">}}
+{{< figure width="50%" src="/img/grad-school/portfolio-site.png" alt="Screenshot of my portfolio site">}}
 
 
 ## How to make an academic portfolio website

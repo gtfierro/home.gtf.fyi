@@ -32,7 +32,7 @@ Before digging into the above issues, it is important to refresh our understandi
 
 The RDF data model is a specification of a directed, labeled graph that represents entities, resources, their properties and the relationships between them.
 This is an extraordinarily flexible data model that is capable of expressing many different representations of information.
-An RDF graph is expressed as a set of *triples*.{{< sn >}}<img src="/img/triple.png"></img>An RDF triple represents a relationship (or predicate) between two resources.This is a fundamental structure whose components are referred to as *subject*, *predicate* and *object*.{{< /sn >}}
+An RDF graph is expressed as a set of *triples*.{{< sn >}}<img src="/img/brick/triple.png"></img>An RDF triple represents a relationship (or predicate) between two resources.This is a fundamental structure whose components are referred to as *subject*, *predicate* and *object*.{{< /sn >}}
 
 One distinct advantage of the RDF data model is that the semantics of the expressed data can be encoded in an *ontology*.
 An *ontology* is a set of rules and axioms which capture what kinds of information can be represented and derived from a set of statements.
@@ -44,7 +44,7 @@ There are two edges between the instance nodes, each labeled `brick:feeds`{{< sn
 The "ontology" nodes represent concepts (*classes*) that have a formal definition in the ontology.
 The `rdfs:subClassOf` relationships between the concept nodes specifies which concepts are more general or specific than others{{< sn >}}We will formalize the notion of "class" and "subclass" below.{{< /sn >}}.
 
-{{< figure width="70%" src="/img/pre-reason.png" alt="Model pre-reasoning">}}
+{{< figure width="70%" src="/img/brick/pre-reason.png" alt="Model pre-reasoning">}}
 
 The distinction between the "instance" and "ontology" portions of the graph are referred to, in the context of OWL, as the *terminological box* (*TBox*) and *assertional box* (*ABox*) respectively.
 The TBox
@@ -87,7 +87,7 @@ These "inferred" triples are often materialized into the graph to facilitate que
 
 Consider the graph from above, with new edges added according to the rule we have just discussed
 
-{{< figure width="75%" src="/img/post-type-reason.png" alt="Model post-reasoning for subclass rule">}}
+{{< figure width="75%" src="/img/brick/post-type-reason.png" alt="Model post-reasoning for subclass rule">}}
 
 The graph now explicitly associates each of the "instance" nodes with its immediate types (as in the original graph) *as well as* all of the types which are supertypes of its immediate types, and the supertypes of *those* types, and so on.
 
@@ -104,7 +104,7 @@ T(?x, "rdf:type", ?c2) :- T(?c1, "rdfs:subClassOf", ?c2), T(?x, "rdf:type", ?c1)
 ```
 
 The Datalog rule from above makes the implied types of all entities in the Brick model explicit.
-Given a class hierarchy such as the Brick `Point` hierarchy{{< sn >}}<img src="/img/point-hierarchy.png"></img>{{< /sn >}}, this means that all instances of `brick:Air_Temperature_Sensor` will also be instances of `brick:Temperature_Sensor`, `brick:Sensor` and `brick:Point`.
+Given a class hierarchy such as the Brick `Point` hierarchy{{< sn >}}<img src="/img/brick/point-hierarchy.png"></img>{{< /sn >}}, this means that all instances of `brick:Air_Temperature_Sensor` will also be instances of `brick:Temperature_Sensor`, `brick:Sensor` and `brick:Point`.
 
 This type information can be explicitly queried as well when it is materialized as part of the RDF graph.
 Consider the following Turtle-encoded RDF model:

@@ -30,7 +30,7 @@ One of my favorite examples is `SODA1R465_ARS`, which is a real point name from 
 on the UC Berkeley campus. The following slide screenshot illustrates how this label
 is properly broken down into its components:
 
-{{< figure width="70%" src="/img/point-label-soda-hall.png" alt="point label breakdown for a Soda Hall BMS point">}}
+{{< figure width="70%" src="/img/brick/point-label-soda-hall.png" alt="point label breakdown for a Soda Hall BMS point">}}
 
 As you can see, the label contains semi-structured information that implies elements
 of the building's structure. The role of a Brick model is, in part, to make this structure

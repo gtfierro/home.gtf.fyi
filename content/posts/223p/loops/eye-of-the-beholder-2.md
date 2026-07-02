@@ -16,7 +16,7 @@ This is an in-progress post and may contain some errors or incomplete informatio
 
 Here's a specific example of a simple HVAC system in 223P:
 
-{{< figure width="100%" src="/img/hvac223p.ttl.svg" alt="simple HVAC loop in 223P">}}
+{{< figure width="100%" src="/img/223p/hvac223p.ttl.svg" alt="simple HVAC loop in 223P">}}
 
 <details>
 <summary>Expand for Turtle definition of the 223P model</summary>
@@ -65,11 +65,11 @@ Let's start with what is probably the conceptually simplest case: a simple cycle
 This can look 2 ways.
 The first is just the big equipment without any of their equipment components (containing only <code>AHU</code> and <code>VAV1</code>).
 
-{{< figure width="100%" src="/img/2025-03-23-hvac-cycle-equipment.svg" alt="highlighting a cycle through VAV 1 without subcomponents">}}
+{{< figure width="100%" src="/img/223p/2025-03-23-hvac-cycle-equipment.svg" alt="highlighting a cycle through VAV 1 without subcomponents">}}
 
 The second is the big equipment with all of their equipment components: (<code>AHU, VAV1, Damper, Coil</code>).
 
-{{< figure width="100%" src="/img/2025-03-23-hvac-cycle-equipment-components.svg" alt="highlighting a cycle through VAV 1 with subcomponents">}}
+{{< figure width="100%" src="/img/223p/2025-03-23-hvac-cycle-equipment-components.svg" alt="highlighting a cycle through VAV 1 with subcomponents">}}
 
 **Both of these loops are difficult to define programmatically** for 3 reasons:
 

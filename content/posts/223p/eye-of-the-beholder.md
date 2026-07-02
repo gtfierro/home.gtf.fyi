@@ -89,7 +89,7 @@ This also illustrates one difference between the two models: 223P models the phy
 An illustration of this abstraction is below{{< sn >}}I am experimenting with using Claude to generate SVGs instead of me putting them together by hand{{< /sn >}}.
 
 
-{{< figure width="70%" src="/img/2025-02-23-brick-223p-view.svg" alt="abstracting 223P models with Brick">}}
+{{< figure width="70%" src="/img/223p/2025-02-23-brick-223p-view.svg" alt="abstracting 223P models with Brick">}}
 
 
 
@@ -122,7 +122,7 @@ Here are a few possible definitions of "loops" for different use cases:
 
 Here's a specific example of a simple HVAC system in 223P:
 
-{{< figure width="100%" src="/img/2025-02-23-hvac-diagram.svg" alt="simple HVAC loop in 223P">}}
+{{< figure width="100%" src="/img/223p/2025-02-23-hvac-diagram.svg" alt="simple HVAC loop in 223P">}}
 
 <details>
 <summary>Expand for Turtle definition of the 223P model</summary>

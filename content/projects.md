@@ -5,7 +5,7 @@ date: 2021-06-12T12:13:19-07:00
 
 ## Semantic Metadata Management for Water Treatment Systems
 
-{{< figure width="80%" src="/img/pfd-pid-historian-water.png" alt="Water Treatment Pilot System">}}
+{{< figure width="80%" src="/img/projects/pfd-pid-historian-water.png" alt="Water Treatment Pilot System">}}
 
 - **Enhancing Data-Driven Science for Water Treatment Pilot Systems with Semantic Metadata Management**
     - funded by the National Alliance for Water Innovation (NAWI), funded by the U.S. Department of Energy, Office of Energy Efficiency and Renewable Energy (EERE), Industrial Efficiency and Decarbonization Office, under Funding Opportunity Announcement DE-FOA-0001905
