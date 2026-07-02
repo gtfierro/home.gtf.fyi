@@ -142,7 +142,7 @@ Shifty *roughly* an order of magnitude faster than TopQuadrant's SHACL implement
 
 The results below are from a simple benchmark that runs inference and then validation on a number of Brick and 223P graphs, and compares the time taken by shifty, TopQuadrant's SHACL implementation, and pySHACL.
 The engines were each given the full "imports closure" of the Brick and 223P ontologies, and the time taken to load the ontologies is included in the benchmark results.
-I gave all engines a 10 minute timeout (500 seconds), and any engine that took longer than 5 minutes was terminated and marked as "—" in the results below.
+I gave all engines a 10 minute timeout (600 seconds), and any engine that took longer than 10 minutes was terminated and marked as "—" in the results below.
 The times recorded are the best of 5 runs.
 
 | Ontology | Model | Triples | pyshifty (s) | TopQuadrant (s) | pySHACL (s) | pyshifty vs TQ | pyshifty vs pySHACL |
