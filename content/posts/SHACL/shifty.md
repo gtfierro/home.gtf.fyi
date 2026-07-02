@@ -202,7 +202,7 @@ s223,lazlo_sdh_223p_anon.ttl,144226
 You can run the benchmark with:
 
 ```bash
-uv run benchmark/performance_comparison/compare_engines.py --model-manifest selected_models.csv --runs 1 --keep-going --run-timeout-seconds 300
+uv run benchmark/performance_comparison/compare_engines.py --model-manifest selected_models.csv --runs 5 --keep-going --run-timeout-seconds 600
 ```
 
 This will output the plot above, as well as a CSV file with the raw results.
