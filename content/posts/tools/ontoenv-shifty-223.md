@@ -1,11 +1,11 @@
 ---
 title: "Using Ontoenv and Shifty to validate ASHRAE 223 models"
-date: 2026-06-07
+date: 2026-07-06
 categories: ['shifty','ontoenv','223']
 type: post
 maturity: seedling
 updates:
-    - date: "2026-06-07"
+    - date: "2026-07-06"
       note: "Working script with ontoenv==0.5 and shifty==0.2.4"
 ---
 
