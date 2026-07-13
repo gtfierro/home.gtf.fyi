@@ -4,8 +4,13 @@
 # ]
 # ///
 import sys
+import re
 import jinja2
 import sqlite3
+
+def slugify(title):
+    slug = re.sub(r'[^a-zA-Z0-9]+', '-', title or '').strip('-').lower()
+    return slug
 
 def dict_factory(cursor, row):
     d = {}
@@ -36,9 +41,9 @@ con.create_function('month_to_number', 1, month_to_number)
 cur = con.cursor()
 
 md_template = jinja2.Template("""
-<div class="pub pub-{{ type }}">
+<div class="pub pub-{{ type }}" id="{{ slug }}">
 
-**{{ title }}**
+**{{ title }}**<a class="anchor" href="#{{ slug }}">#</a>
 **{% if pdf %}[[pdf]](/papers/{{ pdf }}){% endif %}{% if link %}[[link]]({{ link }}){% endif %}{% if repo %}[[repo]]({{ repo }}){% endif %}{% if award %}<i style="color:red">  {{ award }}</i>{% endif %}**
 
 {% for name in authors %}{{ name }}{{ ", " if not loop.last else "" }}{% endfor %}
@@ -90,6 +95,9 @@ for year_row in years:
     for row in cur.execute("SELECT *, month_to_number(month) as month_num FROM papers WHERE year = ? ORDER BY month_num desc;", (year,)):
         try:
             row['authors'] = [x.strip() for x in row.pop('authors').split(',')]
+            row['slug'] = slugify(row['title'])
+            if row.get('year'):
+                row['slug'] = f"{row['slug']}-{row['year']}"
             print(md_template.render(**row))
         except Exception as e:
             print(len(row), row)

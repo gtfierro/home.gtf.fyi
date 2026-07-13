@@ -126,6 +126,9 @@ code, pre, kbd, tt, var, samp {
     & + & {
         margin-top: 8px;
     }
+    a + a {
+        margin-left: 4px;
+    }
 }
 .pub-conference {
     background: rgba(62, 130, 252, .1);
@@ -144,6 +147,16 @@ code, pre, kbd, tt, var, samp {
 }
 .pub-software {
     background: rgba(180, 130, 230, .2);
+}
+
+.pub .anchor {
+    color: #999;
+    text-decoration: none;
+    margin-left: 6px;
+    font-weight: normal;
+    &:hover {
+        color: $blue;
+    }
 }
 
 
