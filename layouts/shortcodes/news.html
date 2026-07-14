@@ -1,0 +1,32 @@
+{{/*
+  Render news entries from data/news.yaml.
+
+  Usage:
+    {{< news >}}                -> newest N (default 12) entries, with "Older news" link if more exist
+    {{< news limit="10" >}}     -> newest 10 entries
+    {{< news offset="12" >}}    -> all entries starting at index 12 (the "old news" page)
+
+  Entries are sorted by `date` (YYYY-MM) descending; ties keep file order,
+  so keep data/news.yaml ordered newest-first for stable ordering.
+*/}}
+{{ $all := sort hugo.Data.news "date" "desc" }}
+{{ $offset := int (.Get "offset" | default 0) }}
+{{ $showAll := eq (.Get "all" | default "") "true" }}
+{{ $limit := int (.Get "limit" | default 12) }}
+{{ $rest := after $offset $all }}
+
+<ul class="news-list">
+{{ if $showAll }}
+  {{ range $rest }}
+    <li><em>[{{ time (printf "%s-01" .date) | dateFormat "January 2006" }}]</em> {{ .text | markdownify }}</li>
+  {{ end }}
+{{ else }}
+  {{ range first $limit $rest }}
+    <li><em>[{{ time (printf "%s-01" .date) | dateFormat "January 2006" }}]</em> {{ .text | markdownify }}</li>
+  {{ end }}
+{{ end }}
+</ul>
+
+{{ if and (eq $offset 0) (gt (len $rest) $limit) }}
+  <p><a href="{{ "oldnews" | relURL }}">Older news</a></p>
+{{ end }}

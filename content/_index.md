@@ -45,19 +45,7 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 
 ## News
 
-* *[June 2026]* Brick v1.5.0 Release Candidate 1 posted on [GitHub](https://github.com/BrickSchema/Brick/releases/tag/v1.5.0-rc1) for community review and feedback
-* *[June 2026]* [Brick v1.0 - Towards a Unified Metadata Schema for Buildings](https://gtf.fyi/papers/#brick-v1-0-towards-a-unified-metadata-schema-for-buildings-2016) won the [BuildSys 2026 Test of Time Award](https://buildsys.acm.org/2026/awards/), a great honor for our work on the Brick ontology and data model for smart buildings!
-* *[May 2026]* Congrats to Mete on his first author acceptance to BuildSys '26! See you all in Banff
-* *[November 2025]* Congrats to Ozan, Mete, and Avia on their **Best Paper Runner-Up Award** at [BuildSys'25](https://buildsys.acm.org/2025/)!
-* *[June 2025]* IEA's Annex 81 was finally closed. It was a joy to work with a brilliant team of internatioanl researchers on our data-driven smart buildings topic. Final reports and all deliverables are [on the IEA website](https://annex81.iea-ebc.org).
-* *[May 2025]* Congrats to Ozan Baris (CMU) and the rest of our team who won the **Best Paper Award** at [FMSys 2025](https://fmsys-org.github.io/2025/index.html) for our paper ["Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs"](https://gtf.fyi/papers/mulayim2025towards.pdf)
-* *[May 2025]* I am happy to announce that I am the Vice General Chair and Industrial Relations Chair for [BuildSys 2025](https://buildsys.acm.org/2025) which will be held in Golden, Colorado from November 19-21, 2025.
-* *[March 2025]* Congrats to the research team on being featured in a [Colorado Sun article](https://coloradosun.com/2025/03/03/energy-efficiency-mobile-homes-colorado-school-of-mines-leadville/) about our work in electrification and climate resilience
-* *[March 2024]* Proud to have the ASHRAE 223P draft standard released for [advisory public review](https://osr.ashrae.org/Online-Comment-Database/ShowDoc2/Table/DocumentAttachments/FileName/4289-223P_APRDraft.pdf/download/false)!
-* *[February 2024]* I was on a panel at the [Brains 4 Buildings webinar](https://brains4buildings.org/2024/02/28/webinar-scaling-adoption-of-automated-operational-intelligence-for-energy-productivity-in-smart-buildings/)
-* *[December 2024]* Congratulations to Ethan Richards (ugrad) on getting a poster ("Using Concept Maps for Notional Machine Selection in CS1") accpeted to SIGCSE 2024!
-* *[November 2024]* Great work to [Dimitris Mavrokapnidis](https://www.ucl.ac.uk/bartlett/environmental-design/people/dimitris-mavrokapnidis) for presenting our work on ["SeeQ: A Programming Model for Portable Data-driven Building Applications"](/papers/mavrokapnidis2023seeq.pdf), published in [BuildSys 2023](https://buildsys.acm.org/2023/)
-* [Older news](/oldnews)
+{{< news >}}
 
 ## Quick Bio
 

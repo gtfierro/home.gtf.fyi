@@ -1,0 +1,76 @@
+# Add new news entries at the top (newest first).
+# Each entry: date (YYYY-MM) and text (markdown allowed).
+# The home page renders the first `limit` entries (default 12);
+# the rest are rendered automatically on the /oldnews page.
+
+- date: "2026-06"
+  text: "Brick v1.5.0 Release Candidate 1 posted on [GitHub](https://github.com/BrickSchema/Brick/releases/tag/v1.5.0-rc1) for community review and feedback"
+
+- date: "2026-06"
+  text: "[Brick v1.0 - Towards a Unified Metadata Schema for Buildings](https://gtf.fyi/papers/#brick-v1-0-towards-a-unified-metadata-schema-for-buildings-2016) won the [BuildSys 2026 Test of Time Award](https://buildsys.acm.org/2026/awards/), a great honor for our work on the Brick ontology and data model for smart buildings!"
+
+- date: "2026-05"
+  text: "Congrats to Mete on his first author acceptance to BuildSys '26! See you all in Banff"
+
+- date: "2025-11"
+  text: "Congrats to Ozan, Mete, and Avia on their **Best Paper Runner-Up Award** at [BuildSys'25](https://buildsys.acm.org/2025/)!"
+
+- date: "2025-06"
+  text: "IEA's Annex 81 was finally closed. It was a joy to work with a brilliant team of internatioanl researchers on our data-driven smart buildings topic. Final reports and all deliverables are [on the IEA website](https://annex81.iea-ebc.org)."
+
+- date: "2025-05"
+  text: "Congrats to Ozan Baris (CMU) and the rest of our team who won the **Best Paper Award** at [FMSys 2025](https://fmsys-org.github.io/2025/index.html) for our paper [\"Towards Zero-shot Question Answering in CPS-IoT: Large Language Models and Knowledge Graphs\"](https://gtf.fyi/papers/mulayim2025towards.pdf)"
+
+- date: "2025-05"
+  text: "I am happy to announce that I am the Vice General Chair and Industrial Relations Chair for [BuildSys 2025](https://buildsys.acm.org/2025) which will be held in Golden, Colorado from November 19-21, 2025."
+
+- date: "2025-03"
+  text: "Congrats to the research team on being featured in a [Colorado Sun article](https://coloradosun.com/2025/03/03/energy-efficiency-mobile-homes-colorado-school-of-mines-leadville/) about our work in electrification and climate resilience"
+
+- date: "2024-12"
+  text: "Congratulations to Ethan Richards (ugrad) on getting a poster (\"Using Concept Maps for Notional Machine Selection in CS1\") accpeted to SIGCSE 2024!"
+
+- date: "2024-11"
+  text: "Great work to [Dimitris Mavrokapnidis](https://www.ucl.ac.uk/bartlett/environmental-design/people/dimitris-mavrokapnidis) for presenting our work on [\"SeeQ: A Programming Model for Portable Data-driven Building Applications\"](/papers/mavrokapnidis2023seeq.pdf), published in [BuildSys 2023](https://buildsys.acm.org/2023/)"
+
+- date: "2024-03"
+  text: "Proud to have the ASHRAE 223P draft standard released for [advisory public review](https://osr.ashrae.org/Online-Comment-Database/ShowDoc2/Table/DocumentAttachments/FileName/4289-223P_APRDraft.pdf/download/false)!"
+
+- date: "2024-02"
+  text: "I was on a panel at the [Brains 4 Buildings webinar](https://brains4buildings.org/2024/02/28/webinar-scaling-adoption-of-automated-operational-intelligence-for-energy-productivity-in-smart-buildings/)"
+
+- date: "2023-08"
+  text: "Looking forward to teaching CSCI 403 (Introduction to Databases) this Fall"
+
+- date: "2023-06"
+  text: "Honored to have our short paper \"A Programming Model for Portable Fault Detection and Diagnosis\" accepted to ACM e-Energy 2023, led by [Dimitris Mavrokapnidis](https://www.ucl.ac.uk/bartlett/environmental-design/people/dimitris-mavrokapnidis)"
+
+- date: "2023-05"
+  text: "Got back from a fantastic trip to Australia to speak at the [IEA Annex 81](https://annex81.iea-ebc.org) plenary and the [National Energy Efficiency Conference](https://www.energy.gov.au/events/national-energy-efficiency-conference-2023)"
+
+- date: "2022-11"
+  text: "Congratulations to all the authors at [DATA 2022](https://data-workshop.github.io/DATA2022/). Thanks for a fantastic workshop with many interesting datasets"
+
+- date: "2022-09"
+  text: "Two papers accepted at [BuildSys 2022!](https://buildsys.acm.org/2022/) -- see you all in Boston!"
+
+- date: "2021-11"
+  text: "Successful conclusion of the [4th annual workshop on Data: Acquisition To Analysis](https://data-workshop.github.io/DATA2021/). Many thanks to the TPC, Artifact Evaluation committee and the authors who submitted and presented!"
+
+- date: "2021-07"
+  text: "I am the co-lead of [Activity A3 for Annex 81 \"Data-Driven Smart Buildings\"](https://annex81.iea-ebc.org/) through the International Energy Agency"
+
+- date: "2021-05"
+  text: "I graduated from UC Berkeley!"
+
+- date: "2021-04"
+  text: "I gave my dissertation talk ([recording available online](https://www.youtube.com/watch?v=Z5OKXIJtvYs))"
+
+- date: "2021-03"
+  text: "I have accepted an assistant professor position in the computer science department at [Colorado School of Mines](https://cs.mines.edu/), with a joint appointment at [NREL](https://www.nrel.gov/)!"
+
+- date: "2020-11"
+  text: "I was one of the chairs of the [Data: Acquisition to Analysis (DATA) 2020 workshop](https://workshopdata.github.io/DATA2020/)"
+
+- date: "2020-10"
+  text: "I was one of 11 recipients of the inaugural [CMD-IT FLIP Dissertation Fellowship](https://eecs.berkeley.edu/news/2020/10/gabe-fierro-wins-inaugural-google-cmd-it-flip-dissertation-fellowship)"
