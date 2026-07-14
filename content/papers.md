@@ -635,7 +635,7 @@ Gabe Fierro, David E. Culler
 <div class="pub pub-conference" id="brick-v1-0-towards-a-unified-metadata-schema-for-buildings-2016">
 
 **Brick v1.0 - Towards a Unified Metadata Schema for Buildings**<a class="anchor" href="#brick-v1-0-towards-a-unified-metadata-schema-for-buildings-2016">#</a>
-**[[pdf]](/papers/brick2016balaji.pdf)<i style="color:red">  Best Paper Runner-Up</i>**
+**[[pdf]](/papers/brick2016balaji.pdf)<i style="color:red">  Best Paper Runner-Up, Test of Time Award</i>**
 
 Bharathan Balaji, Arka Bhattacharya, Gabe Fierro, Jingkun Gao, Joshua Gluck, Dezhi Hong, Aslak Johansen, Jason Koh, Yuvraj Agarwal, Mario Berges, David E. Culler, Rajesh Gupta, Mikkel Baun Kjaergaard, Joern Ploennigs, Kamin Whitehouse
 

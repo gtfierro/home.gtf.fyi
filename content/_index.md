@@ -46,6 +46,7 @@ I also work on the design of next-generation IoT platforms that incorporate edge
 ## News
 
 * *[June 2026]* Brick v1.5.0 Release Candidate 1 posted on [GitHub](https://github.com/BrickSchema/Brick/releases/tag/v1.5.0-rc1) for community review and feedback
+* *[June 2026]* [Brick v1.0 - Towards a Unified Metadata Schema for Buildings](https://gtf.fyi/papers/#brick-v1-0-towards-a-unified-metadata-schema-for-buildings-2016) won the [BuildSys 2026 Test of Time Award](https://buildsys.acm.org/2026/awards/), a great honor for our work on the Brick ontology and data model for smart buildings!
 * *[May 2026]* Congrats to Mete on his first author acceptance to BuildSys '26! See you all in Banff
 * *[November 2025]* Congrats to Ozan, Mete, and Avia on their **Best Paper Runner-Up Award** at [BuildSys'25](https://buildsys.acm.org/2025/)!
 * *[June 2025]* IEA's Annex 81 was finally closed. It was a joy to work with a brilliant team of internatioanl researchers on our data-driven smart buildings topic. Final reports and all deliverables are [on the IEA website](https://annex81.iea-ebc.org).
