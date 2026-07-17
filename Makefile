@@ -7,6 +7,7 @@ papers: clean
 	#cd publications && csvs-to-sqlite papers.csv papers.db
 	cd publications && uv run buildpapersyml.py
 	cd publications && uv run compile-papers.py > ../content/papers.md
+	cd publications && sqlite3 papers.db < export-json.sql > ../static/papers.json
 
 discogs:
 	cd discogs && uv run generate_html.py
