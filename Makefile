@@ -12,8 +12,8 @@ papers: clean
 discogs:
 	cd discogs && uv run generate_html.py
 	cd discogs && uv run generate_genre_html.py
-	cp discogs/index.html static/discogs.html
-	cp discogs/genre.html static/genre.html
+	mkdir -p static/albums
+	cp discogs/genre.html static/albums/index.html
 
 discogs/records.json: 
 	cd discogs && uv run generate_json.py
