@@ -159,6 +159,47 @@ code, pre, kbd, tt, var, samp {
     }
 }
 
+.bibtex-wrap {
+    margin: 6px 0 2px 0;
+    position: relative;
+    pre {
+        margin: 0;
+        padding: 8px 42px 8px 10px;
+        background: #f4f4f4;
+        border: 1px solid #cccccc;
+        border-left: 3px solid $blue;
+        border-radius: 3px;
+        font-size: 12px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow-x: auto;
+        code {
+            background: none;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            font-family: var(--mono-font);
+            color: $black;
+        }
+    }
+    .bibtex-copy {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 11px;
+        padding: 1px 8px;
+        border: 1px solid #cccccc;
+        border-radius: 10px;
+        background: #fff;
+        color: $black;
+        cursor: pointer;
+        &:hover {
+            background: #eee;
+        }
+    }
+}
+
 
 .legend-container {
   font-size: 13px;

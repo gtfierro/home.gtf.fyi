@@ -18,6 +18,10 @@
     {{ $style := resources.Get "sass/researcher.scss" | resources.ExecuteAsTemplate "sass/researcher.scss" . | toCSS | minify }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
+    {{ if eq .RelPermalink "/papers/" }}
+    <script src="/papers.js" defer></script>
+    {{ end }}
+
     {{ with .Site.Params.favicon }}
         <link rel="icon" type="image/ico" href="{{ . | absURL }}">
     {{ end }}

@@ -2,6 +2,9 @@
 
 all: papers discogs clean
 	./deploy.sh
+
+serve: papers discogs
+	hugo serve
 	
 papers: clean
 	#cd publications && csvs-to-sqlite papers.csv papers.db
