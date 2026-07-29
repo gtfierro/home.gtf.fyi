@@ -127,16 +127,16 @@ md_template = jinja2.Template("""
 <div class="pub pub-{{ type }}" id="{{ slug }}">
 
 **{{ title }}**<a class="anchor" href="#{{ slug }}">#</a>
-**{% if pdf %}[[pdf]](/papers/{{ pdf }}){% endif %}{% if link %}[[link]]({{ link }}){% endif %}{% if repo %}[[repo]]({{ repo }}){% endif %}[[bibtex]](#{{ slug }}-bibtex){% if award %}<i style="color:red">  {{ award }}</i>{% endif %}**
+**{% if pdf %}[[pdf]](/papers/{{ pdf }}){% endif %}{% if link %}[[link]]({{ link }}){% endif %}{% if repo %}[[repo]]({{ repo }}){% endif %}<a class="bibtex-toggle" href="#{{ slug }}-bibtex">[bibtex]</a>{% if award %}<i style="color:red">  {{ award }}</i>{% endif %}**
 
 {% for name in authors %}{{ name }}{{ ", " if not loop.last else "" }}{% endfor %}
 
 {% if conference %}*{{ conference }}*.  {{ location if location else ""}}{{ ", " if location else ""}}{{ month if month else ""}}{{ ", " if month else ""}}{{ year }}.{% else %}{{ location if location else ""}}{{ ", " if location else ""}}{{ month if month else ""}}{{ ", " if month else ""}}{{ year }}.{% endif %}
 
-<div class="bibtex-wrap" id="{{ slug }}-bibtex" hidden>
+<details class="bibtex-wrap" id="{{ slug }}-bibtex"><summary>bibtex</summary>
 <pre><code>{{ bibtex|e }}</code></pre>
 <button class="bibtex-copy" type="button">copy</button>
-</div>
+</details>
 
 </div>
 

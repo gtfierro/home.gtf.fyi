@@ -162,9 +162,30 @@ code, pre, kbd, tt, var, samp {
 .bibtex-wrap {
     margin: 6px 0 2px 0;
     position: relative;
+    // <summary> is the no-JS fallback toggle (▸ bibtex). When JS is on, the
+    // inline [bibtex] link drives the toggle instead and the summary is hidden
+    // (see the html.js overrides below).
+    > summary {
+        cursor: pointer;
+        list-style: none;
+        font-size: 12px;
+        color: $blue;
+        user-select: none;
+        margin-bottom: 6px;
+        &::-webkit-details-marker { display: none; }
+        &::before {
+            content: "▸";
+            display: inline-block;
+            margin-right: 4px;
+            transition: transform 0.15s ease;
+        }
+    }
+    &[open] > summary::before {
+        transform: rotate(90deg);
+    }
     pre {
         margin: 0;
-        padding: 8px 42px 8px 10px;
+        padding: 8px 42px 8px 10px; // right room for the copy button
         background: #f4f4f4;
         border: 1px solid #cccccc;
         border-left: 3px solid $blue;
@@ -184,6 +205,7 @@ code, pre, kbd, tt, var, samp {
         }
     }
     .bibtex-copy {
+        display: none; // JS-only: hidden without a click handler
         position: absolute;
         top: 5px;
         right: 5px;
@@ -199,6 +221,16 @@ code, pre, kbd, tt, var, samp {
         }
     }
 }
+
+// Progressive enhancement: when JS is active (html.js), the inline [bibtex]
+// link drives the toggle and the copy button is usable, so hide the native
+// <summary>. Without JS the inline link is a dead anchor, so hide it and let
+// the <summary> reveal the BibTeX instead.
+.bibtex-toggle { display: none; }
+html.js .bibtex-toggle { display: inline; }
+html.js .bibtex-wrap > summary { display: none; }
+html.js .bibtex-wrap .bibtex-copy { display: block; }
+html:not(.js) .bibtex-wrap pre { padding-right: 10px; } // no copy button to fit
 
 
 .legend-container {
