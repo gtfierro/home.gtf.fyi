@@ -1,0 +1,2709 @@
+@prefix bldg: <urn:nawi-water/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix quantitykind: <http://qudt.org/vocab/quantitykind/> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s223: <http://data.ashrae.org/standard223#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix watr: <urn:nawi-water-ontology#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+bldg: a owl:Ontology ;
+    rdfs:comment "NAWI advanced-treatment pilot WaTr model from SCADA tags"^^xsd:string .
+
+bldg:BAF_Ammonia_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_Ammonia_mg_L .
+
+bldg:BAF_C1_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C1 ;
+    s223:observes bldg:BAF_C1_Air_Scour_Valve_State .
+
+bldg:BAF_C1_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C1 ;
+    s223:observes bldg:BAF_C1_Effluent_BW_Intake_Valve_State .
+
+bldg:BAF_C1_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:BAF_C1 ;
+    s223:observes bldg:BAF_C1_Flow_GPM .
+
+bldg:BAF_C1_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C1 ;
+    s223:observes bldg:BAF_C1_Influent_BW_Discharge_Valve_State .
+
+bldg:BAF_C1_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:BAF_C1 ;
+    s223:observes bldg:BAF_C1_Level .
+
+bldg:BAF_C1_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C1 ;
+    s223:observes bldg:BAF_C1_State .
+
+bldg:BAF_C2_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C2 ;
+    s223:observes bldg:BAF_C2_Air_Scour_Valve_State .
+
+bldg:BAF_C2_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C2 ;
+    s223:observes bldg:BAF_C2_Effluent_BW_Intake_Valve_State .
+
+bldg:BAF_C2_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:BAF_C2 ;
+    s223:observes bldg:BAF_C2_Flow_GPM .
+
+bldg:BAF_C2_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C2 ;
+    s223:observes bldg:BAF_C2_Influent_BW_Discharge_Valve_State .
+
+bldg:BAF_C2_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:BAF_C2 ;
+    s223:observes bldg:BAF_C2_Level .
+
+bldg:BAF_C2_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C2 ;
+    s223:observes bldg:BAF_C2_State .
+
+bldg:BAF_C3_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C3 ;
+    s223:observes bldg:BAF_C3_Air_Scour_Valve_State .
+
+bldg:BAF_C3_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C3 ;
+    s223:observes bldg:BAF_C3_Effluent_BW_Intake_Valve_State .
+
+bldg:BAF_C3_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:BAF_C3 ;
+    s223:observes bldg:BAF_C3_Flow_GPM .
+
+bldg:BAF_C3_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C3 ;
+    s223:observes bldg:BAF_C3_Influent_BW_Discharge_Valve_State .
+
+bldg:BAF_C3_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:BAF_C3 ;
+    s223:observes bldg:BAF_C3_Level .
+
+bldg:BAF_C3_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C3 ;
+    s223:observes bldg:BAF_C3_State .
+
+bldg:BAF_C4_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C4 ;
+    s223:observes bldg:BAF_C4_Air_Scour_Valve_State .
+
+bldg:BAF_C4_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C4 ;
+    s223:observes bldg:BAF_C4_Effluent_BW_Intake_Valve_State .
+
+bldg:BAF_C4_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:BAF_C4 ;
+    s223:observes bldg:BAF_C4_Flow_GPM .
+
+bldg:BAF_C4_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C4 ;
+    s223:observes bldg:BAF_C4_Influent_BW_Discharge_Valve_State .
+
+bldg:BAF_C4_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:BAF_C4 ;
+    s223:observes bldg:BAF_C4_Level .
+
+bldg:BAF_C4_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BAF_C4 ;
+    s223:observes bldg:BAF_C4_State .
+
+bldg:BAF_Dissolved_Oxygen_mg_L_sensor a watr:OxygenMeter ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_Dissolved_Oxygen_mg_L .
+
+bldg:BAF_NOX_ppmv_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_NOX_ppmv .
+
+bldg:BAF_Nitrate_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_Nitrate_mg_L .
+
+bldg:BAF_Nitrite_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_Nitrite_mg_L .
+
+bldg:BAF_TOC_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_TOC_ppm .
+
+bldg:BAF_Turbidity__2__NTU_sensor a watr:TurbidityMeter ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_Turbidity__2__NTU .
+
+bldg:BAF_pH_sensor a watr:pHSensor ;
+    s223:hasObservationLocation bldg:BAF ;
+    s223:observes bldg:BAF_pH .
+
+bldg:BW_Backwash_Tank_Volume_gal_sensor a watr:VolumeSensor ;
+    s223:hasObservationLocation bldg:BW_BackwashTank ;
+    s223:observes bldg:BW_Backwash_Tank_Volume_gal .
+
+bldg:BW_Column_Backwash_Pump_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BW_BackwashPump ;
+    s223:observes bldg:BW_Column_Backwash_Pump_State .
+
+bldg:BW_High_Low_Backwash_Flow_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:BW_FlowValve ;
+    s223:observes bldg:BW_High_Low_Backwash_Flow_Valve_State .
+
+bldg:CL2_Effluent_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:Chlorination ;
+    s223:observes bldg:CL2_Effluent_Pressure_psi .
+
+bldg:DFO_Ammonia_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:DFO ;
+    s223:observes bldg:DFO_Ammonia_mg_L .
+
+bldg:DFO_NOX_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:DFO ;
+    s223:observes bldg:DFO_NOX_mg_L .
+
+bldg:DFO_Nitrate_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:DFO ;
+    s223:observes bldg:DFO_Nitrate_mg_L .
+
+bldg:DFO_Nitrite_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:DFO ;
+    s223:observes bldg:DFO_Nitrite_mg_L .
+
+bldg:DFW_Dissolved_Oxygen_mg_L_sensor a watr:OxygenMeter ;
+    s223:hasObservationLocation bldg:DFO ;
+    s223:observes bldg:DFW_Dissolved_Oxygen_mg_L .
+
+bldg:DFW_pH__1__sensor a watr:pHSensor ;
+    s223:hasObservationLocation bldg:DFO ;
+    s223:observes bldg:DFW_pH__1_ .
+
+bldg:DP1_Flowrate_mL_min_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:DP1 ;
+    s223:observes bldg:DP1_Flowrate_mL_min .
+
+bldg:DP2_Flowrate_mL_min_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:DP2 ;
+    s223:observes bldg:DP2_Flowrate_mL_min .
+
+bldg:DP3_Flowrate_mL_min_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:DP3 ;
+    s223:observes bldg:DP3_Flowrate_mL_min .
+
+bldg:DP4_Flowrate_mL_min_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:DP4 ;
+    s223:observes bldg:DP4_Flowrate_mL_min .
+
+bldg:EFF_Chlorine_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:EFF_Chlorine_mg_L .
+
+bldg:EFF_Compressor_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:Effluent_Compressor ;
+    s223:observes bldg:EFF_Compressor_Pressure_psi .
+
+bldg:EFF_Drain_Backwash_Columns_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:EFF_Drain_Backwash_Columns_Valve_State .
+
+bldg:EFF_Effluent_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:EFF_Effluent_Pressure_psi .
+
+bldg:EFF_TOC_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:EFF_TOC_ppm .
+
+bldg:EFF_Turbidity__4__NTU_sensor a watr:TurbidityMeter ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:EFF_Turbidity__4__NTU .
+
+bldg:EFF_UVT___sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:EFF_UVT__ .
+
+bldg:EFF_Wasting_Pump_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:EFF_WastingPump ;
+    s223:observes bldg:EFF_Wasting_Pump_State .
+
+bldg:EFF_pH__2__sensor a watr:pHSensor ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:EFF_pH__2_ .
+
+bldg:External_Influent_Pumps_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Influent_FeedPump ;
+    s223:observes bldg:External_Influent_Pumps_State .
+
+bldg:GAC_C1_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C1 ;
+    s223:observes bldg:GAC_C1_Air_Scour_Valve_State .
+
+bldg:GAC_C1_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C1 ;
+    s223:observes bldg:GAC_C1_Effluent_BW_Intake_Valve_State .
+
+bldg:GAC_C1_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:GAC_C1 ;
+    s223:observes bldg:GAC_C1_Flow_GPM .
+
+bldg:GAC_C1_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C1 ;
+    s223:observes bldg:GAC_C1_Influent_BW_Discharge_Valve_State .
+
+bldg:GAC_C1_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:GAC_C1 ;
+    s223:observes bldg:GAC_C1_Level .
+
+bldg:GAC_C1_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C1 ;
+    s223:observes bldg:GAC_C1_State .
+
+bldg:GAC_C2_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C2 ;
+    s223:observes bldg:GAC_C2_Air_Scour_Valve_State .
+
+bldg:GAC_C2_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C2 ;
+    s223:observes bldg:GAC_C2_Effluent_BW_Intake_Valve_State .
+
+bldg:GAC_C2_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:GAC_C2 ;
+    s223:observes bldg:GAC_C2_Flow_GPM .
+
+bldg:GAC_C2_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C2 ;
+    s223:observes bldg:GAC_C2_Influent_BW_Discharge_Valve_State .
+
+bldg:GAC_C2_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:GAC_C2 ;
+    s223:observes bldg:GAC_C2_Level .
+
+bldg:GAC_C2_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C2 ;
+    s223:observes bldg:GAC_C2_State .
+
+bldg:GAC_C3_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C3 ;
+    s223:observes bldg:GAC_C3_Air_Scour_Valve_State .
+
+bldg:GAC_C3_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C3 ;
+    s223:observes bldg:GAC_C3_Effluent_BW_Intake_Valve_State .
+
+bldg:GAC_C3_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:GAC_C3 ;
+    s223:observes bldg:GAC_C3_Flow_GPM .
+
+bldg:GAC_C3_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C3 ;
+    s223:observes bldg:GAC_C3_Influent_BW_Discharge_Valve_State .
+
+bldg:GAC_C3_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:GAC_C3 ;
+    s223:observes bldg:GAC_C3_Level .
+
+bldg:GAC_C3_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C3 ;
+    s223:observes bldg:GAC_C3_State .
+
+bldg:GAC_C4_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C4 ;
+    s223:observes bldg:GAC_C4_Air_Scour_Valve_State .
+
+bldg:GAC_C4_Effluent_BW_Intake_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C4 ;
+    s223:observes bldg:GAC_C4_Effluent_BW_Intake_Valve_State .
+
+bldg:GAC_C4_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:GAC_C4 ;
+    s223:observes bldg:GAC_C4_Flow_GPM .
+
+bldg:GAC_C4_Influent_BW_Discharge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C4 ;
+    s223:observes bldg:GAC_C4_Influent_BW_Discharge_Valve_State .
+
+bldg:GAC_C4_Level_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:GAC_C4 ;
+    s223:observes bldg:GAC_C4_Level .
+
+bldg:GAC_C4_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_C4 ;
+    s223:observes bldg:GAC_C4_State .
+
+bldg:GAC_Feed_Pump_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC_FeedPump ;
+    s223:observes bldg:GAC_Feed_Pump_State .
+
+bldg:GAC_TOC_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:GAC ;
+    s223:observes bldg:GAC_TOC_ppm .
+
+bldg:GAC_UVT___sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:GAC ;
+    s223:observes bldg:GAC_UVT__ .
+
+bldg:HARDWARE_STATE_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:HARDWARE_STATE .
+
+bldg:INF_Ammonia_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Ammonia_mg_L .
+
+bldg:INF_Break_Tank_Level_ft_sensor a watr:LevelSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Break_Tank_Level_ft .
+
+bldg:INF_Dissolved_Oxygen_mg_L_sensor a watr:OxygenMeter ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Dissolved_Oxygen_mg_L .
+
+bldg:INF_Exterior_Temperature_C_sensor a watr:TemperatureSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Exterior_Temperature_C .
+
+bldg:INF_Filter_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Filter_Pressure_psi .
+
+bldg:INF_Influent_Shutoff_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Influent_Shutoff_Valve_State .
+
+bldg:INF_NOX_ppmv_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_NOX_ppmv .
+
+bldg:INF_Nitrate_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Nitrate_mg_L .
+
+bldg:INF_Nitrite_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Nitrite_mg_L .
+
+bldg:INF_Prefilter_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Prefilter_Pressure_psi .
+
+bldg:INF_TIC_ppm_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_TIC_ppm .
+
+bldg:INF_TOC_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_TOC_ppm .
+
+bldg:INF_Turbidity__1__NTU_sensor a watr:TurbidityMeter ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_Turbidity__1__NTU .
+
+bldg:INF_pH_sensor a watr:pHSensor ;
+    s223:hasObservationLocation bldg:Influent ;
+    s223:observes bldg:INF_pH .
+
+bldg:Iteration_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:Iteration .
+
+bldg:LJ1_DAC0_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_DAC0_V .
+
+bldg:LJ1_TDAC10_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_TDAC10_V .
+
+bldg:LJ1_TDAC11_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_TDAC11_V .
+
+bldg:LJ1_TDAC12_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_TDAC12_V .
+
+bldg:LJ1_TDAC13_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_TDAC13_V .
+
+bldg:LJ1_TDAC14_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_TDAC14_V .
+
+bldg:LJ1_TDAC8_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_TDAC8_V .
+
+bldg:LJ1_TDAC9_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ1_TDAC9_V .
+
+bldg:LJ2_DAC0_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ2_DAC0_V .
+
+bldg:LJ2_DAC1_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ2_DAC1_V .
+
+bldg:LJ3_DAC0_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ3_DAC0_V .
+
+bldg:LJ3_DAC1_V_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:LJ3_DAC1_V .
+
+bldg:MULT_TIC_2_ppm_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:MULT_TOC_Analyzer ;
+    s223:observes bldg:MULT_TIC_2_ppm .
+
+bldg:MULT_TOC_1_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:MULT_TOC_Analyzer ;
+    s223:observes bldg:MULT_TOC_1_ppm .
+
+bldg:MULT_TOC_2_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:MULT_TOC_Analyzer ;
+    s223:observes bldg:MULT_TOC_2_ppm .
+
+bldg:Main_24VDC_Power_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:Main_24VDC_Power_State .
+
+bldg:O3_Current_Draw_A_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Current_Draw_A .
+
+bldg:O3_Fault_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Fault .
+
+bldg:O3_Gas_Feed_Concentration_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Gas_Feed_Concentration_mg_L .
+
+bldg:O3_Offgas_Concentration_ppb_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Offgas_Concentration_ppb .
+
+bldg:O3_Ozone_Concentration_ppm_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Ozone_Concentration_ppm .
+
+bldg:O3_Ozone_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Ozone_State .
+
+bldg:O3_Ozone___sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Ozone__ .
+
+bldg:O3_Running_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_Running .
+
+bldg:O3_TIC_ppm_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_TIC_ppm .
+
+bldg:O3_TOC_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:O3_TOC_ppm .
+
+bldg:Ozone_Dose_mg_L_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:Ozone ;
+    s223:observes bldg:Ozone_Dose_mg_L .
+
+bldg:Particle_Count_0_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_0_count_mL .
+
+bldg:Particle_Count_1_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_1_count_mL .
+
+bldg:Particle_Count_2_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_2_count_mL .
+
+bldg:Particle_Count_3_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_3_count_mL .
+
+bldg:Particle_Count_4_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_4_count_mL .
+
+bldg:Particle_Count_5_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_5_count_mL .
+
+bldg:Particle_Count_6_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_6_count_mL .
+
+bldg:Particle_Count_7_count_mL_sensor a watr:ConcentrationSensor ;
+    s223:hasObservationLocation bldg:ParticleCounter ;
+    s223:observes bldg:Particle_Count_7_count_mL .
+
+bldg:RealTech_1_Force_Clean_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:RealTech_1 ;
+    s223:observes bldg:RealTech_1_Force_Clean_State .
+
+bldg:RealTech_2_Dual_Feed_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:RealTech_2 ;
+    s223:observes bldg:RealTech_2_Dual_Feed_State .
+
+bldg:RealTech_2_Force_Clean_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:RealTech_2 ;
+    s223:observes bldg:RealTech_2_Force_Clean_State .
+
+bldg:Runtime_hr_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:Runtime_hr .
+
+bldg:SCADA_Enclosure_Door_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:SCADA_Enclosure_Door .
+
+bldg:SYSTEM_POWER_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:SYSTEM_POWER .
+
+bldg:TOC_Remote_Start_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:MULT_TOC_Analyzer ;
+    s223:observes bldg:TOC_Remote_Start_State .
+
+bldg:TOC_Stream_1_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:TOC_StreamSelector ;
+    s223:observes bldg:TOC_Stream_1_Valve_State .
+
+bldg:TOC_Stream_2_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:TOC_StreamSelector ;
+    s223:observes bldg:TOC_Stream_2_Valve_State .
+
+bldg:TOC_Stream_3_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:TOC_StreamSelector ;
+    s223:observes bldg:TOC_Stream_3_Valve_State .
+
+bldg:TOC_Stream_4_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:TOC_StreamSelector ;
+    s223:observes bldg:TOC_Stream_4_Valve_State .
+
+bldg:TOC_Stream_5_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:TOC_StreamSelector ;
+    s223:observes bldg:TOC_Stream_5_Valve_State .
+
+bldg:TOC_Stream_6_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:TOC_StreamSelector ;
+    s223:observes bldg:TOC_Stream_6_Valve_State .
+
+bldg:TOTAL_POTABLE_WATER_PRODUCED_gal_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:Effluent ;
+    s223:observes bldg:TOTAL_POTABLE_WATER_PRODUCED_gal .
+
+bldg:UF_Air_Scour_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Air_Scour_Valve_State .
+
+bldg:UF_B1_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_B1_State .
+
+bldg:UF_B3W1_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_B3W1_State .
+
+bldg:UF_B3W2_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_B3W2_State .
+
+bldg:UF_Backwash_Pump_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF_BackwashPump ;
+    s223:observes bldg:UF_Backwash_Pump_State .
+
+bldg:UF_Current_Draw_A_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Current_Draw_A .
+
+bldg:UF_Feed_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Feed_Flow_GPM .
+
+bldg:UF_Feed_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Feed_Pressure_psi .
+
+bldg:UF_Feed_Temperature_C_sensor a watr:TemperatureSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Feed_Temperature_C .
+
+bldg:UF_Feed_Volume_gal_sensor a watr:VolumeSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Feed_Volume_gal .
+
+bldg:UF_J2___sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_J2__ .
+
+bldg:UF_J3___sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_J3__ .
+
+bldg:UF_P1___sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_P1__ .
+
+bldg:UF_Permeate_Drain_BW_Fill_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Permeate_Drain_BW_Fill_Valve_State .
+
+bldg:UF_Permeate_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Permeate_Flow_GPM .
+
+bldg:UF_Permeate_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Permeate_Pressure_psi .
+
+bldg:UF_Permeate_TOC_ppm_sensor a watr:TotalOrganicCompoundConcentrationSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Permeate_TOC_ppm .
+
+bldg:UF_Permeate_pH_sensor a watr:pHSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Permeate_pH .
+
+bldg:UF_Pump_P1_Auto_Override_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Pump_P1_Auto_Override .
+
+bldg:UF_Purge_Valve_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Purge_Valve_State .
+
+bldg:UF_Recycle_Flow_GPM_sensor a watr:FlowSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Recycle_Flow_GPM .
+
+bldg:UF_Reject_Pressure_psi_sensor a watr:PressureSensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Reject_Pressure_psi .
+
+bldg:UF_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_State .
+
+bldg:UF_Turbidity__3__NTU_sensor a watr:TurbidityMeter ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Turbidity__3__NTU .
+
+bldg:UF_Valve_J3_Auto_Override_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UF ;
+    s223:observes bldg:UF_Valve_J3_Auto_Override .
+
+bldg:UV1_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UV1 ;
+    s223:observes bldg:UV1_State .
+
+bldg:UV2_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UV2 ;
+    s223:observes bldg:UV2_State .
+
+bldg:UV3_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UV3 ;
+    s223:observes bldg:UV3_State .
+
+bldg:UV_Current_Draw_A_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UV_AOP ;
+    s223:observes bldg:UV_Current_Draw_A .
+
+bldg:UV_H2O2_Dosing_Pump_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UV_H2O2_Pump ;
+    s223:observes bldg:UV_H2O2_Dosing_Pump_State .
+
+bldg:UV_Reactor_State_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UV_AOP ;
+    s223:observes bldg:UV_Reactor_State .
+
+bldg:UV_Ultraviolet_Intensity_mW_cm_2_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:UV_AOP ;
+    s223:observes bldg:UV_Ultraviolet_Intensity_mW_cm_2 .
+
+bldg:cpu_percent_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:cpu_percent .
+
+bldg:disk_percent_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:disk_percent .
+
+bldg:memory_percent_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:memory_percent .
+
+bldg:memory_used_bytes_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:memory_used_bytes .
+
+bldg:net_bytes_recv_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:net_bytes_recv .
+
+bldg:net_bytes_sent_sensor a s223:Sensor ;
+    s223:hasObservationLocation bldg:SCADA_System ;
+    s223:observes bldg:net_bytes_sent .
+
+bldg:pipe_baf_to_gac a s223:Pipe ;
+    s223:cnx bldg:BAF_out,
+        bldg:GAC_in ;
+    s223:connectsAt bldg:BAF_out,
+        bldg:GAC_in ;
+    s223:hasMedium s223:Fluid-Water .
+
+bldg:pipe_cl2_to_eff a s223:Pipe ;
+    s223:cnx bldg:Chlorination_out,
+        bldg:Effluent_in ;
+    s223:connectsAt bldg:Chlorination_out,
+        bldg:Effluent_in ;
+    s223:hasMedium s223:Fluid-Water .
+
+bldg:pipe_gac_to_uf a s223:Pipe ;
+    s223:cnx bldg:GAC_out,
+        bldg:UF_feed ;
+    s223:connectsAt bldg:GAC_out,
+        bldg:UF_feed ;
+    s223:hasMedium s223:Fluid-Water .
+
+bldg:pipe_infl_to_baf a s223:Pipe ;
+    s223:cnx bldg:BAF_in,
+        bldg:Influent_out ;
+    s223:connectsAt bldg:BAF_in,
+        bldg:Influent_out ;
+    s223:hasMedium s223:Fluid-Water .
+
+bldg:pipe_o3_to_uv a s223:Pipe ;
+    s223:cnx bldg:Ozone_out,
+        bldg:UV_AOP_in ;
+    s223:connectsAt bldg:Ozone_out,
+        bldg:UV_AOP_in ;
+    s223:hasMedium s223:Fluid-Water .
+
+bldg:pipe_uf_to_o3 a s223:Pipe ;
+    s223:cnx bldg:Ozone_in,
+        bldg:UF_permeate ;
+    s223:connectsAt bldg:Ozone_in,
+        bldg:UF_permeate ;
+    s223:hasMedium s223:Fluid-Water .
+
+bldg:pipe_uv_to_cl2 a s223:Pipe ;
+    s223:cnx bldg:Chlorination_in,
+        bldg:UV_AOP_out ;
+    s223:connectsAt bldg:Chlorination_in,
+        bldg:UV_AOP_out ;
+    s223:hasMedium s223:Fluid-Water .
+
+bldg:BAF_C1_c1_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C1 .
+
+bldg:BAF_C1_c1_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C1 .
+
+bldg:BAF_C2_c2_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C2 .
+
+bldg:BAF_C2_c2_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C2 .
+
+bldg:BAF_C3_c3_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C3 .
+
+bldg:BAF_C3_c3_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C3 .
+
+bldg:BAF_C4_c4_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C4 .
+
+bldg:BAF_C4_c4_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF_C4 .
+
+bldg:BW_BackwashPump_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BW_BackwashPump .
+
+bldg:BW_BackwashPump_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BW_BackwashPump .
+
+bldg:BW_BackwashTank_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BW_BackwashTank .
+
+bldg:BW_BackwashTank_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BW_BackwashTank .
+
+bldg:BW_FlowValve a s223:Equipment ;
+    s223:hasProperty bldg:BW_High_Low_Backwash_Flow_Valve_State .
+
+bldg:DP1_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP1 .
+
+bldg:DP1_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP1 .
+
+bldg:DP2_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP2 .
+
+bldg:DP2_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP2 .
+
+bldg:DP3_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP3 .
+
+bldg:DP3_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP3 .
+
+bldg:DP4_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP4 .
+
+bldg:DP4_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:DP4 .
+
+bldg:EFF_WastingPump_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:EFF_WastingPump .
+
+bldg:EFF_WastingPump_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:EFF_WastingPump .
+
+bldg:Effluent_Compressor a s223:Equipment ;
+    s223:hasProperty bldg:EFF_Compressor_Pressure_psi .
+
+bldg:Effluent_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Effluent .
+
+bldg:GAC_C1_c1_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C1 .
+
+bldg:GAC_C1_c1_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C1 .
+
+bldg:GAC_C2_c2_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C2 .
+
+bldg:GAC_C2_c2_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C2 .
+
+bldg:GAC_C3_c3_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C3 .
+
+bldg:GAC_C3_c3_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C3 .
+
+bldg:GAC_C4_c4_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C4 .
+
+bldg:GAC_C4_c4_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_C4 .
+
+bldg:GAC_FeedPump_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_FeedPump .
+
+bldg:GAC_FeedPump_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC_FeedPump .
+
+bldg:Influent_FeedPump_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Influent_FeedPump .
+
+bldg:Influent_FeedPump_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Influent_FeedPump .
+
+bldg:Influent_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Influent .
+
+bldg:O3_TOC_NO2_Ratio a s223:QuantifiableProperty ;
+    rdfs:label "O3:TOC+NO2_Ratio"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Ozone ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:RealTech_1 a s223:Equipment ;
+    s223:hasProperty bldg:RealTech_1_Force_Clean_State .
+
+bldg:UF_BackwashPump_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UF_BackwashPump .
+
+bldg:UF_BackwashPump_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UF_BackwashPump .
+
+bldg:UF_reject a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UF .
+
+bldg:UV1_uv1_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV1 .
+
+bldg:UV1_uv1_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV1 .
+
+bldg:UV2_uv2_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV2 .
+
+bldg:UV2_uv2_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV2 .
+
+bldg:UV3_uv3_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV3 .
+
+bldg:UV3_uv3_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV3 .
+
+bldg:UV_H2O2_Pump_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV_H2O2_Pump .
+
+bldg:UV_H2O2_Pump_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV_H2O2_Pump .
+
+bldg:BAF_Ammonia_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-Ammonia_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Ammonia ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:BAF_C1_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C1_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C1_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C1_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C1_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C1_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:BAF_C1_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "BAF-C1_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:BAF_C1_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C1_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C1_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C1_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:BAF_C1_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF_C1_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C2_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C2_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C2_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C2_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C2_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C2_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:BAF_C2_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "BAF-C2_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:BAF_C2_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C2_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C2_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C2_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:BAF_C2_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF_C2_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C3_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C3_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C3_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C3_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C3_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C3_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:BAF_C3_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "BAF-C3_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:BAF_C3_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C3_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C3_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C3_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:BAF_C3_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF_C3_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C4_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C4_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C4_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C4_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C4_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C4_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:BAF_C4_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "BAF-C4_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:BAF_C4_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF-C4_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_C4_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-C4_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:BAF_C4_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BAF_C4_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BAF_Dissolved_Oxygen_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-Dissolved_Oxygen_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-DissolvedOxygen ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:BAF_NOX_ppmv a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-NOX_ppmv"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-NitrogenOxides ;
+    qudt:hasQuantityKind quantitykind:VolumeFraction ;
+    qudt:hasUnit unit:PPM .
+
+bldg:BAF_Nitrate_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-Nitrate_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Nitrate ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:BAF_Nitrite_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-Nitrite_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Nitrite ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:BAF_TOC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-TOC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:BAF_Turbidity__2__NTU a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-Turbidity_[2]_NTU"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-SuspendedSolids ;
+    qudt:hasQuantityKind quantitykind:Turbidity ;
+    qudt:hasUnit unit:NTU .
+
+bldg:BAF_pH a s223:QuantifiableObservableProperty ;
+    rdfs:label "BAF-pH"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:BW_Backwash_Tank_Volume_gal a s223:QuantifiableObservableProperty ;
+    rdfs:label "BW-Backwash_Tank_Volume_gal"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Volume ;
+    qudt:hasUnit unit:GAL_US .
+
+bldg:BW_Column_Backwash_Pump_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BW-Column_Backwash_Pump_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:BW_High_Low_Backwash_Flow_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "BW-High/Low_Backwash_Flow_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:CL2_Effluent_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "CL2-Effluent_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:DFO_Ammonia_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "DFO-Ammonia_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Ammonia ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:DFO_NOX_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "DFO-NOX_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-NitrogenOxides ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:DFO_Nitrate_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "DFO-Nitrate_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Nitrate ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:DFO_Nitrite_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "DFO-Nitrite_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Nitrite ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:DFW_Dissolved_Oxygen_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "DFW-Dissolved_Oxygen_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-DissolvedOxygen ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:DFW_pH__1_ a s223:QuantifiableObservableProperty ;
+    rdfs:label "DFW-pH_[1]"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:DP1_Flowrate_mL_min a s223:QuantifiableObservableProperty ;
+    rdfs:label "DP1_Flowrate_mL/min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:MilliL-PER-MIN .
+
+bldg:DP1_Speed__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "DP1-Speed_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:DP1_Start_Stop a s223:EnumeratedActuatableProperty ;
+    rdfs:label "DP1-Start/Stop"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:DP2_Flowrate_mL_min a s223:QuantifiableObservableProperty ;
+    rdfs:label "DP2_Flowrate_mL/min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:MilliL-PER-MIN .
+
+bldg:DP2_Speed__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "DP2-Speed_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:DP2_Start_Stop a s223:EnumeratedActuatableProperty ;
+    rdfs:label "DP2-Start/Stop"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:DP3_Flowrate_mL_min a s223:QuantifiableObservableProperty ;
+    rdfs:label "DP3_Flowrate_mL/min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:MilliL-PER-MIN .
+
+bldg:DP3_Speed__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "DP3-Speed_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:DP3_Start_Stop a s223:EnumeratedActuatableProperty ;
+    rdfs:label "DP3-Start/Stop"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:DP4_Flowrate_mL_min a s223:QuantifiableObservableProperty ;
+    rdfs:label "DP4_Flowrate_mL/min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:MilliL-PER-MIN .
+
+bldg:DP4_Speed__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "DP4-Speed_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:DP4_Start_Stop a s223:EnumeratedActuatableProperty ;
+    rdfs:label "DP4-Start/Stop"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:EFF_Chlorine_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "EFF-Chlorine_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Chlorine ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:EFF_Compressor_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "EFF-Compressor_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:EFF_Drain_Backwash_Columns_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "EFF-Drain/Backwash_Columns_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:EFF_Effluent_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "EFF-Effluent_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:EFF_TOC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "EFF-TOC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:EFF_Turbidity__4__NTU a s223:QuantifiableObservableProperty ;
+    rdfs:label "EFF-Turbidity_[4]_NTU"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-SuspendedSolids ;
+    qudt:hasQuantityKind quantitykind:Turbidity ;
+    qudt:hasUnit unit:NTU .
+
+bldg:EFF_UVT__ a s223:QuantifiableObservableProperty ;
+    rdfs:label "EFF-UVT_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:EFF_Wasting_Pump_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "EFF-Wasting_Pump_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:EFF_pH__2_ a s223:QuantifiableObservableProperty ;
+    rdfs:label "EFF-pH_[2]"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:External_Influent_Pumps_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "External_Influent_Pumps_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C1_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C1_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C1_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C1_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C1_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C1_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:GAC_C1_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "GAC-C1_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:GAC_C1_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C1_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C1_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C1_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:GAC_C1_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC_C1_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C2_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C2_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C2_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C2_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C2_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C2_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:GAC_C2_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "GAC-C2_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:GAC_C2_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C2_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C2_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C2_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:GAC_C2_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC_C2_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C3_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C3_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C3_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C3_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C3_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C3_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:GAC_C3_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "GAC-C3_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:GAC_C3_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C3_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C3_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C3_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:GAC_C3_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC_C3_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C4_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C4_Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C4_Effluent_BW_Intake_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C4_Effluent/BW_Intake_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C4_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C4_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:GAC_C4_Flow_Valve__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "GAC-C4_Flow_Valve_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:GAC_C4_Influent_BW_Discharge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-C4_Influent/BW_Discharge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_C4_Level a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-C4_Level"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:GAC_C4_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC_C4_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_Feed_Pump_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "GAC-Feed_Pump_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:GAC_TOC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-TOC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:GAC_UVT__ a s223:QuantifiableObservableProperty ;
+    rdfs:label "GAC-UVT_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:HARDWARE_STATE a s223:EnumeratedObservableProperty ;
+    rdfs:label "HARDWARE_STATE"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:INF_Ammonia_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Ammonia_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Ammonia ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:INF_Break_Tank_Level_ft a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Break_Tank_Level_ft"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Length ;
+    qudt:hasUnit unit:FT .
+
+bldg:INF_Dissolved_Oxygen_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Dissolved_Oxygen_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-DissolvedOxygen ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:INF_Exterior_Temperature_C a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Exterior_Temperature_C"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_C .
+
+bldg:INF_Filter_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Filter_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:INF_Influent_Shutoff_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "INF-Influent_Shutoff_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:INF_NOX_ppmv a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-NOX_ppmv"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-NitrogenOxides ;
+    qudt:hasQuantityKind quantitykind:VolumeFraction ;
+    qudt:hasUnit unit:PPM .
+
+bldg:INF_Nitrate_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Nitrate_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Nitrate ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:INF_Nitrite_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Nitrite_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-Nitrite ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:INF_Prefilter_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Prefilter_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:INF_TIC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-TIC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:INF_TOC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-TOC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:INF_Turbidity__1__NTU a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-Turbidity_[1]_NTU"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-SuspendedSolids ;
+    qudt:hasQuantityKind quantitykind:Turbidity ;
+    qudt:hasUnit unit:NTU .
+
+bldg:INF_pH a s223:QuantifiableObservableProperty ;
+    rdfs:label "INF-pH"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:Iteration a s223:QuantifiableObservableProperty ;
+    rdfs:label "Iteration"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:LJ1_DAC0_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-DAC0_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ1_TDAC10_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-TDAC10_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ1_TDAC11_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-TDAC11_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ1_TDAC12_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-TDAC12_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ1_TDAC13_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-TDAC13_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ1_TDAC14_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-TDAC14_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ1_TDAC8_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-TDAC8_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ1_TDAC9_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ1-TDAC9_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ2_DAC0_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ2-DAC0_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ2_DAC1_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ2-DAC1_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ3_DAC0_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ3-DAC0_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:LJ3_DAC1_V a s223:QuantifiableObservableProperty ;
+    rdfs:label "LJ3-DAC1_V"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Voltage ;
+    qudt:hasUnit unit:V .
+
+bldg:MULT_TIC_2_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "MULT-TIC-2_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:MULT_TOC_1_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "MULT-TOC-1_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:MULT_TOC_2_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "MULT-TOC-2_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:Main_24VDC_Power_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "Main_24VDC_Power_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:O3_Current_Draw_A a s223:QuantifiableObservableProperty ;
+    rdfs:label "O3-Current_Draw_A"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Ozone ;
+    qudt:hasQuantityKind quantitykind:ElectricCurrent ;
+    qudt:hasUnit unit:A .
+
+bldg:O3_Fault a s223:EnumeratedObservableProperty ;
+    rdfs:label "O3-Fault"^^xsd:string ;
+    s223:hasEnumerationKind s223:Aspect-Fault .
+
+bldg:O3_Gas_Feed_Concentration_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "O3-Gas_Feed_Concentration_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Ozone ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:O3_Offgas_Concentration_ppb a s223:QuantifiableObservableProperty ;
+    rdfs:label "O3-Offgas_Concentration_ppb"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Ozone ;
+    qudt:hasQuantityKind quantitykind:VolumeFraction ;
+    qudt:hasUnit unit:PPB .
+
+bldg:O3_Ozone_Concentration_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "O3-Ozone_Concentration_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Ozone ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:O3_Ozone_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "O3-Ozone_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:O3_Ozone__ a s223:QuantifiableObservableProperty ;
+    rdfs:label "O3-Ozone_%"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Ozone ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:O3_Running a s223:EnumeratedObservableProperty ;
+    rdfs:label "O3-Running"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:O3_TIC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "O3-TIC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:O3_TOC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "O3-TOC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:Ozone_Dose_mg_L a s223:QuantifiableObservableProperty ;
+    rdfs:label "Ozone_Dose_mg/L"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Disinfectant-Ozone ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:Particle_Count_0_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_0_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:Particle_Count_1_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_1_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:Particle_Count_2_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_2_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:Particle_Count_3_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_3_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:Particle_Count_4_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_4_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:Particle_Count_5_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_5_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:Particle_Count_6_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_6_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:Particle_Count_7_count_mL a s223:QuantifiableObservableProperty ;
+    rdfs:label "Particle_Count_7_count/mL"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-InorganicCarbon ;
+    qudt:hasQuantityKind quantitykind:NumberDensity ;
+    qudt:hasUnit unit:NUM-PER-MilliL .
+
+bldg:RealTech_1_Force_Clean_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "RealTech_1_Force_Clean_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:RealTech_2 a s223:Equipment ;
+    s223:hasProperty bldg:RealTech_2_Dual_Feed_State,
+        bldg:RealTech_2_Force_Clean_State .
+
+bldg:RealTech_2_Dual_Feed_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "RealTech_2_Dual_Feed_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:RealTech_2_Force_Clean_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "RealTech_2_Force_Clean_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:Runtime_hr a s223:QuantifiableObservableProperty ;
+    rdfs:label "Runtime_hr"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:HR .
+
+bldg:SCADA_Enclosure_Door a s223:EnumeratedObservableProperty ;
+    rdfs:label "SCADA_Enclosure_Door"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:SYSTEM_POWER a s223:EnumeratedObservableProperty ;
+    rdfs:label "SYSTEM_POWER"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:Set_BAF_Air_Scour_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_Air_Scour_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_BAF_Alternate_Backwash_ON_OFF a s223:EnumeratedActuatableProperty ;
+    rdfs:label "Set_BAF_Alternate_Backwash_ON/OFF"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:Set_BAF_BW_High_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_BW_High_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_BAF_BW_Low_1_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_BW_Low_1_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_BAF_BW_Low_2_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_BW_Low_2_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_BAF_Fill_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_Fill_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_BAF_Filter_Sequence_Time_hr a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_Filter_Sequence_Time_hr"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:HR .
+
+bldg:Set_BAF_Level_Drop_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_Level_Drop_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_BAF_Maximum_Turbidity_NTU a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_Maximum_Turbidity_NTU"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-SuspendedSolids ;
+    qudt:hasQuantityKind quantitykind:Turbidity ;
+    qudt:hasUnit unit:NTU .
+
+bldg:Set_BAF_Minimum_BW_Volume_gal a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_BAF_Minimum_BW_Volume_gal"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Volume ;
+    qudt:hasUnit unit:GAL_US .
+
+bldg:Set_GAC_Air_Scour_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_Air_Scour_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_GAC_BW_High_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_BW_High_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_GAC_BW_Low_1_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_BW_Low_1_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_GAC_BW_Low_2_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_BW_Low_2_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_GAC_Fill_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_Fill_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_GAC_Level_Drop_Duration_min a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_Level_Drop_Duration_min"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:MIN .
+
+bldg:Set_GAC_Maximum_Effluent_Valve_Open__ a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_Maximum_Effluent_Valve_Open_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:Set_GAC_Maximum_Turbidity_NTU a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_Maximum_Turbidity_NTU"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-SuspendedSolids ;
+    qudt:hasQuantityKind quantitykind:Turbidity ;
+    qudt:hasUnit unit:NTU .
+
+bldg:Set_GAC_Minimum_BW_Volume_gal a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_Minimum_BW_Volume_gal"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Volume ;
+    qudt:hasUnit unit:GAL_US .
+
+bldg:Set_GAC_Valve_Trigger_Duration_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_GAC_Valve_Trigger_Duration_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_Total_BAF_Infuent_Flow_GPM a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_Total_BAF_Infuent_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:Set_Total_GAC_Infuent_Flow_GPM a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_Total_GAC_Infuent_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:Set_UF_Air_Scour_Delay_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Air_Scour_Delay_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_UF_Air_Scour_Duration_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Air_Scour_Duration_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_UF_BW_Air_Scour_Delay_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_BW_Air_Scour_Delay_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_UF_BW_Air_Scour_Duration_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_BW_Air_Scour_Duration_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_UF_Backwash_Duration_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Backwash_Duration_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_UF_Backwash_Frequency_hr a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Backwash_Frequency_hr"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:HR .
+
+bldg:Set_UF_Backwash_Trigger_Time_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Backwash_Trigger_Time_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_UF_Feed_Flowrate_GPM a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Feed_Flowrate_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:Set_UF_Maximum_Feed_Pressure_psi a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Maximum_Feed_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:Set_UF_Minimum_Backwash_Volume_gal a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Minimum_Backwash_Volume_gal"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Volume ;
+    qudt:hasUnit unit:GAL_US .
+
+bldg:Set_UF_Minimum_Permeate_Flowrate_GPM a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Minimum_Permeate_Flowrate_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:Set_UF_Permeate_Flowrate_GPM a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Permeate_Flowrate_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:Set_UF_Purge_Duration_s a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Purge_Duration_s"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Time ;
+    qudt:hasUnit unit:SEC .
+
+bldg:Set_UF_Purge_Feed_Flowrate_GPM a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Set_UF_Purge_Feed_Flowrate_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:TOC_Remote_Start_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "TOC_Remote_Start_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:TOC_Stream_1_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "TOC_Stream_1_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:TOC_Stream_2_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "TOC_Stream_2_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:TOC_Stream_3_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "TOC_Stream_3_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:TOC_Stream_4_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "TOC_Stream_4_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:TOC_Stream_5_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "TOC_Stream_5_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:TOC_Stream_6_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "TOC_Stream_6_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:TOTAL_POTABLE_WATER_PRODUCED_gal a s223:QuantifiableObservableProperty ;
+    rdfs:label "TOTAL_POTABLE_WATER_PRODUCED_gal"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Volume ;
+    qudt:hasUnit unit:GAL_US .
+
+bldg:UF_Air_Scour_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF-Air_Scour_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_B1_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF-B1_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_B3W1_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF-B3W1_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_B3W2_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF-B3W2_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_Backwash_Pump_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF-Backwash_Pump_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_Current_Draw_A a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Current_Draw_A"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:ElectricCurrent ;
+    qudt:hasUnit unit:A .
+
+bldg:UF_Feed_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Feed_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:UF_Feed_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Feed_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:UF_Feed_Temperature_C a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Feed_Temperature_C"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_C .
+
+bldg:UF_Feed_Volume_gal a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Feed_Volume_gal"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Volume ;
+    qudt:hasUnit unit:GAL_US .
+
+bldg:UF_J2__ a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-J2_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:UF_J3__ a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-J3_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:UF_P1__ a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-P1_%"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT .
+
+bldg:UF_Permeate_Drain_BW_Fill_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF-Permeate_Drain/BW_Fill_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_Permeate_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Permeate_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:UF_Permeate_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Permeate_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:UF_Permeate_TOC_ppm a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Permeate_TOC_ppm"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-OrganicCarbon ;
+    qudt:hasQuantityKind quantitykind:MassConcentration ;
+    qudt:hasUnit unit:MilliGM-PER-L .
+
+bldg:UF_Permeate_pH a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Permeate_pH"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:UF_Pump_P1_Auto_Override a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF_Pump_P1_Auto_Override"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_Purge_Valve_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF-Purge_Valve_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_Recycle_Flow_GPM a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Recycle_Flow_GPM"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:GAL_US-PER-MIN .
+
+bldg:UF_Reject_Pressure_psi a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Reject_Pressure_psi"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:Pressure ;
+    qudt:hasUnit unit:PSI .
+
+bldg:UF_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UF_Turbidity__3__NTU a s223:QuantifiableObservableProperty ;
+    rdfs:label "UF-Turbidity_[3]_NTU"^^xsd:string ;
+    s223:ofMedium s223:Fluid-Water ;
+    s223:ofSubstance watr:Constituent-SuspendedSolids ;
+    qudt:hasQuantityKind quantitykind:Turbidity ;
+    qudt:hasUnit unit:NTU .
+
+bldg:UF_Valve_J3_Auto_Override a s223:EnumeratedObservableProperty ;
+    rdfs:label "UF_Valve_J3_Auto_Override"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UV1_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UV1_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UV2_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UV2_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UV3_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UV3_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UV_Current_Draw_A a s223:QuantifiableObservableProperty ;
+    rdfs:label "UV-Current_Draw_A"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:ElectricCurrent ;
+    qudt:hasUnit unit:A .
+
+bldg:UV_H2O2_Dosing_Pump_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UV-H2O2_Dosing_Pump_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UV_Reactor_State a s223:EnumeratedObservableProperty ;
+    rdfs:label "UV-Reactor_State"^^xsd:string ;
+    s223:hasEnumerationKind s223:Binary-OnOff .
+
+bldg:UV_Ultraviolet_Intensity_mW_cm_2 a s223:QuantifiableObservableProperty ;
+    rdfs:label "UV-Ultraviolet_Intensity_mW/cm^2"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:PowerPerArea ;
+    qudt:hasUnit unit:MilliW-PER-M2 .
+
+bldg:cpu_percent a s223:QuantifiableObservableProperty ;
+    rdfs:label "cpu_percent"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:disk_percent a s223:QuantifiableObservableProperty ;
+    rdfs:label "disk_percent"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:memory_percent a s223:QuantifiableObservableProperty ;
+    rdfs:label "memory_percent"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:memory_used_bytes a s223:QuantifiableObservableProperty ;
+    rdfs:label "memory_used_bytes"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:net_bytes_recv a s223:QuantifiableObservableProperty ;
+    rdfs:label "net_bytes_recv"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:net_bytes_sent a s223:QuantifiableObservableProperty ;
+    rdfs:label "net_bytes_sent"^^xsd:string ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio .
+
+bldg:BAF_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF .
+
+bldg:BAF_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:BAF .
+
+bldg:BW_BackwashPump a watr:Pump ;
+    s223:hasConnectionPoint bldg:BW_BackwashPump_in,
+        bldg:BW_BackwashPump_out ;
+    s223:hasProperty bldg:BW_Column_Backwash_Pump_State ;
+    watr:hasProcess watr:Process-Backwashing .
+
+bldg:BW_BackwashTank a watr:Tank ;
+    s223:hasConnectionPoint bldg:BW_BackwashTank_in,
+        bldg:BW_BackwashTank_out ;
+    s223:hasProperty bldg:BW_Backwash_Tank_Volume_gal .
+
+bldg:Chlorination a watr:ChlorinationUnit ;
+    s223:hasConnectionPoint bldg:Chlorination_in,
+        bldg:Chlorination_out ;
+    s223:hasProperty bldg:CL2_Effluent_Pressure_psi ;
+    watr:hasProcess watr:Process-Chlorination .
+
+bldg:Chlorination_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Chlorination .
+
+bldg:Chlorination_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Chlorination .
+
+bldg:DP1 a watr:Pump ;
+    s223:actuatedByProperty bldg:DP1_Speed__,
+        bldg:DP1_Start_Stop ;
+    s223:hasConnectionPoint bldg:DP1_in,
+        bldg:DP1_out ;
+    s223:hasProperty bldg:DP1_Flowrate_mL_min,
+        bldg:DP1_Speed__,
+        bldg:DP1_Start_Stop ;
+    watr:hasProcess watr:Process-ChemicalAddition .
+
+bldg:DP2 a watr:Pump ;
+    s223:actuatedByProperty bldg:DP2_Speed__,
+        bldg:DP2_Start_Stop ;
+    s223:hasConnectionPoint bldg:DP2_in,
+        bldg:DP2_out ;
+    s223:hasProperty bldg:DP2_Flowrate_mL_min,
+        bldg:DP2_Speed__,
+        bldg:DP2_Start_Stop ;
+    watr:hasProcess watr:Process-ChemicalAddition .
+
+bldg:DP3 a watr:Pump ;
+    s223:actuatedByProperty bldg:DP3_Speed__,
+        bldg:DP3_Start_Stop ;
+    s223:hasConnectionPoint bldg:DP3_in,
+        bldg:DP3_out ;
+    s223:hasProperty bldg:DP3_Flowrate_mL_min,
+        bldg:DP3_Speed__,
+        bldg:DP3_Start_Stop ;
+    watr:hasProcess watr:Process-ChemicalAddition .
+
+bldg:DP4 a watr:Pump ;
+    s223:actuatedByProperty bldg:DP4_Speed__,
+        bldg:DP4_Start_Stop ;
+    s223:hasConnectionPoint bldg:DP4_in,
+        bldg:DP4_out ;
+    s223:hasProperty bldg:DP4_Flowrate_mL_min,
+        bldg:DP4_Speed__,
+        bldg:DP4_Start_Stop ;
+    watr:hasProcess watr:Process-ChemicalAddition .
+
+bldg:EFF_WastingPump a watr:Pump ;
+    s223:hasConnectionPoint bldg:EFF_WastingPump_in,
+        bldg:EFF_WastingPump_out ;
+    s223:hasProperty bldg:EFF_Wasting_Pump_State .
+
+bldg:Effluent_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Effluent .
+
+bldg:GAC_FeedPump a watr:Pump ;
+    s223:hasConnectionPoint bldg:GAC_FeedPump_in,
+        bldg:GAC_FeedPump_out ;
+    s223:hasProperty bldg:GAC_Feed_Pump_State .
+
+bldg:GAC_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC .
+
+bldg:GAC_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:GAC .
+
+bldg:Influent_FeedPump a watr:Pump ;
+    s223:hasConnectionPoint bldg:Influent_FeedPump_in,
+        bldg:Influent_FeedPump_out ;
+    s223:hasProperty bldg:External_Influent_Pumps_State .
+
+bldg:Influent_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Influent .
+
+bldg:Ozone_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Ozone .
+
+bldg:Ozone_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:Ozone .
+
+bldg:UF_BackwashPump a watr:Pump ;
+    s223:hasConnectionPoint bldg:UF_BackwashPump_in,
+        bldg:UF_BackwashPump_out ;
+    s223:hasProperty bldg:UF_Backwash_Pump_State ;
+    watr:hasProcess watr:Process-Backwashing .
+
+bldg:UF_feed a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UF .
+
+bldg:UF_permeate a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UF .
+
+bldg:UV_AOP_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV_AOP .
+
+bldg:UV_AOP_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Water ;
+    s223:isConnectionPointOf bldg:UV_AOP .
+
+bldg:UV_H2O2_Pump a watr:Pump ;
+    s223:hasConnectionPoint bldg:UV_H2O2_Pump_in,
+        bldg:UV_H2O2_Pump_out ;
+    s223:hasProperty bldg:UV_H2O2_Dosing_Pump_State ;
+    watr:hasProcess watr:Process-ChemicalAddition .
+
+bldg:GAC a watr:UnitProcess ;
+    s223:actuatedByProperty bldg:Set_GAC_Air_Scour_Duration_min,
+        bldg:Set_GAC_BW_High_Duration_min,
+        bldg:Set_GAC_BW_Low_1_Duration_min,
+        bldg:Set_GAC_BW_Low_2_Duration_min,
+        bldg:Set_GAC_Fill_Duration_min,
+        bldg:Set_GAC_Level_Drop_Duration_min,
+        bldg:Set_GAC_Maximum_Effluent_Valve_Open__,
+        bldg:Set_GAC_Maximum_Turbidity_NTU,
+        bldg:Set_GAC_Minimum_BW_Volume_gal,
+        bldg:Set_GAC_Valve_Trigger_Duration_s,
+        bldg:Set_Total_GAC_Infuent_Flow_GPM ;
+    s223:contains bldg:GAC_C1,
+        bldg:GAC_C2,
+        bldg:GAC_C3,
+        bldg:GAC_C4 ;
+    s223:hasConnectionPoint bldg:GAC_in,
+        bldg:GAC_out ;
+    s223:hasProperty bldg:GAC_TOC_ppm,
+        bldg:GAC_UVT__,
+        bldg:Set_GAC_Air_Scour_Duration_min,
+        bldg:Set_GAC_BW_High_Duration_min,
+        bldg:Set_GAC_BW_Low_1_Duration_min,
+        bldg:Set_GAC_BW_Low_2_Duration_min,
+        bldg:Set_GAC_Fill_Duration_min,
+        bldg:Set_GAC_Level_Drop_Duration_min,
+        bldg:Set_GAC_Maximum_Effluent_Valve_Open__,
+        bldg:Set_GAC_Maximum_Turbidity_NTU,
+        bldg:Set_GAC_Minimum_BW_Volume_gal,
+        bldg:Set_GAC_Valve_Trigger_Duration_s,
+        bldg:Set_Total_GAC_Infuent_Flow_GPM ;
+    watr:hasProcess watr:Process-GranularActivatedCarbon .
+
+bldg:MULT_TOC_Analyzer a s223:Equipment ;
+    s223:hasProperty bldg:MULT_TIC_2_ppm,
+        bldg:MULT_TOC_1_ppm,
+        bldg:MULT_TOC_2_ppm,
+        bldg:TOC_Remote_Start_State .
+
+bldg:UV1 a watr:UVH2O2Reactor ;
+    s223:hasConnectionPoint bldg:UV1_uv1_in,
+        bldg:UV1_uv1_out ;
+    s223:hasProperty bldg:UV1_State ;
+    watr:hasProcess watr:Process-AdvancedOxidation .
+
+bldg:UV2 a watr:UVH2O2Reactor ;
+    s223:hasConnectionPoint bldg:UV2_uv2_in,
+        bldg:UV2_uv2_out ;
+    s223:hasProperty bldg:UV2_State ;
+    watr:hasProcess watr:Process-AdvancedOxidation .
+
+bldg:UV3 a watr:UVH2O2Reactor ;
+    s223:hasConnectionPoint bldg:UV3_uv3_in,
+        bldg:UV3_uv3_out ;
+    s223:hasProperty bldg:UV3_State ;
+    watr:hasProcess watr:Process-AdvancedOxidation .
+
+bldg:UV_AOP a watr:UnitProcess ;
+    s223:contains bldg:UV1,
+        bldg:UV2,
+        bldg:UV3 ;
+    s223:hasConnectionPoint bldg:UV_AOP_in,
+        bldg:UV_AOP_out ;
+    s223:hasProperty bldg:UV_Current_Draw_A,
+        bldg:UV_Reactor_State,
+        bldg:UV_Ultraviolet_Intensity_mW_cm_2 ;
+    watr:hasProcess watr:Process-AdvancedOxidation .
+
+bldg:DFO a s223:Equipment ;
+    s223:hasProperty bldg:DFO_Ammonia_mg_L,
+        bldg:DFO_NOX_mg_L,
+        bldg:DFO_Nitrate_mg_L,
+        bldg:DFO_Nitrite_mg_L,
+        bldg:DFW_Dissolved_Oxygen_mg_L,
+        bldg:DFW_pH__1_ .
+
+bldg:TOC_StreamSelector a s223:Equipment ;
+    s223:hasProperty bldg:TOC_Stream_1_Valve_State,
+        bldg:TOC_Stream_2_Valve_State,
+        bldg:TOC_Stream_3_Valve_State,
+        bldg:TOC_Stream_4_Valve_State,
+        bldg:TOC_Stream_5_Valve_State,
+        bldg:TOC_Stream_6_Valve_State .
+
+bldg:ParticleCounter a s223:Equipment ;
+    s223:hasProperty bldg:Particle_Count_0_count_mL,
+        bldg:Particle_Count_1_count_mL,
+        bldg:Particle_Count_2_count_mL,
+        bldg:Particle_Count_3_count_mL,
+        bldg:Particle_Count_4_count_mL,
+        bldg:Particle_Count_5_count_mL,
+        bldg:Particle_Count_6_count_mL,
+        bldg:Particle_Count_7_count_mL .
+
+bldg:BAF_C1 a watr:BiologicalAeratedFilter ;
+    s223:actuatedByProperty bldg:BAF_C1_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:BAF_C1_c1_in,
+        bldg:BAF_C1_c1_out ;
+    s223:hasProperty bldg:BAF_C1_Air_Scour_Valve_State,
+        bldg:BAF_C1_Effluent_BW_Intake_Valve_State,
+        bldg:BAF_C1_Flow_GPM,
+        bldg:BAF_C1_Flow_Valve__,
+        bldg:BAF_C1_Influent_BW_Discharge_Valve_State,
+        bldg:BAF_C1_Level,
+        bldg:BAF_C1_State ;
+    watr:hasProcess watr:Process-BiologicallyActiveFiltration .
+
+bldg:BAF_C2 a watr:BiologicalAeratedFilter ;
+    s223:actuatedByProperty bldg:BAF_C2_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:BAF_C2_c2_in,
+        bldg:BAF_C2_c2_out ;
+    s223:hasProperty bldg:BAF_C2_Air_Scour_Valve_State,
+        bldg:BAF_C2_Effluent_BW_Intake_Valve_State,
+        bldg:BAF_C2_Flow_GPM,
+        bldg:BAF_C2_Flow_Valve__,
+        bldg:BAF_C2_Influent_BW_Discharge_Valve_State,
+        bldg:BAF_C2_Level,
+        bldg:BAF_C2_State ;
+    watr:hasProcess watr:Process-BiologicallyActiveFiltration .
+
+bldg:BAF_C3 a watr:BiologicalAeratedFilter ;
+    s223:actuatedByProperty bldg:BAF_C3_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:BAF_C3_c3_in,
+        bldg:BAF_C3_c3_out ;
+    s223:hasProperty bldg:BAF_C3_Air_Scour_Valve_State,
+        bldg:BAF_C3_Effluent_BW_Intake_Valve_State,
+        bldg:BAF_C3_Flow_GPM,
+        bldg:BAF_C3_Flow_Valve__,
+        bldg:BAF_C3_Influent_BW_Discharge_Valve_State,
+        bldg:BAF_C3_Level,
+        bldg:BAF_C3_State ;
+    watr:hasProcess watr:Process-BiologicallyActiveFiltration .
+
+bldg:BAF_C4 a watr:BiologicalAeratedFilter ;
+    s223:actuatedByProperty bldg:BAF_C4_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:BAF_C4_c4_in,
+        bldg:BAF_C4_c4_out ;
+    s223:hasProperty bldg:BAF_C4_Air_Scour_Valve_State,
+        bldg:BAF_C4_Effluent_BW_Intake_Valve_State,
+        bldg:BAF_C4_Flow_GPM,
+        bldg:BAF_C4_Flow_Valve__,
+        bldg:BAF_C4_Influent_BW_Discharge_Valve_State,
+        bldg:BAF_C4_Level,
+        bldg:BAF_C4_State ;
+    watr:hasProcess watr:Process-BiologicallyActiveFiltration .
+
+bldg:GAC_C1 a watr:GranularActivatedCarbonAdsorber ;
+    s223:actuatedByProperty bldg:GAC_C1_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:GAC_C1_c1_in,
+        bldg:GAC_C1_c1_out ;
+    s223:hasProperty bldg:GAC_C1_Air_Scour_Valve_State,
+        bldg:GAC_C1_Effluent_BW_Intake_Valve_State,
+        bldg:GAC_C1_Flow_GPM,
+        bldg:GAC_C1_Flow_Valve__,
+        bldg:GAC_C1_Influent_BW_Discharge_Valve_State,
+        bldg:GAC_C1_Level,
+        bldg:GAC_C1_State ;
+    watr:hasProcess watr:Process-GranularActivatedCarbon .
+
+bldg:GAC_C2 a watr:GranularActivatedCarbonAdsorber ;
+    s223:actuatedByProperty bldg:GAC_C2_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:GAC_C2_c2_in,
+        bldg:GAC_C2_c2_out ;
+    s223:hasProperty bldg:GAC_C2_Air_Scour_Valve_State,
+        bldg:GAC_C2_Effluent_BW_Intake_Valve_State,
+        bldg:GAC_C2_Flow_GPM,
+        bldg:GAC_C2_Flow_Valve__,
+        bldg:GAC_C2_Influent_BW_Discharge_Valve_State,
+        bldg:GAC_C2_Level,
+        bldg:GAC_C2_State ;
+    watr:hasProcess watr:Process-GranularActivatedCarbon .
+
+bldg:GAC_C3 a watr:GranularActivatedCarbonAdsorber ;
+    s223:actuatedByProperty bldg:GAC_C3_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:GAC_C3_c3_in,
+        bldg:GAC_C3_c3_out ;
+    s223:hasProperty bldg:GAC_C3_Air_Scour_Valve_State,
+        bldg:GAC_C3_Effluent_BW_Intake_Valve_State,
+        bldg:GAC_C3_Flow_GPM,
+        bldg:GAC_C3_Flow_Valve__,
+        bldg:GAC_C3_Influent_BW_Discharge_Valve_State,
+        bldg:GAC_C3_Level,
+        bldg:GAC_C3_State ;
+    watr:hasProcess watr:Process-GranularActivatedCarbon .
+
+bldg:GAC_C4 a watr:GranularActivatedCarbonAdsorber ;
+    s223:actuatedByProperty bldg:GAC_C4_Flow_Valve__ ;
+    s223:hasConnectionPoint bldg:GAC_C4_c4_in,
+        bldg:GAC_C4_c4_out ;
+    s223:hasProperty bldg:GAC_C4_Air_Scour_Valve_State,
+        bldg:GAC_C4_Effluent_BW_Intake_Valve_State,
+        bldg:GAC_C4_Flow_GPM,
+        bldg:GAC_C4_Flow_Valve__,
+        bldg:GAC_C4_Influent_BW_Discharge_Valve_State,
+        bldg:GAC_C4_Level,
+        bldg:GAC_C4_State ;
+    watr:hasProcess watr:Process-GranularActivatedCarbon .
+
+bldg:BAF a watr:UnitProcess ;
+    s223:actuatedByProperty bldg:Set_BAF_Air_Scour_Duration_min,
+        bldg:Set_BAF_Alternate_Backwash_ON_OFF,
+        bldg:Set_BAF_BW_High_Duration_min,
+        bldg:Set_BAF_BW_Low_1_Duration_min,
+        bldg:Set_BAF_BW_Low_2_Duration_min,
+        bldg:Set_BAF_Fill_Duration_min,
+        bldg:Set_BAF_Filter_Sequence_Time_hr,
+        bldg:Set_BAF_Level_Drop_Duration_min,
+        bldg:Set_BAF_Maximum_Turbidity_NTU,
+        bldg:Set_BAF_Minimum_BW_Volume_gal,
+        bldg:Set_Total_BAF_Infuent_Flow_GPM ;
+    s223:contains bldg:BAF_C1,
+        bldg:BAF_C2,
+        bldg:BAF_C3,
+        bldg:BAF_C4 ;
+    s223:hasConnectionPoint bldg:BAF_in,
+        bldg:BAF_out ;
+    s223:hasProperty bldg:BAF_Ammonia_mg_L,
+        bldg:BAF_Dissolved_Oxygen_mg_L,
+        bldg:BAF_NOX_ppmv,
+        bldg:BAF_Nitrate_mg_L,
+        bldg:BAF_Nitrite_mg_L,
+        bldg:BAF_TOC_ppm,
+        bldg:BAF_Turbidity__2__NTU,
+        bldg:BAF_pH,
+        bldg:Set_BAF_Air_Scour_Duration_min,
+        bldg:Set_BAF_Alternate_Backwash_ON_OFF,
+        bldg:Set_BAF_BW_High_Duration_min,
+        bldg:Set_BAF_BW_Low_1_Duration_min,
+        bldg:Set_BAF_BW_Low_2_Duration_min,
+        bldg:Set_BAF_Fill_Duration_min,
+        bldg:Set_BAF_Filter_Sequence_Time_hr,
+        bldg:Set_BAF_Level_Drop_Duration_min,
+        bldg:Set_BAF_Maximum_Turbidity_NTU,
+        bldg:Set_BAF_Minimum_BW_Volume_gal,
+        bldg:Set_Total_BAF_Infuent_Flow_GPM ;
+    watr:hasProcess watr:Process-BiologicallyActiveFiltration .
+
+bldg:Effluent a watr:Tank ;
+    s223:hasConnectionPoint bldg:Effluent_in,
+        bldg:Effluent_out ;
+    s223:hasProperty bldg:EFF_Chlorine_mg_L,
+        bldg:EFF_Drain_Backwash_Columns_Valve_State,
+        bldg:EFF_Effluent_Pressure_psi,
+        bldg:EFF_TOC_ppm,
+        bldg:EFF_Turbidity__4__NTU,
+        bldg:EFF_UVT__,
+        bldg:EFF_pH__2_,
+        bldg:TOTAL_POTABLE_WATER_PRODUCED_gal .
+
+bldg:Ozone a watr:OzonationUnit ;
+    s223:hasConnectionPoint bldg:Ozone_in,
+        bldg:Ozone_out ;
+    s223:hasProperty bldg:O3_Current_Draw_A,
+        bldg:O3_Fault,
+        bldg:O3_Gas_Feed_Concentration_mg_L,
+        bldg:O3_Offgas_Concentration_ppb,
+        bldg:O3_Ozone_Concentration_ppm,
+        bldg:O3_Ozone_State,
+        bldg:O3_Ozone__,
+        bldg:O3_Running,
+        bldg:O3_TIC_ppm,
+        bldg:O3_TOC_NO2_Ratio,
+        bldg:O3_TOC_ppm,
+        bldg:Ozone_Dose_mg_L ;
+    watr:hasProcess watr:Process-Ozonation .
+
+bldg:Influent a watr:Tank ;
+    s223:hasConnectionPoint bldg:Influent_in,
+        bldg:Influent_out ;
+    s223:hasProperty bldg:INF_Ammonia_mg_L,
+        bldg:INF_Break_Tank_Level_ft,
+        bldg:INF_Dissolved_Oxygen_mg_L,
+        bldg:INF_Exterior_Temperature_C,
+        bldg:INF_Filter_Pressure_psi,
+        bldg:INF_Influent_Shutoff_Valve_State,
+        bldg:INF_NOX_ppmv,
+        bldg:INF_Nitrate_mg_L,
+        bldg:INF_Nitrite_mg_L,
+        bldg:INF_Prefilter_Pressure_psi,
+        bldg:INF_TIC_ppm,
+        bldg:INF_TOC_ppm,
+        bldg:INF_Turbidity__1__NTU,
+        bldg:INF_pH .
+
+bldg:SCADA_System a s223:Equipment ;
+    s223:hasProperty bldg:HARDWARE_STATE,
+        bldg:Iteration,
+        bldg:LJ1_DAC0_V,
+        bldg:LJ1_TDAC10_V,
+        bldg:LJ1_TDAC11_V,
+        bldg:LJ1_TDAC12_V,
+        bldg:LJ1_TDAC13_V,
+        bldg:LJ1_TDAC14_V,
+        bldg:LJ1_TDAC8_V,
+        bldg:LJ1_TDAC9_V,
+        bldg:LJ2_DAC0_V,
+        bldg:LJ2_DAC1_V,
+        bldg:LJ3_DAC0_V,
+        bldg:LJ3_DAC1_V,
+        bldg:Main_24VDC_Power_State,
+        bldg:Runtime_hr,
+        bldg:SCADA_Enclosure_Door,
+        bldg:SYSTEM_POWER,
+        bldg:cpu_percent,
+        bldg:disk_percent,
+        bldg:memory_percent,
+        bldg:memory_used_bytes,
+        bldg:net_bytes_recv,
+        bldg:net_bytes_sent .
+
+bldg:UF a watr:UltrafiltrationUnit ;
+    s223:actuatedByProperty bldg:Set_UF_Air_Scour_Delay_s,
+        bldg:Set_UF_Air_Scour_Duration_s,
+        bldg:Set_UF_BW_Air_Scour_Delay_s,
+        bldg:Set_UF_BW_Air_Scour_Duration_s,
+        bldg:Set_UF_Backwash_Duration_s,
+        bldg:Set_UF_Backwash_Frequency_hr,
+        bldg:Set_UF_Backwash_Trigger_Time_s,
+        bldg:Set_UF_Feed_Flowrate_GPM,
+        bldg:Set_UF_Maximum_Feed_Pressure_psi,
+        bldg:Set_UF_Minimum_Backwash_Volume_gal,
+        bldg:Set_UF_Minimum_Permeate_Flowrate_GPM,
+        bldg:Set_UF_Permeate_Flowrate_GPM,
+        bldg:Set_UF_Purge_Duration_s,
+        bldg:Set_UF_Purge_Feed_Flowrate_GPM ;
+    s223:hasConnectionPoint bldg:UF_feed,
+        bldg:UF_permeate,
+        bldg:UF_reject ;
+    s223:hasProperty bldg:Set_UF_Air_Scour_Delay_s,
+        bldg:Set_UF_Air_Scour_Duration_s,
+        bldg:Set_UF_BW_Air_Scour_Delay_s,
+        bldg:Set_UF_BW_Air_Scour_Duration_s,
+        bldg:Set_UF_Backwash_Duration_s,
+        bldg:Set_UF_Backwash_Frequency_hr,
+        bldg:Set_UF_Backwash_Trigger_Time_s,
+        bldg:Set_UF_Feed_Flowrate_GPM,
+        bldg:Set_UF_Maximum_Feed_Pressure_psi,
+        bldg:Set_UF_Minimum_Backwash_Volume_gal,
+        bldg:Set_UF_Minimum_Permeate_Flowrate_GPM,
+        bldg:Set_UF_Permeate_Flowrate_GPM,
+        bldg:Set_UF_Purge_Duration_s,
+        bldg:Set_UF_Purge_Feed_Flowrate_GPM,
+        bldg:UF_Air_Scour_Valve_State,
+        bldg:UF_B1_State,
+        bldg:UF_B3W1_State,
+        bldg:UF_B3W2_State,
+        bldg:UF_Current_Draw_A,
+        bldg:UF_Feed_Flow_GPM,
+        bldg:UF_Feed_Pressure_psi,
+        bldg:UF_Feed_Temperature_C,
+        bldg:UF_Feed_Volume_gal,
+        bldg:UF_J2__,
+        bldg:UF_J3__,
+        bldg:UF_P1__,
+        bldg:UF_Permeate_Drain_BW_Fill_Valve_State,
+        bldg:UF_Permeate_Flow_GPM,
+        bldg:UF_Permeate_Pressure_psi,
+        bldg:UF_Permeate_TOC_ppm,
+        bldg:UF_Permeate_pH,
+        bldg:UF_Pump_P1_Auto_Override,
+        bldg:UF_Purge_Valve_State,
+        bldg:UF_Recycle_Flow_GPM,
+        bldg:UF_Reject_Pressure_psi,
+        bldg:UF_State,
+        bldg:UF_Turbidity__3__NTU,
+        bldg:UF_Valve_J3_Auto_Override ;
+    watr:hasProcess watr:Process-Ultrafiltration .
+

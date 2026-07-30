@@ -1,0 +1,272 @@
+@prefix bldg: <urn:bldg/> .
+@prefix quantitykind: <http://qudt.org/vocab/quantitykind/> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s223: <http://data.ashrae.org/standard223#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+
+bldg:discharge_air_temp_sensor a s223:Sensor ;
+    rdfs:label "Discharge air temperature sensor" ;
+    s223:hasObservationLocation bldg:vav3110_reheat_coil ;
+    s223:observes bldg:discharge_air_temp .
+
+bldg:duct_damper_to_fan a s223:Duct ;
+    s223:cnx bldg:cp_damper_out,
+        bldg:cp_fan_in ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:duct_fan_to_coil a s223:Duct ;
+    s223:cnx bldg:cp_coil_air_in,
+        bldg:cp_fan_out ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:duct_vav_to_zone a s223:Duct ;
+    s223:cnx bldg:cp_vav_discharge,
+        bldg:cp_zone_in ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:fan_airflow_sensor a s223:Sensor ;
+    rdfs:label "Fan airflow sensor" ;
+    s223:hasObservationLocation bldg:vav3110_fan ;
+    s223:observes bldg:fan_airflow .
+
+bldg:fan_status_sensor a s223:Sensor ;
+    rdfs:label "Fan status sensor" ;
+    s223:hasObservationLocation bldg:vav3110_fan ;
+    s223:observes bldg:fan_status .
+
+bldg:occupancy_status_sensor a s223:Sensor ;
+    rdfs:label "Occupancy status sensor" ;
+    s223:hasObservationLocation bldg:zone_hvac_domain_space ;
+    s223:observes bldg:occupancy_status .
+
+bldg:pipe_valve_to_coil a s223:Pipe ;
+    s223:cnx bldg:cp_coil_hw_in,
+        bldg:cp_valve_hw_out ;
+    s223:hasMedium s223:Water-HotWater .
+
+bldg:primary_airflow_sensor a s223:Sensor ;
+    rdfs:label "Primary airflow sensor" ;
+    s223:hasObservationLocation bldg:vav3110_damper ;
+    s223:observes bldg:primary_airflow .
+
+bldg:vav3110 a s223:FanPoweredTerminal ;
+    rdfs:label "VAV-3110 (series fan-powered terminal unit)" ;
+    s223:contains bldg:vav3110_damper,
+        bldg:vav3110_fan,
+        bldg:vav3110_hw_valve,
+        bldg:vav3110_reheat_coil ;
+    s223:hasConnectionPoint bldg:cp_vav_discharge,
+        bldg:cp_vav_primary_in .
+
+bldg:zone a s223:Zone ;
+    rdfs:label "Zone served by VAV-3110" ;
+    s223:hasDomain s223:Domain-HVAC ;
+    s223:hasDomainSpace bldg:zone_hvac_domain_space .
+
+bldg:zone_physical_space a s223:PhysicalSpace ;
+    rdfs:label "Physical space of VAV-3110 zone" ;
+    s223:encloses bldg:zone_hvac_domain_space .
+
+bldg:zone_temp_sensor a s223:Sensor ;
+    rdfs:label "Zone temperature sensor" ;
+    s223:hasObservationLocation bldg:zone_hvac_domain_space ;
+    s223:observes bldg:zone_temp .
+
+bldg:airflow_setpoint a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Airflow Setpoint" ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:FT3-PER-MIN ;
+    rdfs:comment "Discharge airflow setpoint" ;
+    rdfs:seeAlso <bacnet://3110/analog-value,29> .
+
+bldg:cp_coil_air_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air ;
+    s223:mapsTo bldg:cp_vav_discharge .
+
+bldg:cp_coil_hw_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Water-HotWater .
+
+bldg:cp_damper_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air ;
+    s223:mapsTo bldg:cp_vav_primary_in .
+
+bldg:cp_valve_hw_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Water-HotWater .
+
+bldg:damper_position_command a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Damper Position" ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT ;
+    rdfs:comment "Damper position command" ;
+    rdfs:seeAlso <bacnet://3110/analog-value,24> .
+
+bldg:effective_cooling_setpoint a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Effective Cool Setpoint" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:seeAlso <bacnet://3110/analog-value,7> .
+
+bldg:effective_heating_setpoint a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Effective Heat Setpoint" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:seeAlso <bacnet://3110/analog-value,8> .
+
+bldg:fan_speed_command a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Fan Speed" ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT ;
+    rdfs:comment "Series fan speed command" ;
+    rdfs:seeAlso <bacnet://3110/analog-output,2> .
+
+bldg:fan_start_stop_command a s223:EnumeratedActuatableProperty ;
+    rdfs:label "Fan Start/Stop" ;
+    s223:hasEnumerationKind s223:Binary-OnOff ;
+    rdfs:comment "Fan start/stop command" ;
+    rdfs:seeAlso <bacnet://3110/binary-output,1> .
+
+bldg:hw_valve_command a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Hot Water Valve" ;
+    qudt:hasQuantityKind quantitykind:DimensionlessRatio ;
+    qudt:hasUnit unit:PERCENT ;
+    rdfs:comment "Hot-water valve position command" ;
+    rdfs:seeAlso <bacnet://3110/analog-output,1> .
+
+bldg:occ_cooling_setpoint a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Occupied Cooling Setpoint" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:seeAlso <bacnet://3110/analog-value,1> .
+
+bldg:occ_heating_setpoint a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Occupied Heating Setpoint" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:seeAlso <bacnet://3110/analog-value,2> .
+
+bldg:unocc_cooling_setpoint a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Unoccupied Cooling Setpoint" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:seeAlso <bacnet://3110/analog-value,3> .
+
+bldg:unocc_heating_setpoint a s223:QuantifiableActuatableProperty ;
+    rdfs:label "Unoccupied Heating Setpoint" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:seeAlso <bacnet://3110/analog-value,4> .
+
+bldg:vav3110_hw_valve a s223:TwoWayValve ;
+    rdfs:label "VAV-3110 hot-water valve" ;
+    s223:hasConnectionPoint bldg:cp_valve_hw_in,
+        bldg:cp_valve_hw_out ;
+    s223:hasProperty bldg:hw_valve_command .
+
+bldg:cp_coil_air_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:cp_coil_hw_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Water-HotWater .
+
+bldg:cp_damper_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:cp_fan_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:cp_fan_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:cp_valve_hw_out a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Water-HotWater .
+
+bldg:cp_vav_primary_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air ;
+    s223:hasRole s223:Role-Primary .
+
+bldg:cp_zone_in a s223:InletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air .
+
+bldg:discharge_air_temp a s223:QuantifiableObservableProperty ;
+    rdfs:label "Discharge Air Temperature" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:comment "Discharge Air Temperature" ;
+    rdfs:seeAlso <bacnet://3110/analog-input,2> .
+
+bldg:fan_airflow a s223:QuantifiableObservableProperty ;
+    rdfs:label "Fan Airflow" ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:FT3-PER-MIN ;
+    rdfs:comment "Series fan airflow" ;
+    rdfs:seeAlso <bacnet://3110/analog-value,60> .
+
+bldg:fan_status a s223:EnumeratedObservableProperty ;
+    rdfs:label "Fan Status" ;
+    s223:hasEnumerationKind s223:Binary-OnOff ;
+    rdfs:comment "Fan run status" ;
+    rdfs:seeAlso <bacnet://3110/binary-input,3> .
+
+bldg:occupancy_status a s223:EnumeratedObservableProperty ;
+    rdfs:label "Occupancy Status" ;
+    s223:hasEnumerationKind s223:EnumerationKind-Occupancy ;
+    rdfs:comment "Zone occupancy status" ;
+    rdfs:seeAlso <bacnet://3110/binary-value,3> .
+
+bldg:primary_airflow a s223:QuantifiableObservableProperty ;
+    rdfs:label "Actual Flow" ;
+    qudt:hasQuantityKind quantitykind:VolumeFlowRate ;
+    qudt:hasUnit unit:FT3-PER-MIN ;
+    rdfs:comment "Primary airflow" ;
+    rdfs:seeAlso <bacnet://3110/analog-input,1> .
+
+bldg:vav3110_damper a s223:Damper ;
+    rdfs:label "VAV-3110 primary air damper" ;
+    s223:hasConnectionPoint bldg:cp_damper_in,
+        bldg:cp_damper_out ;
+    s223:hasProperty bldg:airflow_setpoint,
+        bldg:damper_position_command,
+        bldg:primary_airflow .
+
+bldg:vav3110_reheat_coil a s223:HeatingCoil ;
+    rdfs:label "VAV-3110 hot-water reheat coil" ;
+    s223:hasConnectionPoint bldg:cp_coil_air_in,
+        bldg:cp_coil_air_out,
+        bldg:cp_coil_hw_in,
+        bldg:cp_coil_hw_out ;
+    s223:hasProperty bldg:discharge_air_temp ;
+    s223:hasRole s223:Role-Heating .
+
+bldg:zone_temp a s223:QuantifiableObservableProperty ;
+    rdfs:label "Zone Temperature" ;
+    qudt:hasQuantityKind quantitykind:Temperature ;
+    qudt:hasUnit unit:DEG_F ;
+    rdfs:comment "Zone Air Temperature" ;
+    rdfs:seeAlso <bacnet://3110/analog-input,4> .
+
+bldg:cp_vav_discharge a s223:OutletConnectionPoint ;
+    s223:hasMedium s223:Fluid-Air ;
+    s223:hasRole s223:Role-Discharge .
+
+bldg:vav3110_fan a s223:Fan ;
+    rdfs:label "VAV-3110 series fan" ;
+    s223:hasConnectionPoint bldg:cp_fan_in,
+        bldg:cp_fan_out ;
+    s223:hasProperty bldg:fan_airflow,
+        bldg:fan_speed_command,
+        bldg:fan_start_stop_command,
+        bldg:fan_status .
+
+bldg:zone_hvac_domain_space a s223:DomainSpace ;
+    s223:hasConnectionPoint bldg:cp_zone_in ;
+    s223:hasDomain s223:Domain-HVAC ;
+    s223:hasProperty bldg:effective_cooling_setpoint,
+        bldg:effective_heating_setpoint,
+        bldg:occ_cooling_setpoint,
+        bldg:occ_heating_setpoint,
+        bldg:occupancy_status,
+        bldg:unocc_cooling_setpoint,
+        bldg:unocc_heating_setpoint,
+        bldg:zone_temp .
+
