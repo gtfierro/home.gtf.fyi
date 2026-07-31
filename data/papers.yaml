@@ -758,3 +758,17 @@
   title: Examining Feasibility of STL for Enforcing Safe Building Control
   type: demoposter
   year: 2026
+- authors: Joseph M. Hellerstein, Vikram Sreekanti, Joseph E. Gonzalez, James Dalton,
+    Akon Dey, Sreyashi Nag, Krishna Ramachandran, Sudhanshu Arora, Arka Bhattacharyya,
+    Shirshanka Das, Mark Donsky, Gabe Fierro, Chang She, Carl Steinbach, Venkat Subramanian,
+    Eric Sun
+  award: ''
+  conference: Eighth Biennial Conference on Innovative Data Systems Research (CIDR)
+  link: https://rise.cs.berkeley.edu/wp-content/uploads/2017/03/CIDR17.pdf
+  location: Chaminade, CA, USA
+  month: January
+  pdf: ground2017hellerstein.pdf
+  slides: 0
+  title: 'Ground: A Data Context Service'
+  type: conference
+  year: 2017

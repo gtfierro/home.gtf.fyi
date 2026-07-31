@@ -1263,6 +1263,32 @@ Gabe Fierro, David E. Culler
 
 </div>
 
+
+<div class="pub pub-conference" id="ground-a-data-context-service-2017">
+
+**Ground: A Data Context Service**<a class="anchor" href="#ground-a-data-context-service-2017">#</a>
+**[[pdf]](/papers/ground2017hellerstein.pdf)[[link]](https://rise.cs.berkeley.edu/wp-content/uploads/2017/03/CIDR17.pdf)[[repo]](https://github.com/ground-context/ground)<a class="bibtex-toggle" href="#ground-a-data-context-service-2017-bibtex">[bibtex]</a>**
+
+Joseph M. Hellerstein, Vikram Sreekanti, Joseph E. Gonzalez, James Dalton, Akon Dey, Sreyashi Nag, Krishna Ramachandran, Sudhanshu Arora, Arka Bhattacharyya, Shirshanka Das, Mark Donsky, Gabe Fierro, Chang She, Carl Steinbach, Venkat Subramanian, Eric Sun
+
+*Eighth Biennial Conference on Innovative Data Systems Research (CIDR)*.  Chaminade, CA, USA, January, 2017.
+
+<details class="bibtex-wrap" id="ground-a-data-context-service-2017-bibtex"><summary>bibtex</summary>
+<pre><code>@inproceedings{hellerstein2017ground,
+  title = {Ground: A Data Context Service},
+  author = {Joseph M. Hellerstein and Vikram Sreekanti and Joseph E. Gonzalez and James Dalton and Akon Dey and Sreyashi Nag and Krishna Ramachandran and Sudhanshu Arora and Arka Bhattacharyya and Shirshanka Das and Mark Donsky and Gabe Fierro and Chang She and Carl Steinbach and Venkat Subramanian and Eric Sun},
+  booktitle = {Eighth Biennial Conference on Innovative Data Systems Research (CIDR)},
+  address = {Chaminade, CA, USA},
+  month = {January},
+  year = {2017},
+  url = {https://rise.cs.berkeley.edu/wp-content/uploads/2017/03/CIDR17.pdf},
+  note = {Repository: https://github.com/ground-context/ground}
+}</code></pre>
+<button class="bibtex-copy" type="button">copy</button>
+</details>
+
+</div>
+
 ### 2016
 
 <div class="pub pub-conference" id="brick-v1-0-towards-a-unified-metadata-schema-for-buildings-2016">
