@@ -121,6 +121,7 @@ def main() -> None:
             "title": album_title,
             "image": image,
             "genres": genres,
+            "date_added": item.data.get("date_added"),
         }
         if high_res_image is not None:
             record["image_high_res"] = high_res_image

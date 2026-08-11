@@ -58,6 +58,21 @@ TEMPLATE = """<!doctype html>
         color: var(--fg);
         width: min(70vw, 280px);
       }
+      .sort-controls {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        font-size: 0.9rem;
+      }
+      .sort-controls legend {
+        opacity: 0.7;
+      }
+      .sort-controls label {
+        cursor: pointer;
+      }
       #count {
         margin: 1rem 0 0;
         font-size: 0.95rem;
@@ -164,13 +179,19 @@ TEMPLATE = """<!doctype html>
           placeholder="Album name"
           autocomplete="off"
           aria-label="Filter by album">
+        <fieldset class="sort-controls">
+          <legend>Sort by</legend>
+          <label><input type="radio" name="sort" value="date-added" checked> Date added</label>
+          <label><input type="radio" name="sort" value="artist"> Artist</label>
+          <label><input type="radio" name="sort" value="album"> Album</label>
+        </fieldset>
       </div>
       <button id="random-btn" type="button">Random</button>
       <p id="count"></p>
     </header>
 
     <main id="grid" aria-live="polite"></main>
-    <p id="empty" hidden>No records match that genre.</p>
+    <p id="empty" hidden>No records match those filters.</p>
 
     <script id="records-data" type="application/json">{{ records_json | safe }}</script>
     <script>
@@ -178,6 +199,7 @@ TEMPLATE = """<!doctype html>
       const genreInput = document.getElementById('genre-input');
       const artistInput = document.getElementById('artist-input');
       const albumInput = document.getElementById('album-input');
+      const sortInputs = document.querySelectorAll('input[name="sort"]');
       const grid = document.getElementById('grid');
       const empty = document.getElementById('empty');
       const count = document.getElementById('count');
@@ -201,12 +223,33 @@ TEMPLATE = """<!doctype html>
         return String(value || '').toLowerCase().includes(q);
       };
 
+      const sortRecords = (recordsToSort, sortBy) => {
+        if (sortBy === 'date-added') {
+          return [...recordsToSort].sort((a, b) =>
+            String(b.date_added || '').localeCompare(String(a.date_added || ''))
+          );
+        }
+        const field = sortBy === 'artist' ? 'artist' : 'title';
+        return [...recordsToSort].sort((a, b) => {
+          const primary = String(a[field] || '').localeCompare(String(b[field] || ''), undefined, {
+            sensitivity: 'base',
+            numeric: true,
+          });
+          if (primary !== 0) return primary;
+          return String(a[field === 'artist' ? 'title' : 'artist'] || '').localeCompare(
+            String(b[field === 'artist' ? 'title' : 'artist'] || ''),
+            undefined,
+            { sensitivity: 'base', numeric: true },
+          );
+        });
+      };
+
       const render = () => {
-        const filtered = records.filter((r) =>
+        const filtered = sortRecords(records.filter((r) =>
           matchesGenre(r, genreInput.value) &&
           matchesField(r.artist, artistInput.value) &&
           matchesField(r.title, albumInput.value)
-        );
+        ), document.querySelector('input[name="sort"]:checked').value);
         grid.innerHTML = '';
         cards = [];
         empty.hidden = filtered.length !== 0;
@@ -265,6 +308,7 @@ TEMPLATE = """<!doctype html>
       genreInput.addEventListener('input', render);
       artistInput.addEventListener('input', render);
       albumInput.addEventListener('input', render);
+      sortInputs.forEach((input) => input.addEventListener('change', render));
       randomBtn.addEventListener('click', pickRandom);
       window.addEventListener('DOMContentLoaded', render);
     </script>
