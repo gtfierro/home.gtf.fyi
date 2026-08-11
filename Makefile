@@ -13,7 +13,6 @@ papers: clean
 	cd publications && sqlite3 papers.db < export-json.sql > ../static/papers.json
 
 discogs:
-	cd discogs && uv run generate_html.py
 	cd discogs && uv run generate_genre_html.py
 	mkdir -p static/albums
 	cp discogs/genre.html static/albums/index.html
