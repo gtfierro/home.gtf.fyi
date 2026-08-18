@@ -33,6 +33,30 @@ date: 2021-06-12T16:51:38-07:00
 
 ### 2026
 
+<div class="pub pub-misc" id="evidence-carrying-validation-for-knowledge-graphs-2026">
+
+**Evidence-Carrying Validation for Knowledge Graphs**<a class="anchor" href="#evidence-carrying-validation-for-knowledge-graphs-2026">#</a>
+**[[pdf]](/papers/fierro2026evidence.pdf)[[link]](https://arxiv.org/abs/2608.15948)<a class="bibtex-toggle" href="#evidence-carrying-validation-for-knowledge-graphs-2026-bibtex">[bibtex]</a>**
+
+Gabe Fierro
+
+*arXiv*.  August, 2026.
+
+<details class="bibtex-wrap" id="evidence-carrying-validation-for-knowledge-graphs-2026-bibtex"><summary>bibtex</summary>
+<pre><code>@misc{fierro2026evidence,
+  title = {Evidence-Carrying Validation for Knowledge Graphs},
+  author = {Gabe Fierro},
+  howpublished = {arXiv},
+  month = {August},
+  year = {2026},
+  url = {https://arxiv.org/abs/2608.15948}
+}</code></pre>
+<button class="bibtex-copy" type="button">copy</button>
+</details>
+
+</div>
+
+
 <div class="pub pub-conference" id="acquirium-toward-interoperable-data-driven-applications-in-water-treatment-systems-2026">
 
 **Acquirium: Toward Interoperable Data Driven Applications in Water Treatment Systems**<a class="anchor" href="#acquirium-toward-interoperable-data-driven-applications-in-water-treatment-systems-2026">#</a>

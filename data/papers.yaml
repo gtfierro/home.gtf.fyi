@@ -772,3 +772,14 @@
   title: 'Ground: A Data Context Service'
   type: conference
   year: 2017
+- authors: Gabe Fierro
+  award: null
+  conference: arXiv
+  link: https://arxiv.org/abs/2608.15948
+  location: null
+  month: August
+  pdf: fierro2026evidence.pdf
+  slides: null
+  title: Evidence-Carrying Validation for Knowledge Graphs
+  type: misc
+  year: 2026
