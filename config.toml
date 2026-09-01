@@ -1,5 +1,5 @@
 baseURL = "https://gtf.fyi/"
-languageCode = "en-us"
+locale = "en-us"
 title = "Gabe Fierro"
 contentDir = "content/"
 
