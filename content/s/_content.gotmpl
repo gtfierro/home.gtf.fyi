@@ -1,0 +1,11 @@
+{{/* Generates one redirect page per entry in data/shortlinks.yaml at /s/<key>. */}}
+{{ range $key, $target := hugo.Data.shortlinks }}
+  {{ $.AddPage (dict
+    "kind" "page"
+    "path" $key
+    "title" $key
+    "build" (dict "render" "always" "list" "never")
+    "content" (dict "mediaType" "text/markdown" "value" "")
+    "params" (dict "target" $target)
+  ) }}
+{{ end }}

@@ -1,0 +1,6 @@
+# Link shortener: gtf.fyi/s/<key>  ->  <url>
+# Keys should be lowercase and URL-safe (letters, digits, - and _).
+# Add a line, commit, and the redirect page is generated at build time.
+
+queryproc2026: https://docs.google.com/presentation/d/1BcPzaat4vUm8xre5cDjZJ-tTVjpz9i8WTBIYR0_Bq2E/edit?usp=sharing
+cpsiot25: https://brickschema.github.io/playground/tutorial/cpsiot25/

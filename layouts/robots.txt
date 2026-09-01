@@ -1,0 +1,7 @@
+User-agent: *
+{{ with site.GetPage "/meeting" -}}
+Disallow: {{ .RelPermalink }}
+{{ end -}}
+{{ range slice "/albums" "/s/" -}}
+Disallow: {{ . }}
+{{ end -}}

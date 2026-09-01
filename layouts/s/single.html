@@ -1,0 +1,14 @@
+{{- /* Short link: redirects /s/<key> to the target from data/shortlinks.yaml */ -}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.Locale }}">
+  <head>
+    <title>{{ .Params.target }}</title>
+    <link rel="canonical" href="{{ .Params.target }}">
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url={{ .Params.target }}">
+  </head>
+  <body>
+    <p>Redirecting to <a href="{{ .Params.target }}">{{ .Params.target }}</a>&hellip;</p>
+  </body>
+</html>
