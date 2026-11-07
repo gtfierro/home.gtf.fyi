@@ -33,6 +33,30 @@ date: 2021-06-12T16:51:38-07:00
 
 ### 2026
 
+<div class="pub pub-misc" id="selective-retrieval-routing-for-multi-violation-knowledge-graph-repair-2026">
+
+**Selective Retrieval Routing for Multi-Violation Knowledge Graph Repair**<a class="anchor" href="#selective-retrieval-routing-for-multi-violation-knowledge-graph-repair-2026">#</a>
+**[[pdf]](/papers/lin2026selective.pdf)[[link]](https://arxiv.org/abs/2611.07342)<a class="bibtex-toggle" href="#selective-retrieval-routing-for-multi-violation-knowledge-graph-repair-2026-bibtex">[bibtex]</a>**
+
+Tung-Wei Lin, Gabe Fierro, Han Li, Tianzhen Hong, Pierluigi Nuzzo, Alberto Sangiovanni-Vincentelli
+
+*arXiv*.  November, 2026.
+
+<details class="bibtex-wrap" id="selective-retrieval-routing-for-multi-violation-knowledge-graph-repair-2026-bibtex"><summary>bibtex</summary>
+<pre><code>@misc{lin2026selective,
+  title = {Selective Retrieval Routing for Multi-Violation Knowledge Graph Repair},
+  author = {Tung-Wei Lin and Gabe Fierro and Han Li and Tianzhen Hong and Pierluigi Nuzzo and Alberto Sangiovanni-Vincentelli},
+  howpublished = {arXiv},
+  month = {November},
+  year = {2026},
+  url = {https://arxiv.org/abs/2611.07342}
+}</code></pre>
+<button class="bibtex-copy" type="button">copy</button>
+</details>
+
+</div>
+
+
 <div class="pub pub-misc" id="evidence-carrying-validation-for-knowledge-graphs-2026">
 
 **Evidence-Carrying Validation for Knowledge Graphs**<a class="anchor" href="#evidence-carrying-validation-for-knowledge-graphs-2026">#</a>

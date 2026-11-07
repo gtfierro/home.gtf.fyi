@@ -783,3 +783,15 @@
   title: Evidence-Carrying Validation for Knowledge Graphs
   type: misc
   year: 2026
+- authors: Tung-Wei Lin, Gabe Fierro, Han Li, Tianzhen Hong, Pierluigi Nuzzo, Alberto
+    Sangiovanni-Vincentelli
+  award: ''
+  conference: arXiv
+  link: https://arxiv.org/abs/2611.07342
+  location: ''
+  month: November
+  pdf: lin2026selective.pdf
+  slides: null
+  title: Selective Retrieval Routing for Multi-Violation Knowledge Graph Repair
+  type: misc
+  year: 2026
