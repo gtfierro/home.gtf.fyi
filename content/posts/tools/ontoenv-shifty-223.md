@@ -7,6 +7,8 @@ maturity: seedling
 updates:
     - date: "2026-07-06"
       note: "Working script with ontoenv==0.5 and shifty==0.2.4"
+    - date: "2026-11-20"
+      note: "Updated for ontoenv 0.7 and pyshifty 0.7.0a1: `get_closure` now returns a read-only view, so the script uses `copy_closure`"
 ---
 
 My [`ontoenv`](https://ontoenv.gtf.fyi) and [`shifty`](`https://pyshifty.gtf.fyi`) projects
@@ -18,9 +20,11 @@ Here's the simple version of the script that requires you to provide all of the 
 # /// script
 # dependencies = [
 #    "rdflib",
-#    "pyshifty>=0.2.5"
+#    "pyshifty>=0.7.0a1"
 #   ]
 #  python = ">=3.10"
+# [tool.uv]
+# prerelease = "allow"
 # ///
 import rdflib
 import shifty
@@ -49,10 +53,12 @@ resolution of the ontology dependencies.
 # /// script
 # dependencies = [
 #    "rdflib",
-#    "ontoenv>=0.5",
-#    "pyshifty>=0.2.5"
+#    "ontoenv>=0.7.0rc1",
+#    "pyshifty>=0.7.0a1"
 #   ]
 #  python = ">=3.10"
+# [tool.uv]
+# prerelease = "allow"
 # ///
 import rdflib
 import ontoenv
@@ -77,8 +83,9 @@ env.add("https://open223.info/223p.ttl") # this will download all dependencies i
 
 print("Gathering closure graph for validation...")
 # here we ask the model for what its owl:imports are. OntoEnv
-# returns a single graph containing the full imports closure
-closure, imported = env.get_closure(model_id)
+# returns a single (mutable, in-memory) graph containing the full imports closure.
+# Note: `get_closure` returns a read-only view instead, which shifty cannot (currently) consume
+closure, imported = env.copy_closure(model_id)
 print(f"Closure graph imported {len(imported)} ontologies.")
 
 print("Validating model against S223...")
